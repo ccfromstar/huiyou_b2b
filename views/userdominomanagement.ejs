@@ -1,0 +1,65 @@
+<html>
+<head>
+    <title><%= title %></title>
+    <script type="text/javascript" src="/javascripts/jquery-easyui_jb51/jquery-1.8.0.min.js"></script>
+    <script type="text/javascript" src="/javascripts/b_main.js"></script>
+    <script type="text/javascript" src="/javascripts/b_admin.js"></script>
+    <script type="text/javascript" src="/javascripts/jquery-easyui_jb51/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="/javascripts/jquery-easyui_jb51/locale/easyui-lang-zh_CN.js"></script>
+    <link rel="stylesheet" type="text/css" href="/javascripts/jquery-easyui_jb51/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="/javascripts/jquery-easyui_jb51/themes/icon.css">
+    <link href="/stylesheets/demo.css" rel="stylesheet" type="text/css"/>
+</head>
+<script>
+    function checkURL(){
+        var u = window.location.href;
+        if(u.indexOf("?id=")>0){
+            window.location = "/userdominomanagement";
+        }
+    }
+</script>
+<body class="easyui-layout" onload="checkURL()">
+<div data-options="region:'north',border:false" style="height:65px;background:#2b669a;">
+    <table style="width: 100%">
+        <tr>
+            <td style="padding:20px;color: white;font-size: 14px;font-weight: bold">
+                B2B网站后台管理系统
+            </td>
+            <td onclick="window.location='/';" style="width:100px;cursor:pointer;text-align: right;padding:20px;color: white;font-size: 12px;font-weight: bold">
+                退出
+            </td>
+        </tr>
+    </table>
+</div>
+<div data-options="region:'west',split:true,title:'目录'" style="width:220px;padding:0px;">
+    <div class="easyui-accordion" data-options="fit:true,border:false">
+        <div title="网站管理" data-options="selected:true" style="padding:10px;">
+            <ul class="easyui-tree" id="tt">
+                <li>
+                    <span>用户管理</span>
+                    <ul>
+                        <li>
+                            <span>产品审核</span>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div title="数据库管理"  style="padding:10px;">
+            content2
+        </div>
+        <div title="系统设定" style="padding:10px">
+            content3
+        </div>
+    </div>
+</div>
+<div data-options="region:'east',split:true,collapsed:true,title:'辅助功能'" style="width:100px;padding:10px;"></div>
+<div data-options="region:'south',border:false"
+     style="text-align:right;height:50px;background:#2b669a;padding:15px;color: white;font-size: 12px;">
+    2014年上海荟邮网络科技有限公司版权所有。保留一切权利。
+</div>
+<div data-options="region:'center',title:'功能界面'" style="overflow: hidden">
+    <iframe id="centerid" src="b_product" style="width: 100%;border: 0px;height: 100%" />
+</div>
+</body>
+</html>

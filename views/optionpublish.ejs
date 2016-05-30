@@ -1,0 +1,409 @@
+<div style="width:960px;background-color: #FFFFFF;margin:0 auto;">
+    <form method="post">
+    <table style="width: 100%;margin-top: 20px;margin-bottom: 50px;" border="0">
+         <tr>
+             <td style="width: 100px;text-align: center;vertical-align: top">
+                 <%include optionmenu%>
+             </td>
+             <td style="vertical-align: top">
+                 <%var x= 0;
+                 if(user[0].role_company_admin==1){
+                        x = 180;
+                 }else{
+                        x = 130;
+                 }%>
+
+                 <%if(company[0].name!="上海荟邮网络科技有限公司"){%>
+                 <table style="width: <%=x%>px;margin-top: 0px;" border="0" cellspacing="0">
+                     <tr style="line-height: 30px;">
+                         <%if(user[0].role_company_admin!=1){%>
+                         <td class="tdfooter1" style="background:#F7861E;color:#FFFFFF" >我发布的产品</td>
+                         <%}%>
+                         <%if(user[0].role_company_admin==1){%>
+                         <td class="tdfooter1" style="background:#F7861E;color:#FFFFFF" >本公司人员发布的产品</td>
+                         <%}%>
+                     </tr>
+                 </table>
+                 <div style="background-image: url('/images/ora.jpg');width: 100%;height: 3px;"></div>
+
+<!--搜索-->     <div style="width: 100%;text-align: right;vertical-align: top">
+                     <table border="0" style="width: 100%">
+                         <tr>
+                             <td><input type="text" id="fs" onFocus="if(value==defaultValue){value='';this.style.color='#000'}" onBlur="if(!value){value=defaultValue;this.style.color='#999'}" value="产品编号/产品名称" /></td>
+                             <td style="width: 20px;"><img onclick="filterS()" src="/images/fangdajing.png" style="cursor: pointer;margin-top: 10px;" /></td>
+                         </tr>
+                      </table>
+<!--搜索结束--> </div>
+
+
+                 <%if(user[0].role_company_admin!=1){%>
+                 <div id="list1">
+                 <table class="pclass" style="border:2px solid #ABBBBB;margin-top: 10px;width: 100%;border-collapse: collapse;"  cellspacing="0" cellpadding="0">
+                     <tr style="background-image: url('images/huitou.png')">
+                         <th style="width:130px;text-align: center">
+                             <select style="width: 120px;" id="rq" onchange="filterP()">
+                                 <option value="0">发布日期</option>
+                                 <option value="3">最近3个月</option>
+                                 <option value="6">最近6个月</option>
+                                 <option value="7">最近一年</option>
+                                 <option value="8">最近两年</option>
+                             </select>
+                         </th>
+                         <th style="text-align: center;width:130px">产品编号</th>
+                         <th style="text-align: center;">产品名称</th>
+                         <th style="width:80px;text-align: center">
+
+                             <select id="fp" onchange="filterP()">
+                                 <option value="全部">产品状态</option>
+                                 <option value="审核中">审核中</option>
+                                 <option value="草稿">草稿</option>
+                                 <option value="在售">在售</option>
+                                 <option value="已下架">已下架</option>
+                                 <option value="停售">停售</option>
+                             </select>
+                         </th>
+                         <th style="text-align: center;width: 140px;">操作</th>
+                     </tr>
+                     <%
+                         var k = 0;
+                     for(var i in product){
+                        if(product[i].status_id !=5){
+                            if(product[i].owner_id == user[0].id){
+                             k = k + 1;
+                     %>
+
+                     <tr id="j<%=k%>" onmouseover="$('#j<%=k%>').css('background-color','#EAE8E9');" onmouseout="$('#j<%=k%>').css('background-color','#ffffff');" >
+                          <td style="text-align:center">
+                             <span><%=(new Date(product[i].published_at)).Format("yyyy-MM-dd")%></span><br/>
+                             <span><%=(new Date(product[i].published_at)).Format("hh:mm:ss")%></span>
+                         </td>
+                         <td style="text-align: center"><span id="w<%=k%>" style=""><%=product[i].product_number%></span></td>
+                         <td style="text-align:left;padding-left:5px"><span id="v<%=k%>" style=""><%=product[i].title%></span></td>
+                         <td style="text-align: center;width: 70px;">
+                             <%if(product[i].status_id==3){%>
+                             <span id="h<%=k%>" style="color:#6296C1"><%=product[i].statusname%></span></td>
+                         <%}else if(product[i].status_id==4){%>
+                         <span id="h<%=k%>" style="color:#ff0000"><%=product[i].statusname%></span></td>
+                         <%}else{%>
+                         <span id="h<%=k%>" style="color:#000000"><%=product[i].statusname%></span></td>
+                         <%}%>
+                         </td>
+                         <td style="text-align: center;width: 140px;">
+                             <input onclick="window.location=('/publishproductread?p=<%=product[i].product_number%>');" type="button" value="查看" />
+
+                             <%if(product[i].status_id==1||product[i].status_id==4){%>
+                             <input onclick="window.location=('/publishproductedit?p=<%=product[i].product_number%>');" type="button" value="编辑" />
+                             <%}%>
+                             <%if(product[i].status_id==3){%>
+                             <input onclick="$('#docid').val('<%=product[i].id%>');$('#stype').val('down');var bln1 = window.confirm('是否确认下架？');if(bln1 == false){return false;}document.forms[0].submit();" type="button" value="修改下架" />
+                             <input onclick="$('#docid').val('<%=product[i].id%>');$('#stype').val('close');var bln1 = window.confirm('是否确认停售？');if(bln1 == false){return false;}document.forms[0].submit();" type="button" value="停售" />
+                             <%}%>
+                         </td>
+                     </tr>
+                     <%
+                        }
+                     }
+                     }
+                     %>
+                 </table>
+                </div>
+                <%}%>
+
+                <%if(user[0].role_company_admin==1){%>
+                <div id="list2">
+                 
+
+                 <table class="pclass" style="border:2px solid #ABBBBB;margin-top: 10px;width: 100%;border-collapse: collapse;"  cellspacing="0" cellpadding="0">
+                     <tr style="background-image: url('images/huitou.png')">
+                         <th style="text-align: center;">
+                            <select style="width: 70px;" id="fp2" onchange="filterP()">
+                                 <option value="全部">发布人</option>
+                                 <%
+                                    var str0 = "";
+                                    for(var i in product){
+                                        if(product[i].status_id !=5){
+                                            if(product[i].supplier_id == company[0].id){
+                                                if(str0.indexOf(product[i].nameowner)==-1){
+                                  %>
+                                        <option value="<%=product[i].nameowner%>"><%=product[i].nameowner%></option>
+                                  <%
+                                                str0 = str0 + "@" + product[i].nameowner;
+                                                }
+                                            }
+                                        }
+                                    }
+                                 %>
+                             </select>
+                         </th>
+                         <th style="width:130px;text-align: center">
+                             <select style="width: 120px;" id="rq" onchange="filterP()">
+                                 <option value="0">发布日期</option>
+                                 <option value="3">最近3个月</option>
+                                 <option value="6">最近6个月</option>
+                                 <option value="7">最近一年</option>
+                                 <option value="8">最近两年</option>
+                             </select>
+                         </th>
+                         <th style="text-align: center;width:130px">产品编号</th>
+                         <th style="text-align: center;">产品名称</th>
+                         <th style="width:80px;text-align: center">
+
+                             <select id="fp" onchange="filterP()">
+                                 <option value="全部">产品状态</option>
+                                 <option value="审核中">审核中</option>
+                                 <option value="草稿">草稿</option>
+                                 <option value="在售">在售</option>
+                                 <option value="已下架">已下架</option>
+                                 <option value="停售">停售</option>
+                             </select>
+                         </th>
+                         <th style="text-align: center;width: 140px;">操作</th>
+                     </tr>
+                     <%
+                         var k = 0;
+                     for(var i in product){
+                        if(product[i].status_id !=5){
+                            if(product[i].supplier_id == company[0].id){
+                             k = k + 1;
+                     %>
+
+                     <tr id="j<%=k%>" onmouseover="$('#j<%=k%>').css('background-color','#EAE8E9');" onmouseout="$('#j<%=k%>').css('background-color','#ffffff');" style="line-height:20px;height:41px">
+                         <td style="text-align:center">
+                             <span id="hu<%=k%>"><%=product[i].nameowner%></span>
+                         </td>   
+                         
+                             <td style="text-align:center">
+                             <span><%=(new Date(product[i].published_at)).Format("yyyy-MM-dd")%></span><br/>
+                             <span><%=(new Date(product[i].published_at)).Format("hh:mm:ss")%></span>
+                         </td>
+                         
+                         <td style="text-align: center"><span id="w<%=k%>" style="margin-left: 5px;"><%=product[i].product_number%></span></td>
+                         <td style="text-align:left;padding-left:5px"><span id="v<%=k%>"><%=product[i].title%></span></td>
+                         <td style="text-align: center;width: 70px;">
+                             <%if(product[i].status_id==3){%>
+                             <span id="h<%=k%>" style="color:#6296C1"><%=product[i].statusname%></span></td>
+                         <%}else if(product[i].status_id==4){%>
+                         <span id="h<%=k%>" style="color:#ff0000"><%=product[i].statusname%></span></td>
+                         <%}else{%>
+                         <span id="h<%=k%>" style="color:#000000"><%=product[i].statusname%></span></td>
+                         <%}%>
+                         </td>
+                         <td style="text-align: center;width: 140px;">
+                             <input onclick="window.location=('/publishproductread?p=<%=product[i].product_number%>');" type="button" value="查看" />
+
+                             <%if(product[i].status_id==1||product[i].status_id==4){%>
+                             <input onclick="window.location=('/publishproductedit?p=<%=product[i].product_number%>');" type="button" value="编辑" />
+                             <%}%>
+                             <%if(product[i].status_id==3){%>
+                             <input onclick="$('#docid').val('<%=product[i].id%>');$('#stype').val('down');var bln1 = window.confirm('是否确认下架？');if(bln1 == false){return false;}document.forms[0].submit();" type="button" value="修改下架" />
+                             <input onclick="$('#docid').val('<%=product[i].id%>');$('#stype').val('close');var bln1 = window.confirm('是否确认停售？');if(bln1 == false){return false;}document.forms[0].submit();" type="button" value="停售" />
+                             <%}%>
+                         </td>
+                     </tr>
+                     <%
+                        }
+                     }
+                     }
+                     %>
+                 </table>
+
+                </div>
+
+                    <%}%>
+
+                <%}%>
+
+                <%if(company[0].name=="上海荟邮网络科技有限公司"){%>
+                    <table style="width: <%=x%>px;margin-top: 0px;" border="0" cellspacing="0">
+                        <tr style="line-height: 30px;">
+                            <td class="tdfooter1" style="background:#F7861E;color:#FFFFFF" >所有产品</td>
+                        </tr>
+                    </table>
+                    <div style="background-image: url('/images/ora.jpg');width: 100%;height: 3px;"></div>
+                <table class="pclass" style="border:2px solid #ABBBBB;margin-top: 10px;width: 100%;border-collapse: collapse;"  cellspacing="0" cellpadding="0">
+                     <tr style="background-image: url('images/huitou.png')">
+                        <th style="text-align: center;width:20px" >
+                            <select style="width: 60px;" id="fp2" onchange="filterP()">
+                                 <option value="全部">发布人</option>
+                                 <%
+                                    var str0 = "";
+                                    for(var i in product){
+                                        if(product[i].status_id !=5){
+                                            //if(product[i].supplier_id == company[0].id){
+                                                if(str0.indexOf(product[i].nameowner)==-1){
+                                  %>
+                                        <option value="<%=product[i].nameowner%>"><%=product[i].nameowner%></option>
+                                  <%
+                                                str0 = str0 + "@" + product[i].nameowner;
+                                                }
+                                            //}
+                                        }
+                                    }
+                                 %>
+                             </select>
+                         </th>
+                         <th style="width:80px;text-align: center">
+                             <select style="width: 80px;" id="rq" onchange="filterP()">
+                                 <option value="0">发布日期</option>
+                                 <option value="3">最近3个月</option>
+                                 <option value="6">最近6个月</option>
+                                 <option value="7">最近一年</option>
+                                 <option value="8">最近两年</option>
+                             </select>
+                         </th>
+                         <th style="text-align: center;width:100px">产品编号</th>
+                         <th style="text-align: center;width:100px">产品名称</th>
+                         <th style="text-align: center;">
+                             <input type="text" readonly  class="Wdate" onfocus="WdatePicker({minDate:'%y-%M-{%d+1}',doubleCalendar:false,dateFmt:'yyyy-MM-dd',onpicking:function(dp){$('#fp6').val(dp.cal.getNewDateStr());filterP();}})" style="cursor:pointer;width:80px" value="出发日期"></input>
+                             <input type="hidden" id="fp6" />
+                         </th>
+                         <th style="text-align: center;">
+                             <select style="width: 70px;" id="fp5" onchange="filterP()">
+                                 <option value="全部">船名</option>
+                                 <%
+                                    var str0 = "";
+                                    for(var i in product){
+                                        if(product[i].status_id !=5){
+                                                if(str0.indexOf(product[i].txtShipName)==-1){
+                                  %>
+                                        <option value="<%=product[i].txtShipName%>"><%=product[i].txtShipName%></option>
+                                  <%
+                                                str0 = str0 + "@" + product[i].txtShipName;
+                                                } 
+                                        }
+                                    }
+                                 %>
+                             </select>
+                         </th>
+                         <th style="text-align: center;width:50px">
+                            <select id="fp1" onchange="filterP()">
+                                 <option value="全部">运营性质</option>
+                                 <option value="自营">自营</option>
+                                 <option value="荟邮代">荟邮代</option>
+                            </select>
+                         </th>
+                         <th style="width:50px;text-align: center;">
+                            <select style="width: 70px;" id="fp4" onchange="filterP()">
+                                 <option value="全部">供应商</option>
+                                 <%
+                                    var str0 = "";
+                                    for(var i in product){
+                                        if(product[i].status_id !=5){
+                                                if(str0.indexOf(product[i].short_name)==-1){
+                                  %>
+                                        <option value="<%=product[i].short_name%>"><%=product[i].short_name%></option>
+                                  <%
+                                                str0 = str0 + "@" + product[i].short_name;
+                                                } 
+                                        }
+                                    }
+                                 %>
+                             </select>
+                         </th>
+                         <th style="width:50px;text-align: center;">
+                            <select style="width: 70px;" id="fp3" onchange="filterP()">
+                                 <option value="全部">录入人</option>
+                                 <%
+                                    var str0 = "";
+                                    for(var i in product){
+                                        if(product[i].status_id !=5 && (new Date(product[i].created_at)).Format("yyyy-MM-dd")>"2014-12-26"){
+                                                if(str0.indexOf(product[i].namewrite)==-1){
+                                  %>
+                                        <option value="<%=product[i].namewrite%>"><%=product[i].namewrite%></option>
+                                  <%
+                                                str0 = str0 + "@" + product[i].namewrite;
+                                                } 
+                                        }
+                                    }
+                                 %>
+                             </select>
+                         </th>
+                         <th style="width:20px;text-align: center">
+
+                             <select id="fp" onchange="filterP()">
+                                 <option value="全部">状态</option>
+                                 <option value="审核中">审核中</option>
+                                 <option value="草稿">草稿</option>
+                                 <option value="在售">在售</option>
+                                 <option value="已下架">已下架</option>
+                                 <option value="停售">停售</option>
+                             </select>
+                         </th>
+                         <th style="text-align: center;width: 40px;">操作</th>
+                     </tr>
+                     <%
+                         var k = 0;
+                     for(var i in product){
+                        if(product[i].status_id !=5 ){
+                            //if(product[i].owner_id == user[0].id){
+                             k = k + 1;
+                     %>
+
+                     <%
+                     var re1 = product[i].remark;
+                     re1 = re1?"title="+re1:"";
+                     %>
+
+                     <tr <%=re1%> id="j<%=k%>" onmouseover="$('#j<%=k%>').css('background-color','#EAE8E9');" onmouseout="$('#j<%=k%>').css('background-color','#ffffff');" style="line-height:20px;height:41px" >
+                         <td style="text-align:center;width:20px">
+                             <span id="hu<%=k%>" ><%=product[i].nameowner%></span>
+                         </td>  
+                          <td style="text-align:center">
+                             <span><%=(new Date(product[i].published_at)).Format("yyyy-MM-dd")%></span><br/>
+                             <span><%=(new Date(product[i].published_at)).Format("hh:mm:ss")%></span>
+                         </td>
+                         <td style="text-align: center;"><span id="w<%=k%>"><%=product[i].product_number%></span></td>
+                         <td style="text-align:center"><span id="v<%=k%>" style=""><%=product[i].title%></span></td>
+                         <td style="text-align:center"><span id="va<%=k%>" style=""><%=product[i].start_date%></span></td>
+                         <td style="text-align:center"><span id="vb<%=k%>" style=""><%=product[i].txtShipName%></span></td>
+                         <td style="text-align:center;padding-left:5px" id="sbh<%=k%>"><%=product[i].service_by_huiyou==0?"自营":"荟邮代"%></td>
+                         <td style="text-align:center;" id="hus<%=k%>"><%=product[i].short_name%></td>
+                         <td style="text-align:center;" id="hua<%=k%>"><%=(new Date(product[i].created_at)).Format("yyyy-MM-dd")>"2014-12-26"?product[i].namewrite:"-"%></td>
+                         <td style="text-align: center;width: 20px;">
+                             <%if(product[i].status_id==3){%>
+                             <span id="h<%=k%>" style="color:#6296C1"><%=product[i].statusname%></span></td>
+                         <%}else if(product[i].status_id==4){%>
+                         <span id="h<%=k%>" style="color:#ff0000"><%=product[i].statusname%></span></td>
+                         <%}else{%>
+                         <span id="h<%=k%>" style="color:#000000"><%=product[i].statusname%></span></td>
+                         <%}%>
+                         </td>
+                         <td style="text-align: left;width: 20px;">
+                             <input onclick="window.location=('/publishproductread?p=<%=product[i].product_number%>');" type="button" value="查看" />
+
+                             <%if(product[i].status_id==1||product[i].status_id==4){%>
+                             <input onclick="window.location=('/publishproductedit?p=<%=product[i].product_number%>');" type="button" value="编辑" />
+                             <%}%>
+                             <%if(product[i].status_id==3){%>
+                             <input onclick="$('#docid').val('<%=product[i].id%>');$('#stype').val('down');var bln1 = window.confirm('是否确认下架？');if(bln1 == false){return false;}document.forms[0].submit();" type="button" value="修改下架" />
+                             <input onclick="$('#docid').val('<%=product[i].id%>');$('#stype').val('close');var bln1 = window.confirm('是否确认停售？');if(bln1 == false){return false;}document.forms[0].submit();" type="button" value="停售" />
+                             <%}%>
+                             <%if(product[i].status_id==1){%>
+                             <input onclick="$('#docid').val('<%=product[i].id%>');$('#stype').val('delete');var bln1 = window.confirm('是否确认删除？');if(bln1 == false){return false;}document.forms[0].submit();" type="button" value="删除" />  
+                             <%}%>
+                             <%if(product[i].status_id==2){%>
+                             <input onclick="$('#docid').val('<%=product[i].id%>');$('#stype').val('down');var bln1 = window.confirm('是否确认下架？');if(bln1 == false){return false;}document.forms[0].submit();" type="button" value="修改下架" />
+                             <%}%>
+                         </td>
+                     </tr>
+                     <%
+                        //}
+                     }
+                     }
+                     %>
+                 </table>
+                <%}%>
+             </td>
+         </tr>
+    </table>
+        <input type="hidden" id="docid" name="docid" />
+        <input type="hidden" id="stype" name="stype" />
+        <input type="hidden" id="kk" value="<%=k%>" />
+        <input type="hidden" id="refreshable-page" value="1" />
+    </form>
+    <script type="text/javascript">
+        function reload (argument) {
+            window.location='/optionpublish';
+        }
+    </script>
+</div>

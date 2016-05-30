@@ -1,0 +1,63 @@
+<div style="width:970px;background-color: #FFFFFF;margin:0 auto;">
+    <div id="anchor1" style="display:none;"><br/></div>
+    <div id="anchor" style="display:none;">
+
+        <table style="width: 960px;margin-top: 0px;margin-left: 5px;"  cellspacing="0" border="0">
+            <tr>
+                <td class="tab2"  id="n0" onclick="goToProductListView();return false;"><img src="/images/back.png" />&nbsp;&nbsp;返回产品列表</td>
+                <td class="tab1" style="width:20px" id="n6" onclick="ctab(6);document.getElementById('page2').contentWindow.ctab(6)"><img src="/images/list.png" title="显示全部信息" /></td>
+                <td class="tab2"  id="n1" onclick="ctab(1);document.getElementById('page2').contentWindow.ctab(1)">产品信息</td>
+                <td class="tab2"  id="n2" onclick="ctab(2);document.getElementById('page2').contentWindow.ctab(2)">价格体系及费用说明</td>
+                <td class="tab2" id="n5" onclick="ctab(5);document.getElementById('page2').contentWindow.ctab(5)">行程说明</td>
+                <td class="tab2"  id="n3" onclick="ctab(3);document.getElementById('page2').contentWindow.ctab(3)">签证签注及预订说明</td>
+                <td class="tab2"  id="n4" onclick="ctab(4);document.getElementById('page2').contentWindow.ctab(4)">邮轮介绍</td>
+            </tr>
+        </table>
+    </div>
+    <div id="div-page1"><iframe name="page1" id="page1"  src="homepage" style="width: 970px;height: 900px;" scrolling="no" frameborder="0"></iframe></div>
+    <div id="div-page2"><iframe name="page2" id="page2"  src="loading" style="width: 970px;height: 2800px;display: none" scrolling="no" frameborder="0"></iframe></div>
+    <div id="div-page3"><iframe name="page3" id="page3"  src="loading" style="width: 970px;height: 1600px;display: none" scrolling="no" frameborder="0"></iframe></div>
+    <div id="div-page4"><iframe name="page4" id="page4"  src="loading" style="width: 970px;height: 500px;display: none" scrolling="no" frameborder="0"></iframe></div>
+    <div id="div-page5"><iframe name="page5" id="page5"  src="loading" style="width: 970px;height: 900px;display: none" scrolling="no" frameborder="0"></iframe></div>
+    <div id="div-page6"><iframe name="page6" id="page6"  src="loading" style="width: 970px;height: 650px;display: none" scrolling="no" frameborder="0"></iframe></div>
+
+    <div id="div-page7"><iframe name="page7" id="page7"  src="loading" style="width: 970px;height: 650px;display: none" scrolling="no" frameborder="0"></iframe></div>
+    <div id="div-page8"><iframe name="page8" id="page8"  src="loading" style="width: 970px;height: 650px;display: none" scrolling="no" frameborder="0"></iframe></div>
+    <div id="div-page9"><iframe name="page9" id="page9"  src="loading" style="width: 970px;height: 650px;display: none" scrolling="no" frameborder="0"></iframe></div>
+
+    <div id="div-page10"><iframe id="page10" src="loading" style="width: 970px;height: 650px;display: none" scrolling="no" frameborder="0"></iframe></div>
+
+    <div id="totop" style="display:none;position:fixed; bottom:45px; right:100px;z-index:10;line-height: 10px;">
+        <img id="pic11" onclick="window.frames['page2'].fyd4();" src="images/downloadt0.png" style="cursor: pointer" /><br/>
+        <img id="pic10" onclick="window.frames['page2'].fyd3();" src="images/download.png" style="cursor: pointer" /><br/>
+        <img id="pic1" onclick="window.frames['page2'].fyd2();" src="images/contact0.png" style="cursor: pointer" /><br/>
+        <img id="pic4" onclick="window.frames['page2'].fyd1();" src="images/yuding0.png" style="cursor: pointer" /><br/>
+        <a  href="#" target="_self"><img id="pic0" src="images/tothetop0.png" style="cursor: pointer" /></a>
+    </div>
+    <div id="bottommenu" style="display:none;width:100%;height:900px;background-color:#000000;filter: alpha(opacity=70); opacity: 0.7;position:fixed; bottom:0px; left:0px;z-index:3;line-height: 10px;">
+    </div>
+    <div id="publish" style="display:none;position:fixed; bottom:100px; right:100px;z-index:3;line-height: 10px;">
+        <img id="pic5" onclick="htg('publishproduct');" style="cursor: pointer" /><br/>
+    </div>
+
+    <div id="buy" style="display:none;position:fixed; bottom:100px; right:100px;z-index:3;line-height: 10px;">
+        <img id="pic6" onclick="$('#page3').attr('src','/market?p=fb');" src="images/fg0.png" style="cursor: pointer" /><br/>
+    </div>
+
+    <div id="sell" style="display:none;position:fixed; bottom:100px; right:100px;z-index:3;line-height: 10px;">
+        <img id="pic7" onclick="$('#page3').attr('src','/marketbuy?p=fb');" src="images/fx0.png" style="cursor: pointer" /><br/>
+    </div>
+
+    <div style="position:fixed; bottom:30px; right:100px;z-index:10;line-height: 10px;">
+        <a  href="#" target="_self">
+            <img id="pic3" src="images/tothetop0.png" style="cursor: pointer" />
+        </a>
+        <div style="margin-left:5px;margin-top:5px"><a id="pic40" href="#" onclick="return parent.goToMessage({recipient:'<%=108%>'});" style="">联系客服</a></div>
+    </div>
+
+    <div id="wxxftb" style="position:fixed; bottom:50px; left:30px;z-index:3;width:140px;height:180px;background:black;opacity:0.7">
+        <img id="wx_code" src="images/qrcode_for_gh_de1b7e3f76b0_430.jpg" style="position:fixed;bottom:97px; left:40px;z-index:4;width:120px;height:120px;">
+        <div style="color:#FFFFFF;font-size:13px;position:fixed;bottom:57px; left:41px;z-index:5;font-weight:bold;line-height:15px"><span style="color:#FFFFFF">关注荟邮轮最新服务号</span><br/><span style="color:#FFFFFF">查阅产品，一键分享！</span></div>
+    </div>
+</div>
+

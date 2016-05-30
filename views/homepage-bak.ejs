@@ -1,0 +1,155 @@
+<div style="width:960px;background-color: #FFFFFF;margin:0 auto;">
+<br/>
+    <table style="width: 100%;margin-top: -14px;margin-bottom: 50px;" border="0" cellspacing="0" cellpadding="0">
+        <tr style="line-height: 20px;">
+            <td style="width: 200px;text-align: center;vertical-align: top">
+                <table style="width: 80%;margin: auto" border="0">
+                    <%if(company[0].role_seller == 1){%>
+                    <tr>
+                        <td class="tdfooter2" style="cursor:pointer;line-height:30px;color: #ffffff;text-align: center;background-color: #ABBBBB;font-weight: bold;font-size: 14px;"  onclick="window.parent.htg('publishproductmenu')">产品发布</td>
+                    </tr>
+                    <%}%>
+                    <%if(company[0].role_seller == 1){%>
+                    <tr>
+                        <td class="tdfooter2" style="cursor:pointer;line-height:30px;color: #ffffff;text-align: center;background-color: #ABBBBB;font-weight: bold;font-size: 14px;"  onclick="window.parent.htg('optionpublish')">产品管理</td>
+                    </tr>
+                    <%}%>
+                    <tr>
+                        <td class="tdfooter2" style="cursor:pointer;line-height:30px;color: #ffffff;text-align: center;background-color: #ABBBBB;font-weight: bold;font-size: 14px;" onclick="window.parent.htg('optionordersell')">订单管理</td>
+                    </tr>
+                    <tr>
+                        <td class="tdfooter2" style="cursor:pointer;line-height:30px;color: #ffffff;text-align: center;background-color: #ABBBBB;font-weight: bold;font-size: 14px;" onclick="window.parent.htg('optionpublish1')">简讯管理</td>
+                    </tr>
+                    <%if(company[0].role_seller == 1){%>
+                    <tr>
+                        <td class="tdfooter2" style="cursor:pointer;line-height:30px;color: #ffffff;text-align: center;background-color: #ABBBBB;font-weight: bold;font-size: 14px;" onclick="window.parent.htg('optionaccount')">财务管理</td>
+                    </tr>
+                    <%}%>
+                    <tr>
+                        <td class="tdfooter2" style="cursor:pointer;line-height:30px;color: #ffffff;text-align: center;background-color: #ABBBBB;font-weight: bold;font-size: 14px;" onclick="window.parent.htg('optioncompany')">账户管理</td>
+                    </tr>
+
+                </table>
+            </td>
+
+            <td style="vertical-align: top">
+                <div style="font-weight: bold;margin-top: -2px;font-size: 18px;color:#F68421">推荐产品</div>
+                <img src="/images/ora.jpg" style="margin-top: 0px;height: 3px;width: 100%;" />
+
+                <div class="wrapper">
+                    <div id="focus">
+                        <ul>
+                            <%for(var i=0;i<50;i++){%>
+                            <li><img src="/images/0927-wdly.jpg" style="cursor: pointer;width: 760px;"  alt=""/></li>
+                            <li><img src="/images/shouye2.jpg" style="cursor: pointer;width: 760px;"  alt=""/></li>
+                            <li><img src="/images/1103.jpg" style="cursor: pointer;width: 760px;"  alt=""/></li>
+                            <li><img src="/images/09-hyss.jpg" style="cursor: pointer;width: 760px;"  alt=""/></li>
+                            <li><img src="/images/5_PRINCESS_sabtini1.jpg" style="cursor: pointer;width: 760px;"  alt=""/></li>
+                            <%}%>
+                        </ul>
+                    </div>
+                    <!--focus end-->
+
+                </div>
+
+                <table style="display:none;width:105%;height:340px;margin-left: -16px;" border="0" cellpadding="0" cellspacing="15">
+                    <tr>
+                        <td><img src="/images/adv1.jpg" style="width:250px;height: 180px;padding-top:10px; " /></td>
+                        <td><img src="/images/adv2.jpg" style="width:250px;height: 180px;padding-top:10px; " /></td>
+                        <td><img src="/images/adv3.jpg" style="width:250px;height: 180px;padding-top:10px; " /></td>
+                    </tr>
+
+                    <tr>
+                        <td><img src="/images/adv4.jpg" style="width:250px;height: 180px;padding-top:10px; " /></td>
+                        <td><img src="/images/adv5.jpg" style="width:250px;height: 180px;padding-top:10px; " /></td>
+                        <td><img src="/images/adv6.jpg" style="width:250px;height: 180px;padding-top:10px; " /></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <table style="margin-top:50px;width:100%;height:220px;BORDER-COLLAPSE: collapse ;border-color: #ABBBBB;" border="0" cellspacing="0" cellpadding="0" >
+        <tr style="line-height: 20px;">
+            <td style="vertical-align: top;width: 400px;vertical-align: top">
+                <div style="font-weight: bold;margin-top: 10px;font-size: 18px;color:#F68421">有人在卖</div>
+                <img src="/images/ora.jpg" style="margin-top:  0px;height: 3px;width: 100%;" />
+                <table class="pclass" style="cursor:pointer;border:2px solid #ABBBBB;margin-top: 20px;width: 100%;BORDER-COLLAPSE: collapse ;border-color: #ABBBBB;" onclick="window.location='market';" cellspacing="0" cellpadding="0">
+                    <tr style="background-image: url('images/huitou.png')">
+                        <th style="width:130px;text-align: center;font-size: 14px;color: #000000">发布日期</th>
+                        <th style="text-align: center;font-size: 14px;color: #000000">产品名称</th>
+                    </tr>
+                    <%
+                    for(var i in supply){
+                            if(i<5){
+                    %>
+
+                    <tr>
+                        <td style="text-align: center;">
+                            <%
+                            var a = (new Date(supply[i].published_at)).Format("yyyy-MM-dd hh:mm:ss") +"";
+                            var b = a.split(":");
+                             %>
+                            <span style="margin-left: 0px;"><%=b[0]+":"+b[1]%></span>
+                        </td>
+                        <%var m = "";
+                            var d = "";
+                            var b = (new Date(supply[i].departure_date)).Format("yyyy-MM-dd hh:mm:ss")+"";
+                            m = b.substring(5,7);
+                            d = b.substring(8,10);
+                        %>
+                        <% var pname = m+d+supply[i].txtShipName+supply[i].days+"天"+(Number(supply[i].days-1))+"晚"+supply[i].cruise_route;
+                           if(pname.length>30){
+                               pname = pname.substring(0,30)+"...";
+                           }
+                        %>
+                        <td><span style="margin-left: 5px;"><%=pname%></span></td>
+                    </tr>
+                    <%
+                    }
+                    }
+                    %>
+                </table>
+                <div style="width: 100%;text-align: right;margin-top: 5px;color: #1D77C1;cursor: pointer" onclick="window.parent.ht3()">查看更多...</div>
+            </td>
+            <td style="width: 50px;">&nbsp;</td>
+            <td style="vertical-align: top;width: 400px;vertical-align: top">
+                <div style="font-weight: bold;margin-top: 10px;font-size: 18px;color:#F68421">有人在买</div>
+                <img src="/images/ora.jpg" style="margin-top: 0px;height: 3px;width: 100%;" />
+                <table class="pclass" style="cursor:pointer;border:2px solid #ABBBBB;margin-top: 20px;width: 100%;BORDER-COLLAPSE: collapse ;border-color: #ABBBBB;" onclick="window.location='marketbuy';" cellspacing="0" cellpadding="0">
+                    <tr style="background-image: url('images/huitou.png')">
+                        <th style="width:130px;text-align: center;font-size: 14px;color: #000000">发布日期</th>
+                        <th style="text-align: center;font-size: 14px;color: #000000">需求内容</th>
+                    </tr>
+                <%
+                    for(var i in demand){
+                        if(i<5){
+                %>
+
+                        <tr>
+                            <td style="text-align: center;">
+                                <%
+                                    var a = (new Date(demand[i].published_at)).Format("yyyy-MM-dd hh:mm:ss") +"";
+                                    var b = a.split(":");
+                                %>
+                                <span style="margin-left: 0px;"><%=b[0]+":"+b[1]%></span>
+                            </td>
+                            <td><span style="margin-left: 5px;"><%=demand[i].description.substring(0,25)%></span></td>
+                        </tr>
+                <%
+                        }
+                    }
+                %>
+                </table>
+                <div style="width: 100%;text-align: right;margin-top: 5px;color: #1D77C1;cursor: pointer" onclick="window.parent.ht31()">查看更多...</div>
+            </td>
+        </tr>
+    </table>
+    <br/><br/>
+
+</div>
+
+<script>
+    $(function() {
+        $( "#tabs" ).tabs();
+    });
+</script>

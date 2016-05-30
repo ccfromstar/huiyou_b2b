@@ -1,0 +1,30 @@
+{"total":<%=datasource.length%>,"rows":[
+<%
+//初始记录数=(页号-1)*每页记录大小+1
+var initCount = (page-1)*rows+1;
+//结束记录数
+//1.初始记录数+(每页记录大小-1)>总记录数 --------- 总记录数
+//2.初始记录数+(每页记录大小-1)<总记录数 --------- 初始记录数+(每页记录大小-1)
+var endCount = 0;
+if (initCount + (rows - 1) > datasource.length) {
+endCount = datasource.length;
+} else {
+endCount = initCount + (rows - 1);
+}
+
+for(var i in datasource){
+if(i<endCount && i>initCount-2){
+if(i!=endCount-1){
+%>
+{"id":"<%=datasource[i].id%>","name":"<%=datasource[i].name%>", "email":"<%=datasource[i].email%>", "mobile_phone":"<%=datasource[i].mobile_phone%>", "activated":"<%=datasource[i].activated%>", "certified":"<%=datasource[i].certified%>", "registered_at":"<%=datasource[i].registered_at%>", "last_updated_at":"<%=datasource[i].last_updated_at%>", "a_user":"<%=datasource[i].approvename?datasource[i].approvename:''%>"},
+<%
+}
+else{
+%>
+{"id":"<%=datasource[i].id%>","name":"<%=datasource[i].name%>", "email":"<%=datasource[i].email%>", "mobile_phone":"<%=datasource[i].mobile_phone%>", "activated":"<%=datasource[i].activated%>", "certified":"<%=datasource[i].certified%>", "registered_at":"<%=datasource[i].registered_at%>", "last_updated_at":"<%=datasource[i].last_updated_at%>", "a_user":"<%=datasource[i].approvename?datasource[i].approvename:''%>"}
+<%
+}
+}
+}
+%>
+]}

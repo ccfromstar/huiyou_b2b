@@ -1,0 +1,492 @@
+<div style="width:960px;background-color: #FFFFFF;margin:0 auto;">
+    
+    <form method="post">
+        
+        <table style="width:100%">
+            <tr>
+                <td style="vertical-align:top"><span style="font-weight: bold;font-size: 18px;color: #000000;padding-top: 10px;"><%=product[0].title%></span>
+                    <span style="margin-left:20px;margin-top:17px;color:#187ED3;cursor:pointer;display:inline-block;padding-top:10px" onclick="window.parent.htotop();parent.goToMessage({recipient:'<%=108%>', ext_p_number:'<%=product[0].product_number%>', ext_p_id:'<%=product[0].id%>', ext_type:1, title:'<%=product[0].title%>'});"><img  src="/images/contactsell.png" /></span>              
+                </td>
+            </tr>
+        </table>
+        <img style="margin-top: 20px;" src="/images/no1.png" />
+
+        <table style="width: 100%;margin-top: 0px;border:2px solid #ABBBBB;"  cellspacing="0" cellpadding="0">
+            <tr style="text-align: center;color: #000000;font-weight: bold;background-image: url('images/huitou.png')">
+                <td style="width: 90px;">舱房代码</td>
+                <td style="width: 150px;">舱房说明</td>
+                <td style="width: 90px;">最大入住人数</td>
+                <td  style="width: 90px;">第1/2人市场价</td>
+                <td style="width: 90px;">第1/2人结算价</td>
+                <td  style="width: 90px;">第3/4人市场价</td>
+                <td  style="width: 90px;">第3/4人结算价</td>
+                <td  style="width: 90px;">儿童结算价</td>
+                <td  style="width: 90px;">可售房间数</td>
+                <td  style="width: 90px;">购买数量</td>
+            </tr>
+            <%
+            var f1 = "display:none;";var f2 = "display:none;";var f3 = "display:none;";var f4 = "display:none;";var f5 = "display:none;";
+            for(var i in pp){
+                if(pp[i].amount != 0 && pp[i].cabin_type_id==1){
+                    f1 = "";
+                }
+                if(pp[i].amount != 0 && pp[i].cabin_type_id==2){
+                    f2 = "";
+                }
+                if(pp[i].amount != 0 && pp[i].cabin_type_id==3){
+                    f3 = "";
+                }
+                if(pp[i].amount != 0 && pp[i].cabin_type_id==4){
+                    f4 = "";
+                }
+                if(pp[i].amount != 0 && pp[i].cabin_type_id==5){
+                    f5 = "";
+                }
+            }%>
+            <tr style="<%=f1%>text-align: left;color: #ffffff;font-weight: bold;background-color: #B3B3B3;line-height: 20px;">
+                <td></td>
+                <td style="color: #ffffff;text-align: center;">内舱房</td>
+                <td colspan="8" ></td>
+            </tr>
+            <%
+            var l = 0;  var s1 = "";
+            var c1 = "";var c2 = "";var c3 = "";var c4 = "";var c5 = "";var c6 = "";
+
+            for(var i in pp){
+                    if(pp[i].amount != 0 && pp[i].cabin_type_id==1){
+                        l = l + 1;
+                (l%2 !=0) ?s1="background-color:#F2F0F4;":s1="";
+            %>
+            <tr style="<%=s1%>text-align: center">
+                <%
+                    if(c1==""){
+                        c1 = pp[i].cabin_type_id;
+                        c2 = pp[i].cabin_category_id;
+                        c3 = pp[i].retail_price;
+                        c4 = pp[i].retail_price_2;
+                        c5 = pp[i].retail_price_child;
+                        c6 = pp[i].id;
+                    }else{
+                        c1 = c1 + "@" +pp[i].cabin_type_id;
+                        c2 = c2 + "@" +pp[i].cabin_category_id;
+                        c3 = c3 + "@" +pp[i].retail_price;
+                        c4 = c4 + "@" +pp[i].retail_price_2;
+                        c5 = c5 + "@" +pp[i].retail_price_child;
+                        c6 = c6 + "@" +pp[i].id;
+                    }
+                    var a1 = ""; var a2 = "";var a3 = "";
+                    if(pp[i].cabin_category_id == 9999){
+                        if(pp[i].cabin_type_id==1){a1 ="内舱房";}
+                        else if(pp[i].cabin_type_id==2){a1 ="海景房";}
+                        else if(pp[i].cabin_type_id==3){a1 ="阳台房";}
+                        else if(pp[i].cabin_type_id==4){a1 ="套房";}
+                        else if(pp[i].cabin_type_id==5){a1 ="皇家大道景观房";}
+                        a2 = "-";a3 = "-";
+                    }else{
+                        a1 = pp[i].txtCabinName;
+                        a2 = pp[i].txtCabinNo;
+                        a3 = pp[i].numCanCheckIn;
+                    }
+                %>
+                <td><%=a2%></td>
+                <td><%=a1%></td>
+                <td><%=a3%></td>
+                <td>￥<%=pp[i].price%></td>
+                <td>￥<%=pp[i].retail_price%></td>
+                <%if(Number(a3)>2){%>
+                <td>￥<%=pp[i].price_2%></td>
+                <td>￥<%=pp[i].retail_price_2%></td>
+                <%if(Number(pp[i].retail_price_child)==0){%>
+                <td>-</td>
+                <%}else{%>
+                <td>￥<%=pp[i].retail_price_child%></td>
+                <%}%>
+                <%}else{%>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <%}%>
+
+                <td><%=pp[i].amount%></td>
+                <td>
+                    <select id="p<%=l%>" style="width: 40px;">
+                          <option value="0">0</option>
+                          <%for(var k=0;k<Number(pp[i].amount);k++){
+                          %>
+                                <option value="<%=k+1%>"><%=k+1%></option>
+                          <%
+                          }
+                           %>
+                    </select>
+
+                </td>
+            </tr>
+            <%
+            }
+            }%>
+
+            <tr style="<%=f5%>text-align: left;color: #ffffff;font-weight: bold;background-color: #B3B3B3;line-height: 20px;">
+                <td></td>
+                <td style="color: #ffffff;text-align: center;">皇家大道景观房</td>
+                <td colspan="8" ></td>
+            </tr>
+            <%
+              var s1 = "";
+
+
+                    for(var i in pp){
+                    if(pp[i].amount != 0 && pp[i].cabin_type_id==5){
+                l = l + 1;
+                (l%2 !=0) ?s1="background-color:#F2F0F4;":s1="";
+            %>
+            <tr style="<%=s1%>text-align: center">
+                <%
+                    if(c1==""){
+                        c1 = pp[i].cabin_type_id;
+                        c2 = pp[i].cabin_category_id;
+                        c3 = pp[i].retail_price;
+                        c4 = pp[i].retail_price_2;
+                        c5 = pp[i].retail_price_child;
+                        c6 = pp[i].id;
+                    }else{
+                        c1 = c1 + "@" +pp[i].cabin_type_id;
+                        c2 = c2 + "@" +pp[i].cabin_category_id;
+                        c3 = c3 + "@" +pp[i].retail_price;
+                        c4 = c4 + "@" +pp[i].retail_price_2;
+                        c5 = c5 + "@" +pp[i].retail_price_child;
+                        c6 = c6 + "@" +pp[i].id;
+                    }
+                    var a1 = ""; var a2 = "";var a3 = "";
+                    if(pp[i].cabin_category_id == 9999){
+                        if(pp[i].cabin_type_id==1){a1 ="内舱房";}
+                        else if(pp[i].cabin_type_id==2){a1 ="海景房";}
+                        else if(pp[i].cabin_type_id==3){a1 ="阳台房";}
+                        else if(pp[i].cabin_type_id==4){a1 ="套房";}
+                        else if(pp[i].cabin_type_id==5){a1 ="皇家大道景观房";}
+                        a2 = "-";a3 = "-";
+                    }else{
+                        a1 = pp[i].txtCabinName;
+                        a2 = pp[i].txtCabinNo;
+                        a3 = pp[i].numCanCheckIn;
+                    }
+                %>
+                <td><%=a2%></td>
+                <td><%=a1%></td>
+                <td><%=a3%></td>
+                <td>￥<%=pp[i].price%></td>
+                <td>￥<%=pp[i].retail_price%></td>
+                <%if(Number(a3)>2){%>
+                <td>￥<%=pp[i].price_2%></td>
+                <td>￥<%=pp[i].retail_price_2%></td>
+                <%if(Number(pp[i].retail_price_child)==0){%>
+                <td>-</td>
+                <%}else{%>
+                <td>￥<%=pp[i].retail_price_child%></td>
+                <%}%>
+                <%}else{%>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <%}%>
+
+                <td><%=pp[i].amount%></td>
+                <td>
+                    <select id="p<%=l%>" style="width: 40px;">
+                        <option value="0">0</option>
+                        <%for(var k=0;k<Number(pp[i].amount);k++){
+                        %>
+                        <option value="<%=k+1%>"><%=k+1%></option>
+                        <%
+                        }
+                        %>
+                    </select>
+
+                </td>
+            </tr>
+            <%
+            }
+            }%>
+
+            <tr style="<%=f2%>text-align: left;color: #ffffff;font-weight: bold;background-color: #B3B3B3;line-height: 20px;">
+                <td></td>
+                <td style="color: #ffffff;text-align: center;">海景房</td>
+                <td colspan="8" ></td>
+            </tr>
+            <%
+              var s1 = "";
+
+
+                    for(var i in pp){
+                    if(pp[i].amount != 0 && pp[i].cabin_type_id==2){
+                l = l + 1;
+                (l%2 !=0) ?s1="background-color:#F2F0F4;":s1="";
+            %>
+            <tr style="<%=s1%>text-align: center">
+                <%
+                    if(c1==""){
+                        c1 = pp[i].cabin_type_id;
+                        c2 = pp[i].cabin_category_id;
+                        c3 = pp[i].retail_price;
+                        c4 = pp[i].retail_price_2;
+                        c5 = pp[i].retail_price_child;
+                        c6 = pp[i].id;
+                    }else{
+                        c1 = c1 + "@" +pp[i].cabin_type_id;
+                        c2 = c2 + "@" +pp[i].cabin_category_id;
+                        c3 = c3 + "@" +pp[i].retail_price;
+                        c4 = c4 + "@" +pp[i].retail_price_2;
+                        c5 = c5 + "@" +pp[i].retail_price_child;
+                        c6 = c6 + "@" +pp[i].id;
+                    }
+                    var a1 = ""; var a2 = "";var a3 = "";
+                    if(pp[i].cabin_category_id == 9999){
+                        if(pp[i].cabin_type_id==1){a1 ="内舱房";}
+                        else if(pp[i].cabin_type_id==2){a1 ="海景房";}
+                        else if(pp[i].cabin_type_id==3){a1 ="阳台房";}
+                        else if(pp[i].cabin_type_id==4){a1 ="套房";}
+                        else if(pp[i].cabin_type_id==5){a1 ="皇家大道景观房";}
+                        a2 = "-";a3 = "-";
+                    }else{
+                        a1 = pp[i].txtCabinName;
+                        a2 = pp[i].txtCabinNo;
+                        a3 = pp[i].numCanCheckIn;
+                    }
+                %>
+                <td><%=a2%></td>
+                <td><%=a1%></td>
+                <td><%=a3%></td>
+                <td>￥<%=pp[i].price%></td>
+                <td>￥<%=pp[i].retail_price%></td>
+                <%if(Number(a3)>2){%>
+                <td>￥<%=pp[i].price_2%></td>
+                <td>￥<%=pp[i].retail_price_2%></td>
+                <%if(Number(pp[i].retail_price_child)==0){%>
+                <td>-</td>
+                <%}else{%>
+                <td>￥<%=pp[i].retail_price_child%></td>
+                <%}%>
+                <%}else{%>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <%}%>
+
+                <td><%=pp[i].amount%></td>
+                <td>
+                    <select id="p<%=l%>" style="width: 40px;">
+                        <option value="0">0</option>
+                        <%for(var k=0;k<Number(pp[i].amount);k++){
+                        %>
+                        <option value="<%=k+1%>"><%=k+1%></option>
+                        <%
+                        }
+                        %>
+                    </select>
+
+                </td>
+            </tr>
+            <%
+            }
+            }%>
+
+            <tr style="<%=f3%>text-align: left;color: #ffffff;font-weight: bold;background-color: #B3B3B3;line-height: 20px;">
+                <td></td>
+                <td style="color: #ffffff;text-align: center;">阳台房</td>
+                <td colspan="8" ></td>
+            </tr>
+            <%
+              var s1 = "";
+
+
+                    for(var i in pp){
+                    if(pp[i].amount != 0 && pp[i].cabin_type_id==3){
+                l = l + 1;
+                (l%2 !=0) ?s1="background-color:#F2F0F4;":s1="";
+            %>
+            <tr style="<%=s1%>text-align: center">
+                <%
+                    if(c1==""){
+                        c1 = pp[i].cabin_type_id;
+                        c2 = pp[i].cabin_category_id;
+                        c3 = pp[i].retail_price;
+                        c4 = pp[i].retail_price_2;
+                        c5 = pp[i].retail_price_child;
+                        c6 = pp[i].id;
+                    }else{
+                        c1 = c1 + "@" +pp[i].cabin_type_id;
+                        c2 = c2 + "@" +pp[i].cabin_category_id;
+                        c3 = c3 + "@" +pp[i].retail_price;
+                        c4 = c4 + "@" +pp[i].retail_price_2;
+                        c5 = c5 + "@" +pp[i].retail_price_child;
+                        c6 = c6 + "@" +pp[i].id;
+                    }
+                    var a1 = ""; var a2 = "";var a3 = "";
+                    if(pp[i].cabin_category_id == 9999){
+                        if(pp[i].cabin_type_id==1){a1 ="内舱房";}
+                        else if(pp[i].cabin_type_id==2){a1 ="海景房";}
+                        else if(pp[i].cabin_type_id==3){a1 ="阳台房";}
+                        else if(pp[i].cabin_type_id==4){a1 ="套房";}
+                        else if(pp[i].cabin_type_id==5){a1 ="皇家大道景观房";}
+                        a2 = "-";a3 = "-";
+                    }else{
+                        a1 = pp[i].txtCabinName;
+                        a2 = pp[i].txtCabinNo;
+                        a3 = pp[i].numCanCheckIn;
+                    }
+                %>
+                <td><%=a2%></td>
+                <td><%=a1%></td>
+                <td><%=a3%></td>
+                <td>￥<%=pp[i].price%></td>
+                <td>￥<%=pp[i].retail_price%></td>
+                <%if(Number(a3)>2){%>
+                <td>￥<%=pp[i].price_2%></td>
+                <td>￥<%=pp[i].retail_price_2%></td>
+                <%if(Number(pp[i].retail_price_child)==0){%>
+                <td>-</td>
+                <%}else{%>
+                <td>￥<%=pp[i].retail_price_child%></td>
+                <%}%>
+                <%}else{%>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <%}%>
+
+                <td><%=pp[i].amount%></td>
+                <td>
+                    <select id="p<%=l%>" style="width: 40px;">
+                        <option value="0">0</option>
+                        <%for(var k=0;k<Number(pp[i].amount);k++){
+                        %>
+                        <option value="<%=k+1%>"><%=k+1%></option>
+                        <%
+                        }
+                        %>
+                    </select>
+
+                </td>
+            </tr>
+            <%
+            }
+            }%>
+
+            <tr style="<%=f4%>text-align: left;color: #ffffff;font-weight: bold;background-color: #B3B3B3;line-height: 20px;">
+                <td></td>
+                <td style="color: #ffffff;text-align: center;">套房</td>
+                <td colspan="8" ></td>
+            </tr>
+            <%
+              var s1 = "";
+
+
+                    for(var i in pp){
+                    if(pp[i].amount != 0 && pp[i].cabin_type_id==4){
+                l = l + 1;
+                (l%2 !=0) ?s1="background-color:#F2F0F4;":s1="";
+            %>
+            <tr style="<%=s1%>text-align: center">
+                <%
+                    if(c1==""){
+                        c1 = pp[i].cabin_type_id;
+                        c2 = pp[i].cabin_category_id;
+                        c3 = pp[i].retail_price;
+                        c4 = pp[i].retail_price_2;
+                        c5 = pp[i].retail_price_child;
+                        c6 = pp[i].id;
+                    }else{
+                        c1 = c1 + "@" +pp[i].cabin_type_id;
+                        c2 = c2 + "@" +pp[i].cabin_category_id;
+                        c3 = c3 + "@" +pp[i].retail_price;
+                        c4 = c4 + "@" +pp[i].retail_price_2;
+                        c5 = c5 + "@" +pp[i].retail_price_child;
+                        c6 = c6 + "@" +pp[i].id;
+                    }
+                    var a1 = ""; var a2 = "";var a3 = "";
+                    if(pp[i].cabin_category_id == 9999){
+                        if(pp[i].cabin_type_id==1){a1 ="内舱房";}
+                        else if(pp[i].cabin_type_id==2){a1 ="海景房";}
+                        else if(pp[i].cabin_type_id==3){a1 ="阳台房";}
+                        else if(pp[i].cabin_type_id==4){a1 ="套房";}
+                        else if(pp[i].cabin_type_id==5){a1 ="皇家大道景观房";}
+                        a2 = "-";a3 = "-";
+                    }else{
+                        a1 = pp[i].txtCabinName;
+                        a2 = pp[i].txtCabinNo;
+                        a3 = pp[i].numCanCheckIn;
+                    }
+                %>
+                <td><%=a2%></td>
+                <td><%=a1%></td>
+                <td><%=a3%></td>
+                <td>￥<%=pp[i].price%></td>
+                <td>￥<%=pp[i].retail_price%></td>
+                <%if(Number(a3)>2){%>
+                <td>￥<%=pp[i].price_2%></td>
+                <td>￥<%=pp[i].retail_price_2%></td>
+                <%if(Number(pp[i].retail_price_child)==0){%>
+                <td>-</td>
+                <%}else{%>
+                <td>￥<%=pp[i].retail_price_child%></td>
+                <%}%>
+                <%}else{%>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <%}%>
+
+                <td><%=pp[i].amount%></td>
+                <td>
+                    <select id="p<%=l%>" style="width: 40px;">
+                        <option value="0">0</option>
+                        <%for(var k=0;k<Number(pp[i].amount);k++){
+                        %>
+                        <option value="<%=k+1%>"><%=k+1%></option>
+                        <%
+                        }
+                        %>
+                    </select>
+
+                </td>
+            </tr>
+            <%
+            }
+            }%>
+
+        </table>
+
+        <table style="margin: auto;width: 960px;margin-top: 20px;" border="0">
+            <tr style="line-height:30px;">
+                <td>&nbsp;</td>
+                <td style="text-align:left;">
+                    <img  src="/images/contactsell.png" style="cursor:pointer;" onclick="window.parent.htotop();parent.goToMessage({recipient:'<%=108%>', ext_p_number:'<%=product[0].product_number%>', ext_p_id:'<%=product[0].id%>', ext_type:1, title:'<%=product[0].title%>'});"/>
+                </td>
+                <td style="width:100px;text-align:center;vertical-align: top;">
+                   <img src="/images/cancel_booking.png" style="cursor:pointer" onclick="parent.cancelBooking();" />
+                </td>
+                <td style="width:100px">
+                    <img id="yding" style="cursor:pointer;" src="/images/xiayibu.png" onclick="bookingNextStep();" />
+                </td>
+                 
+            </tr>
+        </table>
+
+        <br/>
+        <input type="hidden" name="product_number" id="product_number" value="<%=product[0].product_number%>"></input>
+        <input type="hidden" name="product_id"  value="<%=product[0].id%>" />
+        <input type="hidden" name="cabin_type_id"  value="<%=c1%>" />
+        <input type="hidden" name="cabin_category_id"  value="<%=c2%>" />
+
+        <input type="hidden" name="retail_price"  value="<%=c3%>" />
+        <input type="hidden" name="retail_price_2"  value="<%=c4%>" />
+        <input type="hidden" name="price_child"  value="<%=c5%>" />
+        <input type="hidden" name="product_position_id"  value="<%=c6%>" />
+        <input type="hidden" name="buynum" id="buynum"  value="" />
+
+        <input type="hidden" name="cuserid"  value="<%=user[0].id%>" />
+    </form>    
+</div>
+<script type="text/javascript">
+    unmaskIframe();
+   window.parent.ResizeIframeFromParent("page10");
+</script>

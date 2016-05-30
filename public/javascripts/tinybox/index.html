@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>TinyBox - JavaScript Popup Script</title>
+</head>
+<body>
+
+<link type="text/css" rel="stylesheet" href="style.css" />
+
+<script type="text/javascript" src="tinybox.js"></script>
+
+<div id="testdiv">
+
+	<h1>TinyBox JavaScript弹出脚本</h1>
+	<div style="height:20px;"></div>
+	<div class="button" id="testclick1"><strong>高级功能</strong> - <em>点击查看</em></div>
+
+	<div class="button" id="testclick2"><strong>图片</strong> - <em>点击查看</em></div>
+
+	<div class="button" id="testclick3"><strong>定时自动隐藏</strong> - <em>点击查看</em></div>
+
+</div>
+
+
+
+<script type="text/javascript">
+
+T$('testclick1').onclick = function(){
+	TINY.box.show('advanced.html',1,300,150,1)
+}
+
+var content2 = "<img src='images/rhino.jpg' width='298' height='373' alt='' />";
+T$('testclick2').onclick = function(){
+	TINY.box.show(content2,0,0,0,1)
+}
+
+var content3 = "3秒就会消失。";
+T$('testclick3').onclick = function(){
+	TINY.box.show(content3,0,0,0,0,3)
+}
+</script>
+
+</body>
+</html>

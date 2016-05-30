@@ -1,0 +1,95 @@
+<div id="product-list-view" style="width:960px;background-color: #FFFFFF;margin:0 auto;">
+
+    <table style="width: 150px;margin-top: 22px;display: none" border="0" cellspacing="0">
+        <tr>
+            <td class="tdfooter1" style="background-color: #F7861E;color:#FFFFFF;font-size: 11px;" id="n1">中国出发</td>
+            <td class="tdfooter1" style="font-size: 11px;" id="n2" onclick="window.location='/productoverseas'">海外出发</td>
+        </tr>
+    </table>
+    <table style="width: 100%;margin-top:22px;background-color: #F7861E" border="0" cellspacing="0">
+
+        <tr style="font-weight: bold;height: 45px;">
+            <td style="vertical-align: middle">
+                <span style="margin-left:19px;color: #FFFFFF;">
+                    <select id="product-type" style="width: 120px;" onchange="changeDeparture();">
+                        <option selected value="*">所有产品类别</option>
+                        <option value="1">单船票</option>
+                        <option value="2">团队游（一价全包）</option>
+                        </select>
+                </span>
+            </td>
+            <td style="vertical-align: middle"><span style="color: #FFFFFF;">
+                    <select id="date-start" style="width: 120px;">
+                        <option value="*">所有出发日期</option>
+                        <%
+                        var myDate = new Date();
+                        var tyear = myDate.getFullYear();
+                        var nummonth = myDate.getMonth();
+                        var tmonth = "";
+                        var nyear =  tyear + 1;
+                        var j = 0;
+                        for(var i=nummonth+1;i<14;i++){
+                            j = j + 1;
+                            if(j<15){
+                                if(i==13) {
+                                    tyear = tyear + 1;
+                                    i = 1;
+                                }
+                            tmonth = i;
+                            if(tmonth!="12"&&tmonth!="11"&&tmonth!="10"){
+                                tmonth = "0" + tmonth;
+                            }
+                        %>
+                        <option value="<%=tyear+"-"+tmonth%>"><%=tyear+"年"+tmonth+"月"%></option>
+                        <%
+                            }
+                        }
+                        %>
+                    </select>
+                </span></td>
+            <td style="vertical-align: middle"><span style="color: #FFFFFF;">
+                    <select style="width:120px" id="area" name="cf" onchange="changeDeparture()">
+                        <option value="*">所有航区</option>
+                        <%
+                        for (var i in med) {
+                        %>
+                        <option value="<%=med[i].id%>"><%=med[i].txtCruiseArea%>
+                        </option>
+                        <%
+                        }
+                        %>
+                    </select>
+                </span></td>
+
+            <td style="vertical-align: middle"><span style="color: #FFFFFF;">
+                     <select id="departure" style="width: 120px;">
+                     </select>
+                </span></td>
+            <td style="vertical-align: middle"><span style="color: #FFFFFF;">
+                 <select style="width:120px" id="cruise-company" onchange="changeShipFilter();">
+                     <option value="*">所有邮轮公司</option>
+                 </select>
+                </span></td>
+            <td style="vertical-align: middle"><span style="color: #FFFFFF;">
+                     <select id="ship-id" style="width: 120px;">
+                         <option value="-">所有邮轮</option>
+                     </select>
+                </span></td>
+            <td style="vertical-align: middle"><img style="padding-top:14px;cursor: pointer" onclick="resetPage();fetchProducts();"  src="images/sou.png"><div style="display:none;height:25px;cursor:pointer;margin-left: 40px;margin-top: 0px;width: 70px;background-color: #0068BD;color:#FFFFFF;font-weight: bold;text-align: center;line-height: 25px;">搜！</div></td>
+        </tr>
+    </table>
+    <div style="width: 100%;text-align: right;margin-top: 10px;">
+    <select name="pse2" id="pse2" onchange="resetPage();fetchProducts();">
+        <option value="*">选择排序</option>
+        <option value="1">结算价格由低到高</option>
+        <option value="2">出发日期由近到远</option>
+        <option selected value="3">发布日期由近及远</option>
+    </select>
+    </div>
+    <div id="loading" style="display: none;width:100%;text-align: center">加载中...</div>
+    <div id="product-list"></div>
+    <div id="product-paging" style="width:100%;text-align:center"></div>
+    <br/>
+    <input type="hidden" id="refreshable-page" value="1"/>
+    <script type="text/javascript" src="/javascripts/b_product_list_view.js"></script>
+</div>

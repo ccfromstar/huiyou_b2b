@@ -1,0 +1,278 @@
+<div style="width:960px;background-color: #FFFFFF;margin:0 auto;">
+    <table style="width: 100%;margin-top: 20px;margin-bottom: 50px;" border="0">
+         <tr>
+             <td style="vertical-align: top">
+                 
+                 <%
+                     var h1 = 0;
+                 if(company[0].role_seller == 1) {
+                     h1 = 200
+                 }else{
+                     h1 = 100
+                 }%>
+                 
+  <!--标签-->   <table style="width: 350px;margin-top: 0px;" border="0" cellspacing="0">
+                     <tr style="line-height: 30px;">
+                        <%if(user[0].role_company_admin!=1){%> 
+                         <td class="tdfooter1 " style="background:#F7861E;color:#FFFFFF">我购买的订单
+                         </td>
+                         <%}%>
+                         <%if(user[0].role_company_admin==1){%>
+                         <td class="tdfooter1" style="background:#F7861E;color:#FFFFFF">本公司人员购买的订单</td>
+                          <%}%>
+                     </tr>
+<!--标签结束-->  </table>
+
+                 <div style="background-image: url('/images/ora.jpg');width: 100%;height: 3px;"></div>
+
+ <!--搜索-->   <div style="width: 100%;text-align: right;vertical-align: top">
+                     <table border="0" style="width: 100%">
+                         <tr>
+                             <td>
+                                 <select id="czr" style="display: none">
+                                     <option value="全部">采购方：</option>
+                                 </select>
+                                 &nbsp;&nbsp;&nbsp;<input type="text" id="fs" onFocus="if(value==defaultValue){value='';this.style.color='#000'}" onBlur="if(!value){value=defaultValue;this.style.color='#999'}" value="订单号/产品名称" /></td>
+                             <td style="width: 20px;"><img onclick="filterS()" src="/images/fangdajing.png" style="cursor: pointer;margin-top: 10px;" /></td>
+                         </tr>
+                     </table>
+ <!--搜索结束--> </div>
+                 
+<!--子账户开始--><%if(user[0].role_company_admin!=1){%>
+                 <table class="pclass" style="border:2px solid #ABBBBB;margin-top: 10px;width: 100%;border-collapse: collapse;" cellspacing="0" cellpadding="0" id="list5">
+                     <tr style="background-image: url('images/huitou.png')">
+                         <th style="width:130px;text-align: center">
+                             <select style="width: 120px;" id="rq" onchange="filterP()">
+                                 <option value="0">发布日期</option>
+                                 <option value="3">最近3个月</option>
+                                 <option value="6">最近6个月</option>
+                                 <option value="7">最近一年</option>
+                                 <option value="8">最近两年</option>
+                             </select>
+                         </th>
+                         <th style="text-align: center;width: 120px;">订单号</th>
+                         <th style="text-align: center">产品名称</th>
+                         <th style="width:80px;text-align: center">
+                             <select id="fp" onchange="filterP()">
+                                 <option value="全部">订单状态</option>
+                                 <option value="待确认">待确认</option>
+                                 <option value="待付款">待付款</option>
+                                 <option value="已付款">已付款</option>
+                                 <option value="待出团">待出团</option>
+                                 <option value="已出团">已出团</option>
+                                 <option value="交易关闭">交易关闭</option>
+                             </select>
+                         </th>
+                         <th style="width: 140px;text-align: center">操作</th>
+                     </tr>
+                     <%
+                     var k = 0;
+                     for(var i in booking){
+
+                     if(booking[i].owner_id == user[0].id){
+
+                     var tm = 0;
+                     var man1 = 0;
+                     var man2 = 0;
+                         var passe = "";
+                     for(var l in cc){
+                         if(cc[l].booking_id == booking[i].id){
+                             tm = tm + cc[l].booking_pos_total_price;
+                             man1 = man1 + cc[l].amount_adult;
+                             man2 = man2 + cc[l].amount_child;
+                             for(var p in cc1){
+                                if(cc1[p].booking_pos_id == cc[l].id){
+                                    passe = cc1[p].lastname+cc1[p].firstname;
+                                }
+                             }
+                         }
+                     }
+
+                     if(passe==""){
+                         passe = "...";
+                     }
+                     if(booking[i].rebate){
+                            tm = booking[i].rebate;
+                      }
+                     
+
+
+                     %>
+                     <tr id="j<%=k%>" onmouseover="$('#j<%=k%>').css('background-color','#EAE8E9');$('#jj<%=k%>').css('background-color','#EAE8E9');" onmouseout="$('#j<%=k%>').css('background-color','#ffffff');$('#jj<%=k%>').css('background-color','#ffffff');">
+
+                         <td colspan="2" style="border-right: 0px;">&nbsp;&nbsp;<b>采购方：</b><%=booking[i].sn%>&nbsp;&nbsp;<%=booking[i].booker_name%></td>
+                         <td colspan="2" style="text-align: left;border-left: 0px;border-right: 0px;">
+                             &nbsp;&nbsp;<b>游客信息：</b><span style="color: #0B68BB;"><%=passe%>等</span> <span style="color: #FF0000"><%=man1%>成人<%=man2%>儿童</span>
+                         </td>
+                         <td colspan="2" style="text-align: left;border-left: 0px;">
+                             &nbsp;&nbsp;<b>订单金额：</b> <span style="color: #FF0000;font-weight: bold"><%=tm%>元</span>
+                         </td>
+                     </tr>
+                     <tr id="jj<%=k%>" style="line-height: 20px;" onmouseover="$('#j<%=k%>').css('background-color','#EAE8E9');$('#jj<%=k%>').css('background-color','#EAE8E9');" onmouseout="$('#j<%=k%>').css('background-color','#ffffff');$('#jj<%=k%>').css('background-color','#ffffff');">
+                         <td style="text-align:center">
+                             <span style="margin-left: 5px;"><%=(new Date(booking[i].created_at)).Format("yyyy-MM-dd hh:mm:ss")%></span>
+                         </td>
+                         <td style="text-align: center"><span style="margin-left: 0px;" id="w<%=k%>"><%=booking[i].booking_number%></span></td>
+                         <td style="line-height:20px;"><span onclick="window.location='productdetail?p=<%=booking[i].product_number%>';" style="cursor:pointer;margin-left: 5px;color: #0B68BB;font-weight: bold" id="v<%=k%>"><%=booking[i].title%></span>
+                            <br/>&nbsp;&nbsp;供应商：<%=booking[i].short_name%>
+                         </td>
+                         <td style="text-align: center" id="h<%=k%>">
+                            <%=booking[i].bname%>
+                        </td>
+                         <td style="text-align: center;width: 140px;">
+                             <input onclick="window.location=('productbookingread?p=<%=booking[i].id%>');" type="button" value="查看" />
+                              <%if(booking[i].travel_group_file && booking[i].status_id==6){%>
+                             <input onclick="window.location=('productbookingreadxs?p=<%=booking[i].id%>');" type="button" value="下载出团通知书" />   
+                             <%}%>
+                             <%if(booking[i].status_id == 1){%>
+                             <input onclick="window.location=('productbookingread?p=<%=booking[i].id%>');" type="button" value="取消" />
+                             <%}%>
+                             <%if(booking[i].status_id == 2){%>
+                             <input onclick="window.location=('productbookingread?p=<%=booking[i].id%>');" type="button" value="完善游客信息" />
+                             <%}%>
+                         </td>
+                     </tr>
+                     <%
+                         k = k + 1;
+                     }
+                     }
+                     %>
+                 </table>
+<!--子账户结束--><%}%> 
+
+<!--管理员账户开始--><%if(user[0].role_company_admin==1){%>    
+                      <table class="pclass" style="border:2px solid #ABBBBB;margin-top: 10px;width: 100%;border-collapse: collapse;" cellspacing="0" cellpadding="0" id="list5">
+                     <tr style="background-image: url('images/huitou.png')">
+
+                        <th style="text-align: center;">
+                            <select style="width: 70px;" id="fp2" onchange="filterP()">
+                                 <option value="全部">发布人</option>
+                                 <%
+                                    var str0 = "";
+                                    for(var i in booking){
+                                        if(booking[i].status_id !=5){
+                                            if(booking[i].supplier_id == company[0].id){
+                                                if(str0.indexOf(booking[i].booker_name)==-1){
+                                  %>
+                                        <option value="<%=booking[i].booker_name%>"><%=booking[i].booker_name%></option>
+                                  <%
+                                                str0 = str0 + "@" + booking[i].booker_name;
+                                                }
+                                            }
+                                        }
+                                    }
+                                 %>
+                             </select>
+                         </th>
+                              
+                         <th style="width:130px;text-align: center">
+                             <select style="width: 120px;" id="rq" onchange="filterP()">
+                                 <option value="0">发布日期</option>
+                                 <option value="3">最近3个月</option>
+                                 <option value="6">最近6个月</option>
+                                 <option value="7">最近一年</option>
+                                 <option value="8">最近两年</option>
+                             </select>
+                         </th>
+                         <th style="text-align: center;width: 120px;">订单号</th>
+                         <th style="text-align: center">产品名称</th>
+                         <th style="width:80px;text-align: center">
+                             <select id="fp" onchange="filterP()">
+                                 <option value="全部">订单状态</option>
+                                 <option value="待确认">待确认</option>
+                                 <option value="待付款">待付款</option>
+                                 <option value="已付款">已付款</option>
+                                 <option value="待出团">待出团</option>
+                                 <option value="已出团">已出团</option>
+                                 <option value="交易关闭">交易关闭</option>
+                             </select>
+                         </th>
+                         <th style="width: 140px;text-align: center">操作</th>
+                     </tr>
+                     <%
+                     var k = 0;
+                     for(var i in booking){
+
+                     if(booking[i].supplier_id == company[0].id){
+
+                     var tm = 0;
+                     var man1 = 0;
+                     var man2 = 0;
+                         var passe = "";
+                     for(var l in cc){
+                         if(cc[l].booking_id == booking[i].id){
+                             tm = tm + cc[l].booking_pos_total_price;
+                             man1 = man1 + cc[l].amount_adult;
+                             man2 = man2 + cc[l].amount_child;
+                             for(var p in cc1){
+                                if(cc1[p].booking_pos_id == cc[l].id){
+                                    passe = cc1[p].lastname+cc1[p].firstname;
+                                }
+                             }
+                         }
+                     }
+
+                     if(passe==""){
+                         passe = "...";
+                     }
+                     if(booking[i].rebate){
+                            tm = booking[i].rebate;
+                      }
+                     
+
+
+                     %>
+                     <tr id="j<%=k%>" onmouseover="$('#j<%=k%>').css('background-color','#EAE8E9');$('#jj<%=k%>').css('background-color','#EAE8E9');" onmouseout="$('#j<%=k%>').css('background-color','#ffffff');$('#jj<%=k%>').css('background-color','#ffffff');">
+                         <td colspan="2" style="border-right: 0px;">&nbsp;&nbsp;<b>采购方：</b><%=booking[i].sn%>&nbsp;&nbsp;<%=booking[i].booker_name%></td>
+                         <td colspan="2" style="text-align: left;border-left: 0px;border-right: 0px;">
+                             &nbsp;&nbsp;<b>游客信息：</b><span style="color: #0B68BB;"><%=passe%>等</span> <span style="color: #FF0000"><%=man1%>成人<%=man2%>儿童</span>
+                         </td>
+                         <td colspan="2" style="text-align: left;border-left: 0px;">
+                             &nbsp;&nbsp;<b>订单金额：</b> <span style="color: #FF0000;font-weight: bold"><%=tm%>元</span>
+                         </td>
+                     </tr>
+                     <tr id="jj<%=k%>" style="line-height: 20px;" onmouseover="$('#j<%=k%>').css('background-color','#EAE8E9');$('#jj<%=k%>').css('background-color','#EAE8E9');" onmouseout="$('#j<%=k%>').css('background-color','#ffffff');$('#jj<%=k%>').css('background-color','#ffffff');">
+                        <td style="text-align:center"><%=booking[i].booker_name%></td>
+                         <td>
+                             <span style="margin-left: 5px;"><%=(new Date(booking[i].created_at)).Format("yyyy-MM-dd hh:mm:ss")%></span>
+                         </td>
+                         <td style="text-align: center"><span style="margin-left: 0px;" id="w<%=k%>"><%=booking[i].booking_number%></span></td>
+                         <td style="line-height:20px;"><span onclick="window.location='productdetail?p=<%=booking[i].product_number%>';" style="cursor:pointer;margin-left: 5px;color: #0B68BB;font-weight: bold;" id="v<%=k%>"><%=booking[i].title%></span>
+                            <br/>&nbsp;&nbsp;供应商：<%=booking[i].short_name%>
+                         </td>
+                         <td style="text-align: center" id="h<%=k%>">
+                            <%=booking[i].bname%>
+                        </td>
+                         <td style="text-align: center;width: 140px;">
+                             <input onclick="window.location=('productbookingread?p=<%=booking[i].id%>');" type="button" value="查看" />
+                              <%if(booking[i].travel_group_file && booking[i].status_id==6){%>
+                             <input onclick="window.location=('productbookingreadxs?p=<%=booking[i].id%>');" type="button" value="下载出团通知书" />   
+                             <%}%>
+                             <%if(booking[i].status_id == 1){%>
+                             <input onclick="window.location=('productbookingread?p=<%=booking[i].id%>');" type="button" value="取消" />
+                             <%}%>
+                             <%if(booking[i].status_id == 2){%>
+                             <input onclick="window.location=('productbookingread?p=<%=booking[i].id%>');" type="button" value="完善游客信息" />
+                             <%}%>
+                         </td>
+                     </tr>
+                     <%
+                         k = k + 1;
+                     }
+                     }
+                     %>
+                     </table>
+<!--管理员账户结束--><%}%>     
+
+             </td>
+         </tr>
+    </table>
+    <input type="hidden" id="kk" value="<%=k%>" />
+    <input type="hidden" id="refreshable-page" value="1" />
+    <script>
+            var type = Number(getCookie("bookingtype"));
+            setCookie('bookingtype','0');
+            $("#fp").get(0).selectedIndex = type;
+            filterP();  
+    </script>
+</div>

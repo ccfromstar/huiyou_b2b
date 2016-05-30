@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+<head>
+<title>荟邮轮</title>
+<link rel="stylesheet" type="text/css" href="/stylesheets/demozi.css">
+<script type="text/javascript" src="/javascripts/jquery-easyui_jb51/jquery-1.8.0.min.js"></script>
+<script type="text/javascript" src="/javascripts/b_main.js"></script>
+</head>
+
+<body>
+
+	<div id="page1" class="page" style="height:1000px;"><!--page 1-->
+              <div style="height:52px;background:#FFFFFF"></div>   <!--空-->
+              <div style="height:85px;width:328px;background:#FFFFFF;float:left">      <!--pag1 top left-->
+                  <img src="/images/lets.png">
+                  <p style="font-size:20px"><span style="font-size:20px"><%=product[0].txtCompanyName%>&nbsp; </span><%=product[0].txtShipName%></p>
+                  <p style="font-size:14px; font-weight:bold"><%=product[0].title%></p>
+                  <p style="font-size:12px;width:328px;color:#F78D2B;font-weight:bold;z-index:10;position:absolute"> <%
+                    var hx = "";
+                    for(var i in ts){
+                         if(ts[i].location!="航海日"){
+                        if(hx ==""){
+                            hx = ts[i].location;
+                        }else{
+                            hx = hx + "-" + ts[i].location;
+                        }
+                         }
+                    }%>
+                    <%=hx%></p>
+              </div>
+
+              <div><!--page1 top right-->
+                  <img src="/images/gray.png" style="float:right;z-index:9;position:absolute;margin-left:38px">
+              </div>
+
+              <img src="/images/cover.jpg" style="width:595px;clear:both;position:relative;top:5px" /><!--pag1 image-->
+    
+
+               <div style="height:20px;width:595px;margin-top:5px;">        <!--page1 bottom-->
+                <p style="float:right;">
+                  <%if(user[0].id!=24){%>
+                  <span style="font-weight:bold;color:#000000;font-size:14px"><%=company[0].short_name%></span>&nbsp; <span style="color:#5E6771;font-size:14px"><%=user[0].name%></span>&nbsp; <span style="color:#5E6771;font-size:14px"><%=user[0].mobile_phone%></span>
+                  <%}%>
+                </p>
+               </div>
+        </div><!--page 1结束-->
+
+     <!--page 2-->
+        <div id="page2" class="page" style="height:1000px;display:none;">
+        	<div style="height:52px;background:#FFFFFF"></div>   <!--空-->
+             <img src="/images/cover2.jpg"><!--图片-->
+              <p style="font-size:20px;width:400px;">
+                <span style="font-size:20px"><%=product[0].txtCompanyName%>&nbsp; </span><%=product[0].txtShipName%>
+              </p>
+                  <p style="font-size:14px; font-weight:bold;width:400px;"><%=product[0].title%></p>
+                  <p style="font-size:12px;width:400px;color:#F78D2B;font-weight:bold;z-index:10;"> <%
+                    var hx = "";
+                    for(var i in ts){
+                         if(ts[i].location!="航海日"){
+                        if(hx ==""){
+                            hx = ts[i].location;
+                        }else{
+                            hx = hx + "-" + ts[i].location;
+                        }
+                         }
+                    }%>
+                    <%=hx%></p>
+
+                <div style="height:20px;width:400px;">        <!--page2 bottom-->
+                <p style="">
+                  <%if(user[0].id!=24){%>
+                  <span style="font-weight:bold;color:#000000;font-size:14px"><%=company[0].short_name%></span>&nbsp; <span style="color:#5E6771;font-size:14px"><%=user[0].name%></span>&nbsp; <span style="color:#5E6771;font-size:14px"><%=user[0].mobile_phone%></span>
+                  <%}%>
+                </p>
+               </div>
+
+        </div><!--page 2结束-->
+
+</body>
+</html>

@@ -1,0 +1,291 @@
+<div style="width:100%;background-color: #FFFFFF;margin:auto;">
+<script>
+function filterW(){
+
+    
+    var k = $("#kk").val();
+
+    for(var i=0;i<k;i++){
+            if($("#j"+i).html()){
+                $("#j"+i).removeAttr("style");
+            }
+    }
+
+    //筛选年度
+    var o = ($("#fp1").val());
+    if(o!="全部"){
+        for(var i=0;i<k;i++){
+            if($("#ha"+i).html()){
+                if(($("#ha"+i).html()).replace(/(^\s*)|(\s*$)/g, "")!=o){
+
+                    if($("#j"+i).html()){
+                        $("#j"+i).css("display","none");
+                    }
+                }
+            }
+        }
+    }
+
+    //筛选船公司
+    var o = ($("#fp2").val());
+    if(o!="全部"){
+        for(var i=0;i<k;i++){
+            if($("#hb"+i).html()){
+                if(($("#hb"+i).html()).replace(/(^\s*)|(\s*$)/g, "")!=o){
+
+                    if($("#j"+i).html()){
+                        $("#j"+i).css("display","none");
+                    }
+                }
+            }
+        }
+    }
+
+    //筛选船
+    var o = ($("#fp3").val());
+    if(o!="全部"){
+        for(var i=0;i<k;i++){
+            if($("#hc"+i).html()){
+                if(($("#hc"+i).html()).replace(/(^\s*)|(\s*$)/g, "")!=o){
+
+                    if($("#j"+i).html()){
+                        $("#j"+i).css("display","none");
+                    }
+                }
+            }
+        }
+    }
+
+    //筛选月
+    var o = ($("#fp4").val());
+    if(o!="全部"){
+        for(var i=0;i<k;i++){
+            if($("#hd"+i).html()){
+                if(($("#hd"+i).html()).replace(/(^\s*)|(\s*$)/g, "")!=o){
+
+                    if($("#j"+i).html()){
+                        $("#j"+i).css("display","none");
+                    }
+                }
+            }
+        }
+    }
+
+    //筛选晚
+    var o = ($("#fp5").val());
+    if(o!="全部"){
+        for(var i=0;i<k;i++){
+            if($("#he"+i).html()){
+                if(($("#he"+i).html()).replace(/(^\s*)|(\s*$)/g, "")!=o){
+
+                    if($("#j"+i).html()){
+                        $("#j"+i).css("display","none");
+                    }
+                }
+            }
+        }
+    }
+
+    //筛选航区
+    var o = ($("#fp6").val());
+    if(o!="全部"){
+        for(var i=0;i<k;i++){
+            if($("#hf"+i).html()){
+                if(($("#hf"+i).html()).replace(/(^\s*)|(\s*$)/g, "")!=o){
+
+                    if($("#j"+i).html()){
+                        $("#j"+i).css("display","none");
+                    }
+                }
+            }
+        }
+    }
+
+    //筛选出发
+    var o = ($("#fp7").val());
+    if(o!="全部"){
+        for(var i=0;i<k;i++){
+            if($("#hg"+i).html()){
+                if(($("#hg"+i).html()).replace(/(^\s*)|(\s*$)/g, "")!=o ){
+                    if($("#j"+i).html()){
+                        $("#j"+i).css("display","none");
+                    }
+                }
+            }
+        }
+    }
+
+    //筛选包船旅行社
+    var o = ($("#fp8").val());
+    if(o!="全部"){
+        for(var i=0;i<k;i++){
+            if($("#hh"+i).html()){
+                if(($("#hh"+i).html()).replace(/(^\s*)|(\s*$)/g, "")!=o ){
+                    if($("#j"+i).html()){
+                        $("#j"+i).css("display","none");
+                    }
+                }
+            }
+        }
+    }
+
+}
+</script>
+
+<%
+    var a1 = "";var a2 = "";var a3 = "";var a4 = "";var a5 = "";var a6 = "";var a7 = "";var a8 = "";
+    for(var i in r){
+            if(a1.indexOf(r[i].txtYear)==-1){
+                if(a1==""){
+                    a1 = r[i].txtYear + "";
+                }else{
+                    a1 = a1 + "@" + r[i].txtYear+ "";
+                }
+            }
+            if(a2.indexOf(r[i].txtCompany)==-1){
+                if(a2==""){
+                    a2 = r[i].txtCompany;
+                }else{
+                    a2 = a2 + "@" + r[i].txtCompany;
+                }
+            }
+            if(a3.indexOf(r[i].txtShip)==-1){
+                if(a3==""){
+                    a3 = r[i].txtShip;
+                }else{
+                    a3 = a3 + "@" + r[i].txtShip;
+                }
+            }
+            if(a4.indexOf(r[i].txtMonth)==-1){
+                if(a4==""){
+                    a4 = r[i].txtMonth+ "";
+                }else{
+                    a4 = a4 + "@" + r[i].txtMonth+ "";
+                }
+            }
+             var o = r[i].night + "";
+            if(a5.indexOf(o)==-1){
+                if(a5==""){
+                    a5 = o+ "";
+                }else{
+                    a5 = a5 + "@" + o+ "";
+                }
+            }
+            if(a6.indexOf(r[i].txtArea)==-1){
+                if(a6==""){
+                    a6 = r[i].txtArea;
+                }else{
+                    a6 = a6 + "@" + r[i].txtArea;
+                }
+            }
+
+            var o = r[i].txtTravelAgency + "";
+            if(a8.indexOf(o)==-1){
+                if(a8==""){
+                    a8 = o;
+                }else{
+                    a8 = a8 + "@" + o;
+                }
+            }
+
+    }
+    var tmp1 = a1.split("@");
+    var tmp2 = a2.split("@");
+    var tmp3 = a3.split("@");
+    var tmp4 = a4.split("@");
+    var tmp5 = a5.split("@");
+    var tmp6 = a6.split("@");
+    var tmp7 = a7.split("@");
+    var tmp8 = a8.split("@");
+%>
+    <div style="width:100%;">
+    <table style="width:1400px;BORDER-COLLAPSE: collapse ;border-color: #ABBBBB;border:2px solid #ABBBBB;" class="pclass" cellspacing="0" cellpadding="0">
+        <tr>
+            <td style="width:20px">
+                <select id="fp1" onchange="filterW()">
+                                 <option value="全部">年度</option>
+                                 <%for(var i=0;i<tmp1.length;i++){%>
+                                 <option value="<%=tmp1[i]%>"><%=tmp1[i]%></option>
+                                 <%}%>
+                </select>
+            </td>
+            <td style="width:20px">
+                <select id="fp4" onchange="filterW()">
+                                 <option value="全部">月份</option>
+                                 <%for(var i=0;i<tmp4.length;i++){%>
+                                 <option value="<%=tmp4[i]%>"><%=tmp4[i]%></option>
+                                 <%}%>
+                </select>
+            </td>
+            <td style="width:60px">编号</td>
+            <td style="width:100px">
+                <select id="fp2" onchange="filterW()">
+                                 <option value="全部">邮轮公司</option>
+                                 <%for(var i=0;i<tmp2.length;i++){%>
+                                 <option value="<%=tmp2[i]%>"><%=tmp2[i]%></option>
+                                 <%}%>
+                </select>
+            </td>
+            <td style="width:160px">
+                <select id="fp3" onchange="filterW()">
+                                 <option value="全部">船只</option>
+                                 <%for(var i=0;i<tmp3.length;i++){%>
+                                 <option value="<%=tmp3[i]%>"><%=tmp3[i]%></option>
+                                 <%}%>
+                </select>
+            </td>
+            <td style="width:85px">出航日期</td>
+            <td style="width:60px">
+                <select id="fp5" onchange="filterW()">
+                                 <option value="全部">晚数</option>
+                                 <%for(var i=0;i<tmp5.length;i++){%>
+                                 <option value="<%=tmp5[i]%>"><%=tmp5[i]%></option>
+                                 <%}%>
+                </select>
+            </td>
+            <td style="width:20px">
+                <select id="fp6" onchange="filterW()">
+                                 <option value="全部">航区</option>
+                                 <%for(var i=0;i<tmp6.length;i++){%>
+                                 <option value="<%=tmp6[i]%>"><%=tmp6[i]%></option>
+                                 <%}%>
+                </select>
+            </td>
+            <td style="width:200px">航线</td>
+            <td style="width:200px">
+                <select id="fp8" style="width:200px;" onchange="filterW()">
+                                 <option value="全部">包船和切舱</option>
+                                 <%for(var i=0;i<tmp8.length;i++){%>
+                                 <option value="<%=tmp8[i]%>"><%=tmp8[i]%></option>
+                                 <%}%>
+                </select>
+            </td>
+            <td style="width:200px">平台互换航次</td>
+            <td style="width:200px">备注</td>
+        </tr>
+        <%
+            var  k = 0;
+            for(var i in r){
+                k = k + 1
+        %>
+        <tr id="j<%=i%>" onclick="$('#j<%=i%>').css('background-color','#EAE8E9');">
+            <td id="ha<%=i%>"><%=r[i].txtYear%></td>
+            <td id="hd<%=i%>"><%=r[i].txtMonth%></td>
+            <td><%=r[i].txtNo%></td>
+            <td id="hb<%=i%>"><%=r[i].txtCompany%></td>
+            <td id="hc<%=i%>"><%=r[i].txtShip%></td>
+            <td><%=r[i].datStart%></td>
+            <td id="he<%=i%>"><%=r[i].night%></td>
+            <td id="hf<%=i%>"><%=r[i].txtArea%></td>
+            <td><%=r[i].txtLineName%></td>
+            <td id="hh<%=i%>"><%=r[i].txtTravelAgency?r[i].txtTravelAgency:""%></td>
+            <td><%=r[i].txtSitePrice?r[i].txtSitePrice:""%></td>
+            <td><%=r[i].txtRemark?r[i].txtRemark:""%></td>
+        </tr>
+        <%}%>
+    </table>
+    </div>
+    <input type="hidden" id="kk" value="<%=k%>" />
+</div>
+
+

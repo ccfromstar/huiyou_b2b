@@ -1,0 +1,79 @@
+<script>
+        $(function(){
+            $('#gg').datagrid({
+                title:'供应商产品审核',
+                fit:true,
+                nowrap: false,
+                striped: true,
+                toolbar:"#toolbar",
+                url:'getdata1',
+                sortName: 'code',
+                sortOrder: 'desc',
+                idField:'id',
+                frozenColumns:[[
+                    {field:'ck',checkbox:true},
+                    {field:'id',title:'数据库记录id'},
+                    {field:'product_number',title:'产品编号',width:'200'},
+                    {field:'status_id',title:'产品状态'},
+                    {field:'service_by_huiyou',title:'产品性质'},
+                    {field:'published_at',title:'申请日期',width:'200'},
+                    {field:'last_updated_at',title:'处理日期',width:'200'},
+                    {field:'a_user',title:'审核账户名'}
+                ]],
+                pagination:true,
+                rownumbers:true,
+                singleSelect:false,
+                pageList:[5,10,15,20,25,30,35,40,45,50],
+                onDblClickRow :function(rowIndex,rowData){
+                    window.location = "publishproductread?p="+rowData['product_number'];
+                }
+            });
+        });
+
+        function approve(){
+            var ids = [];
+            var rows = $('#gg').datagrid('getSelections');
+            for(var i=0;i<rows.length;i++){
+                ids.push(rows[i].id);
+            }
+
+            var idstr = ids.join(';');
+            if (idstr == ""){
+                $.messager.alert('提示','请选择您要审核通过的产品!','warning');return false;
+            }
+
+            if(rows.length != 1){
+                $.messager.alert('提示','一次只能审核一个产品!','warning');return false;
+            }
+
+            $.messager.confirm('提示', '是否确认审核通过?', function(r){
+                if (r){
+                    if(r==true){
+                        $("#docid").val(idstr);
+                        document.forms[0].submit();
+                    }
+                }
+            });
+        }
+
+        function searchReocrd(){
+                var  txtSearch = $("#txtSearch").val();
+                $('#gg').datagrid({'url':'getsearchdata19?sid='+txtSearch});
+        }
+
+        function searchAllReocrd(){
+            $('#gg').datagrid({'url':'getdata'});
+        }
+
+</script>
+
+<table id="gg"></table>
+<div id="toolbar">
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="approve()">审核通过</a>
+    <input class="textbox" name="txtSearch" id="txtSearch" ></input>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="searchReocrd()">查询</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="searchAllReocrd()">查看全部</a>
+</div>
+<form method="post">
+    <input type="text" name="docid" id="docid" style="display: none" />
+</form>

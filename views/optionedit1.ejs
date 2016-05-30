@@ -1,0 +1,33 @@
+<div style="width:960px;background-color: #FFFFFF;margin:0 auto;">
+    <form method="post">
+        <table style="width: 120px;margin-top: 20px;" border="0" cellspacing="0">
+            <tr>
+                <td class="tdfooter1" style="background-color: #2EAE25;color:#FFFFFF" id="n1">编辑需求信息</td>
+            </tr>
+        </table>
+        <table style="width: 100%;margin-top:0px;" border="0" cellspacing="0">
+            <tr style="height: 6px;">
+                <td colspan="3" style="background-image: url('/images/green1.jpg')">
+            </tr>
+        </table>
+
+        <div style="width: 100%;height: 200px;background-color: #F2F0F5">
+            <div style="padding-left: 20px;padding-top: 0px;font-weight: bold">需求描述:<textarea id="description" name="description" style="width: 98%;" rows="6"><%=demand[0].description%></textarea></div>
+            <div style="width: 100%;padding-left: 20px;padding-top: 0px;font-weight: bold">
+                <table style="width: 100%">
+                    <tr>
+                        <td>
+
+                        </td>
+                        <td style="text-align: right;width: 120px;">
+                            <div style="cursor:pointer;margin-left: 20px;margin-top: 5px;width: 70px;background-color: #0068BD;color:#FFFFFF;font-weight: bold;text-align: center" onclick="buypublish();">修改</div>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+        <input type="hidden" name="docid" value="<%=demand[0].id%>" />
+    </form>
+    <br/><br/><br/>
+</div>

@@ -1,0 +1,1378 @@
+<%
+    var bookingContact;
+    if(booking[0].status_id == 1){    
+        if(product[0].service_by_huiyou && service_manager){
+            bookingContact = service_manager;
+        }else{
+            bookingContact = product[0].owner_id;
+        }
+    } else {
+        if(booking[0].service_user_id) {
+            bookingContact = booking[0].service_user_id;
+        } else if(product[0].service_by_huiyou == 1 && service_manager){
+            bookingContact = service_manager;
+        }else{
+            bookingContact = product[0].owner_id;
+        }
+    }
+%>
+
+<div>
+    <p>经营性质(0.自营 1.代营):<%=product[0].service_by_huiyou%></p>
+    <p>客服ID:<%=product[0].service_user_id%></p>
+</div>
+
+<div style="width:960px;background-color: #FFFFFF;margin:0 auto;">
+    <form method="post" enctype="multipart/form-data">
+        
+    <style>
+        #status td{
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+    <%if(booking[0].status_id != 4 && booking[0].status_id != 3){%>
+    <table id="#status" style="width:100%">
+        <tr style="line-height:20px;height:20px;">
+            <%
+            var st1 = "#888888";var st2 = "#888888";var st3 = "#888888";var st4 = "#888888";var st5 = "#888888";var st6 = "#888888";
+            if(booking[0].status_id == 1){
+                st1 = "#369149";
+            }
+            if(booking[0].status_id == 2){
+                st3 = "#369149";
+            }
+            if(booking[0].status_id == 6){
+                st5 = "#369149";
+            }
+            %>
+            <td style="color:<%=st1%>;text-align: center;font-weight: bold;">待确认</td>
+            <td style="color:<%=st2%>;text-align: center;font-weight: bold;">已确认</td>
+            <td style="color:<%=st3%>;text-align: center;font-weight: bold;">
+                <%if(bsd[0].date_wait_payment && bsd[0].date_wait_payment){%>
+                已付款
+                <%}else{%>
+                待付款
+                <%}%>
+            </td>
+            <td style="color:<%=st4%>;text-align: center;font-weight: bold;">已收款</td>
+            <td style="color:<%=st5%>;text-align: center;font-weight: bold;">待出团</td>
+            <td style="color:<%=st6%>;text-align: center;font-weight: bold;">已出团</td>
+        </tr>
+    </table>
+        <%if(booking[0].status_id == 1){%>
+            <img src="/images/st1.png" />
+        <%}%>
+        <%if(booking[0].status_id == 2||booking[0].status_id == 7){%>
+            <img src="/images/st3.png" />
+        <%}%>
+        <%if(booking[0].status_id == 6){%>
+            <img src="/images/st5.png" />
+        <%}%>
+        <table style="width:100%">
+        <tr style="line-height:20px;height:20px;">
+            <%
+            var t1 = "";var t2 = "";var t3 = "";var t4 = "";var t5 = "";var t6 = "";
+            if(bsd[0].date_wait_confirm && bsd[0].date_wait_confirm){
+                t1 = bsd[0].date_wait_confirm;
+            }
+            if(bsd[0].date_confirmed && bsd[0].date_confirmed){
+                t2 = bsd[0].date_confirmed;
+            }
+            if(bsd[0].date_wait_payment && bsd[0].date_wait_payment){
+                t3 = bsd[0].date_wait_payment;
+            }
+            if(bsd[0].date_paid && bsd[0].date_paid){
+                t4 = bsd[0].date_paid;
+            }
+            if(bsd[0].date_wait_group && bsd[0].date_wait_group){
+                t5 = bsd[0].date_wait_group;
+            }
+            if(bsd[0].date_group_finished && bsd[0].date_group_finished){
+                t6 = bsd[0].date_group_finished;
+            }
+            %>
+            <td style="width:160px;color:<%=st1%>;text-align: center;font-weight: bold;"><%=booking[0].created_at%></td>
+            <td style="width:160px;color:<%=st2%>;text-align: center;font-weight: bold;"><%=t2%></td>
+            <td style="width:160px;color:<%=st3%>;text-align: center;font-weight: bold;"><%=t3%></td>
+            <td style="width:160px;color:<%=st4%>;text-align: center;font-weight: bold;"><%=t4%></td>
+            <td style="width:160px;color:<%=st5%>;text-align: center;font-weight: bold;"><%=t5%></td>
+            <td style="width:160px;color:<%=st6%>;text-align: center;font-weight: bold;"><%=t6%></td>
+        </tr>
+    </table>
+    <%}%>
+    <div style="overflow:hidden;border:3px solid  #369149;width:903px;padding-top: 10px;padding-left:50px;background-color:#F2F2F2;line-height:20px;padding-bottom:10px;margin-top:10px;">
+            <%if(booking[0].status_id == 1){%>
+            <span style="color:#000000;font-size: 14px">当前订单状态:您已成功提交订单,待卖家确认。</span><br/>
+            1.如果您不想购买，您可以<span id="cb1" style="color:#187ED3;cursor:pointer" onclick="cancelBooking();">取消订单</span>。<br/>
+            2.如果您需要准备签证材料，您可以在本页面<span style="color:#187ED3;cursor:pointer" onclick="goto(2);">下载签证资料</span>。<br/>
+            3.如果您有任何疑问，可以在线<span style="color:#187ED3;cursor:pointer" onclick="parent.goToMessage({recipient:'<%=bookingContact%>', ext_p_number:'<%=product[0].product_number%>', ext_p_id:'<%=product[0].id%>', ext_type:1, title:'<%=product[0].title%>'});">联系卖家</span>。
+            <%}%>
+            <%if(booking[0].status_id == 4){%>
+            <span style="color:#000000;font-size: 14px">当前订单状态:已取消</span><br/>
+            取消原因：<%=booking[0].reject_reason%><br/>
+            1.您可以<span style="color:#187ED3;cursor:pointer" onclick="window.location='loading?page=optionorder';window.parent.htotop();">返回订单列表</span><br/>
+            2.如果您有任何疑问，可以在线<span style="color:#187ED3;cursor:pointer" onclick="parent.goToMessage({recipient:'<%=bookingContact%>', ext_p_number:'<%=product[0].product_number%>', ext_p_id:'<%=product[0].id%>', ext_type:1, title:'<%=product[0].title%>'});">联系卖家</span>。
+            <%}%>
+            <%if(booking[0].status_id == 3){%>
+            <span style="color:#000000;font-size: 14px">当前订单状态:很遗憾，您的订单已关闭。</span><br/>
+            取消方：<%=product[0].short_name%><br/>
+            取消理由：<%=booking[0].reject_reason%>
+            <%}%>
+            <%if(booking[0].status_id == 2||booking[0].status_id == 7){
+                if(t3==""){
+            %>
+            <span style="color:#000000;font-size: 14px">当前订单状态：您的订单已确认成功，请仔细阅读《订单付款通知单》，付款完成后请及时点击“已付款”</span><br/>
+            1.《订单付款通知单》，您可以
+            <span style="color:#187ED3;cursor:pointer" onclick="window.open('productbookingprint?p=<%=booking[0].id%>');">查看</span>，
+            <span style="color:#187ED3;cursor:pointer" onclick="window.open('productbookingprint?p=<%=booking[0].id%>');">下载</span>，
+            <span style="color:#187ED3;cursor:pointer" onclick="window.open('productbookingprint?p=<%=booking[0].id%>');">打印</span>。<br/>
+            2.如果您已完成支付，请录入 <span style="color:#187ED3;cursor:pointer" onclick="$('#payh').css('display','inline-block');$('#payh1').css('display','inline');" >支付信息。</span>如果确认已付清全款，请点击 <span style="color:#187ED3;cursor:pointer" onclick="paid();">已付款</span>。<br/>
+            <div id="payh" style="display:none;line-height:30px;background-color:#FFFFFF;padding:10px;border:1px solid  #ABABAB;">
+                支付日期:
+                <input type="text" name="zfpaid_at" id="zfpaid_at" style="cursor:pointer" readonly  class="Wdate" onfocus="WdatePicker({doubleCalendar:false,dateFmt:'yyyy-MM-dd'})" />
+                <br/>
+                支付金额:
+                <input onBlur="if(!value){value=defaultValue};" onFocus="if(value==defaultValue){value='';}" onkeyup="this.value=this.value.replace(/\D/g,'')" type="text" name="zfamount" style="width: 50px;" value="0" />元
+                <br/>
+                支付内容说明:<br/>
+                <textarea name="zfcomment" style="width: 420px;margin-top: 0px;" rows="2"></textarea>
+                <br/>附件:
+                <input type="text" name="filenamezf" id="filenamezf" /> <input onchange="var name1 = $('#filezf').val();var tmp = name1.split('\\');$('#filenamezf').val(tmp[tmp.length-1]);" type="file" name="filezf" id="filezf" />
+                <br/>
+                <input type = "button" value="确定" onclick="if($('#zfpaid_at').val()==''){alert('支付日期必填！');}$('#sType').val('uploadpaymenthistory');document.forms[0].submit();" />
+                <br/>
+            </div>
+            <div id="payh1" style="display:none" ><br/></div>
+            3.如果您还未提供游客信息，您可以在本页面<span style="color:#187ED3;cursor:pointer" onclick="goto(4);">补充游客信息。</span><br/>
+            4.如果您需要准备签证材料，您可以在本页面<span style="color:#187ED3;cursor:pointer" onclick="goto(2);">下载签证资料。</span><br/>
+            5.如果您不想购买，可以<span class="cb5" style="color:#187ED3;cursor:pointer" onclick="cancelBooking5();">取消订单</span>。<br/>
+            6.如果您有任何疑问，可以在线<span style="color:#187ED3;cursor:pointer" onclick="parent.goToMessage({recipient:'<%=bookingContact%>', ext_p_number:'<%=product[0].product_number%>', ext_p_id:'<%=product[0].id%>', ext_type:1, title:'<%=product[0].title%>'});">联系卖家</span>。
+            <%
+                }else{
+            %>
+            <span style="color:#000000;font-size: 14px">当前订单状态：您已于<span style="color:#FF0000;font-size: 14px"><%=t3%></span>确认付款，请耐心等待卖家确认收款记录。</span><br/>
+            1.《订单付款通知单》，您可以
+            <span style="color:#187ED3;cursor:pointer" onclick="window.open('productbookingprint?p=<%=booking[0].id%>');">查看</span>，
+            <span style="color:#187ED3;cursor:pointer" onclick="window.open('productbookingprint?p=<%=booking[0].id%>');">下载</span>，
+            <span style="color:#187ED3;cursor:pointer" onclick="window.open('productbookingprint?p=<%=booking[0].id%>');">打印</span>。<br/>
+            2.如果您还未提供游客信息，您可以在本页面<span style="color:#187ED3;cursor:pointer" onclick="goto(4);">补充游客信息。</span><br/>
+            3.如果您需要准备签证材料，您可以在本页面<span style="color:#187ED3;cursor:pointer" onclick="goto(2);">下载签证资料。</span><br/>
+            4.如果您不想购买，可以<span class="cb5" style="color:#187ED3;cursor:pointer" onclick="cancelBooking5();">取消订单</span>。<br/>
+            5.如果您有任何疑问，可以在线<span style="color:#187ED3;cursor:pointer" onclick="parent.goToMessage({recipient:'<%=bookingContact%>', ext_p_number:'<%=product[0].product_number%>', ext_p_id:'<%=product[0].id%>', ext_type:1, title:'<%=product[0].title%>'});">联系卖家</span>。
+            <%}}%>
+            <%if(booking[0].status_id == 6){
+                if(t5==""){%>
+            <span style="color:#000000;font-size: 14px">当前订单状态：已完成支付，请尽快补充游客信息，卖家将于出行前3-5日内上传《出团通知单》至您的订单内。</span><br/>
+            1. 如果您还未提供游客信息，您可以在本页面<span style="color:#187ED3;cursor:pointer" onclick="goto(4);">补充游客信息。</span><br/>
+            2. 如果您需要准备签证材料，您可以在本页面<span style="color:#187ED3;cursor:pointer" onclick="goto(2);">下载签证资料。</span><br/>
+            3.《订单付款通知单》，您可以
+            <span style="color:#187ED3;cursor:pointer" onclick="window.open('productbookingprint?p=<%=booking[0].id%>');">查看</span>，
+            <span style="color:#187ED3;cursor:pointer" onclick="window.open('productbookingprint?p=<%=booking[0].id%>');">下载</span>，
+            <span style="color:#187ED3;cursor:pointer" onclick="window.open('productbookingprint?p=<%=booking[0].id%>');">打印</span>。<br/>
+            4. 如果您有任何疑问，可以在线<span style="color:#187ED3;cursor:pointer" onclick="parent.goToMessage({recipient:'<%=bookingContact%>', ext_p_number:'<%=product[0].product_number%>', ext_p_id:'<%=product[0].id%>', ext_type:1, title:'<%=product[0].title%>'});">联系卖家</span>。
+            <%}else{%>
+            <span style="color:#000000;font-size: 14px">当前订单状态：卖家已于<span style="color:#FF0000;font-size: 14px"><%=t5%></span>上传出团通知书，请注意查收！</span><br/>
+            1.《出团通知单》，您可以
+            <span style="color:#187ED3;cursor:pointer" onclick="window.open('/files/<%=booking[0].travel_group_file%>');">查看</span><br/>
+            2. 如果您还未提供游客信息，您可以在本页面<span style="color:#187ED3;cursor:pointer" onclick="goto(4);">补充游客信息。</span><br/>
+            3. 如果您需要准备签证材料，您可以在本页面<span style="color:#187ED3;cursor:pointer" onclick="goto(2);">下载签证资料。</span><br/>
+            4.《订单付款通知单》，您可以
+            <span style="color:#187ED3;cursor:pointer" onclick="window.open('productbookingprint?p=<%=booking[0].id%>');">查看</span>，
+            <span style="color:#187ED3;cursor:pointer" onclick="window.open('productbookingprint?p=<%=booking[0].id%>');">下载</span>，
+            <span style="color:#187ED3;cursor:pointer" onclick="window.open('productbookingprint?p=<%=booking[0].id%>');">打印</span>。<br/>
+            5.如果您有任何疑问，可以在线<span style="color:#187ED3;cursor:pointer" onclick="parent.goToMessage({recipient:'<%=bookingContact%>', ext_p_number:'<%=product[0].product_number%>', ext_p_id:'<%=product[0].id%>', ext_type:1, title:'<%=product[0].title%>'});">联系卖家</span>。
+            <%}}%>
+    </div>
+
+    <%if(ph[0]){%>
+    <table style="border:2px solid #ABBBBB;width: 960px;border-bottom:0px;width: 100%;height: 30px;background-image: url('images/huitou.png');margin-top: 10px;" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="font-weight: bold;font-size: 14px;">&nbsp;&nbsp;支付记录</td>
+
+            <td style="text-align: right"></td>
+        </tr>
+    </table>
+    
+    <table style="border:2px solid #ABBBBB;margin-top: 0px;width: 960px;border-top:0px;width: 100%;margin-top: 0px;border-top: 0" cellpadding="0" cellspacing="0">
+        <tr style="line-height: 10px;">
+            <td style="padding: 10px;font-weight:bold">
+                &nbsp;&nbsp;支付日期
+            </td>
+            <td style="padding: 10px;font-weight:bold">
+                支付金额（元）
+            </td>
+            <td style="padding: 10px;font-weight:bold">
+                支付内容说明
+            </td>
+            <td style="padding: 10px;font-weight:bold">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;附件
+            </td>
+            <%if(booking[0].status_id == 2){%>
+            <td style="padding: 10px;font-weight:bold">
+                &nbsp;&nbsp;&nbsp;操作
+            </td>
+            <%}%>
+        </tr>
+        <%
+        var pd = "";
+        for(var k in ph){
+            pd = ph[k].paid_at + " ";
+            pd = pd.substring(0,10);
+            %>
+        <tr style="line-height: 10px;">
+            <td style="padding: 10px;">
+
+                <%=pd%>
+            </td>
+            <td style="padding: 10px;">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=ph[k].amount%>
+            </td>
+            <td style="padding: 10px;">
+                <%=ph[k].comment%>
+            </td>
+            <td style="padding: 10px;">
+                 <%
+                    if(ph[k].file_path!="" && ph[k].file_path.indexOf(".")>0){  
+                  %>
+        <a href="#" onclick="window.open('files/<%=ph[k].file_path%>');"><image src="images/fileatt.gif"></image><%=ph[k].file_path%></a>&nbsp;&nbsp;&nbsp;&nbsp;
+                <%}%>
+            </td>
+            <%if(booking[0].status_id == 2){%>
+            <td style="padding: 10px;">
+                    <a href="#" style="cursor:pointer;display:none" onclick="">编辑</a>
+                    <a href="#" style="cursor:pointer;" onclick="jConfirmIframe('是否确认删除！', '', function(confirmed){if(!confirmed) return false;$('#sType').val('delpayhistory');$('#delid').val('<%=ph[k].id%>');document.forms[0].submit();});">删除</a>
+            </td>
+            <%}%>
+        </tr>
+        <%}%>
+    </table>
+    
+    <%}%>
+     <%if(booking[0].status_id == 2){%>
+    <table style="border:2px solid #ABBBBB;width: 960px;border-bottom:0px;width: 100%;height: 30px;background-image: url('images/huitou.png');margin-top: 10px;" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="font-weight: bold;font-size: 14px;">&nbsp;&nbsp;付款说明</td>
+
+            <td style="text-align: right"></td>
+        </tr>
+    </table>
+
+
+    <table style="border:2px solid #ABBBBB;margin-top: 0px;width: 960px;border-top:0px;width: 100%;margin-top: 0px;border-top: 0" cellpadding="0" cellspacing="0">
+        <tr style="line-height: 30px;">
+            <td style="padding: 10px;">
+                <div style="font-size: 14px;color: #FF0000;font-weight: bold"> 
+                    <%if(booking[0].payment_type==1){%>
+                    请于<%=(new Date(booking[0].payment_until)).Format("yyyy-MM-dd")%>前支付
+                    全款<%=booking[0].rebate%>元
+                    <%}else if(booking[0].payment_type==2){%>
+                    请于<%=(new Date(booking[0].deposit_until)).Format("yyyy-MM-dd")%>前支付
+                    订金<%=booking[0].deposit%>元
+                    请于<%=(new Date(booking[0].pay_balance_until)).Format("yyyy-MM-dd")%>前支付
+                    余款<%=booking[0].rebate-booking[0].deposit%>元
+                    <%}%>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;★请注意逾期将不保留舱位，敬请配合！！！
+                </div>
+                <div style="font-size: 14px;color: #797979;font-weight: bold">
+                    <%
+                        var a1= product[0].account_name;
+                        if(a1=== null){a1="";}
+                    %>
+                   <%if(product[0].service_by_huiyou == 1){%>
+                    账户名称：上海华夏国际旅行社有限公司<br/>
+                    开户银行：交通银行上海威海路支行<br/>
+                    账号：310066276018150031333
+                    <%}else{%>
+                    账户名称：<%=a1%><br/>
+                    开户银行：<%=product[0].bank%><br/>
+                    账号：<%=product[0].account_number%>
+                    <%}%>
+                </div>
+                <div style="font-size: 14px;color: #797979;font-weight: bold">备注：</div>
+                <%=booking[0].comment_supplier%>
+            </td>
+        </tr>
+    </table>
+    <%}%>
+
+    <div style="line-height: 15px;font-weight: bold;margin-top: 25px;font-size: 16px;">订单详情</div>
+    <div style="line-height: 10px;"><img src="/images/ora.jpg" style="margin-top: 0px;width: 100%;height: 4px;" /></div>
+   
+    <table style="border:2px solid #ABBBBB;border-bottom:0px;width: 100%;height: 30px;background-image: url('images/huitou.png');margin-top: 10px;" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="font-weight: bold;font-size: 14px;">&nbsp;&nbsp;&nbsp;&nbsp;订单号:<span id="ddh"><%=booking[0].booking_number%></span></td>
+            <td style="font-weight: bold;font-size: 14px;text-align: center">&nbsp;&nbsp;订单生成日期：<span id="ddh"><%=(new Date(booking[0].created_at)).Format("yyyy-MM-dd hh:mm:ss")%></span></td>
+            <%var tp = "";
+            if(product[0].type_id==1){
+                tp = "单船票"
+            }else{
+                tp = "团队游"
+            }
+
+            //var d1 = product[0].contact_person;
+            //var d2 = product[0].contact_mobile_phone;
+            //var d3 = product[0].contact_email;
+
+            var d1 = "客服待分配";
+            var d2 = "400-998-6121";
+            var d3 = "booking@huiyoulun.com";
+
+            for(var c in ccc2){
+                if(ccc2[c].id==booking[0].service_user_id){
+                    d1 = ccc2[c].name;
+                    d2 = "400-998-6121";
+                    d3 = ccc2[c].email;
+                }
+            }
+            %>
+
+            <td style="font-weight: bold;font-size: 14px;text-align: right">产品类型：<%=tp%>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;订单状态：<span style="color:#FF0000;font-size: 14px;" id="ddh">
+                
+                 <%if(bsd[0].date_wait_payment && bsd[0].date_wait_payment && booking[0].bname=="待付款"){%>
+                已付款
+                <%}else{%>
+                <%=booking[0].bname%>
+                <%}%>
+            </span>&nbsp;&nbsp;&nbsp;</td>
+        </tr>
+    </table>
+    <table style="width: 100%;border:2px solid #ABBBBB;border-top: 0px;"  cellpadding="0" cellspacing="0">
+        <tr style="line-height: 20px;">
+            <td style="width: 480px;vertical-align: top"><div style="margin:10px;"><span style="font-weight: bold">产品供应商：</span><br/>
+                     <img  src="files/<%=product[0].logo%>" style="width: 100px;height: 100px;display: none" />
+                     <span style="display: inline-block;margin-left: 5px;">
+                        <!--<%=product[0].short_name%><br/>-->
+                        上海荟邮网络科技有限公司<br/>
+                        联系人：<%=d1%><br/>
+                        电话：<%=d2%><br/>
+                        邮箱：<%=d3%><br/>
+                     </span>
+                </div></td>
+            <td style="width: 480px;"><div style="margin:10px;"><span style="font-weight: bold">预订方信息：</span><br/>
+                    <img src="files/<%=company[0].logo%>" style="width: 100px;height: 100px;display: none" /><span style="display: inline-block;margin-left: 5px;"><%=booking[0].booker_company%><br/>联系人：<%=booking[0].booker_name%><br/>电话：<%=booking[0].booker_telephone%><br/>邮箱：<%=booking[0].booker_email%><br/></span>
+                </div></td>
+        </tr>
+    </table>
+    <table class="pclass" style="border:2px solid #ABBBBB;border-top:0px;width: 100%;text-align: center"  cellpadding="0" cellspacing="0">
+        <tr>
+            <td><b>产品编号</b></td>
+            <td><b>产品名称</b></td>
+            <td><b>出发日期</b></td>
+            <td><b>邮轮名称</b></td>
+            <td><b>停靠港口</b></td>
+        </tr>
+        <tr style="line-height:20px;">
+            <td style="font-size: 12px;font-weight: bold;"><%=product[0].product_number%></td>
+            <td style="font-size: 12px;font-weight: bold;color:#0468B9;cursor: pointer;width:200px" onclick="window.location='productdetail?p=<%=product[0].product_number%>';"><%=product[0].title%></td>
+            <td style="font-size: 12px;font-weight: bold;width:80px"><%=(new Date(product[0].start_date)).Format("yyyy-MM-dd")%></td>
+            <td style="font-size: 12px;font-weight: bold;width:80px"><%=product[0].txtShipName%></td>
+            <%
+            var hx = "";
+            for(var i in ts){
+                 if(ts[i].location!=="航海日"){
+                if(hx ==""){
+                    hx = ts[i].location;
+                }else{
+                    hx = hx + "-" + ts[i].location;
+                }
+                } 
+            }%>
+            <td style="font-size: 12px;font-weight: bold;text-align:left;padding:5px;"><%=hx%></td>
+        </tr>
+    </table>
+
+    <table style="display:none;border:2px solid #ABBBBB;border-bottom:0px;width: 100%;height: 30px;background-image: url('images/huitou.png');margin-top: 10px;" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="font-weight: bold;font-size: 14px;">&nbsp;&nbsp;舱房信息</td>
+            <%var tp = "";
+            if(product[0].type_id==1){
+                tp = "单船票"
+            }else{
+                tp = "团队游"
+            }
+            %>
+            <td style="text-align: right"></td>
+        </tr>
+    </table>
+
+    <table style="display:none;border:2px solid #ABBBBB;border-top:0px;width: 100%;margin-top: 0px;border-top: 0;"  cellspacing="0" cellpadding="0">
+        <tr style="text-align: center;color: #000000;font-weight: bold;background-color: #EDEBEC">
+            <td >序号</td>
+            <td >舱房类型</td>
+            <td >房间数</td>
+            <td >第1、2人</td>
+            <td >第3、4人</td>
+            <td >儿童价</td>
+            <td >成人数量</td>
+            <td >儿童数量</td>
+        </tr>
+        <%
+        var m = 0;
+        var v = 0;
+        var dd1 = "";var cc2 = 0;var cc3 = 0;var cc4 = 0;
+        var cbname = "";
+        var c1 = "";var c2 = "";var c3 = "";var c4 = "";  var cb = "";  var man1 = 0;var man2 = 0;  var money1 = 0;
+                for(var i in cc){
+            m = m + 1;
+            if(cb==""){
+                cb = cc[i].txtCabinName;
+            }else{
+                cb = cb+"  "+cc[i].txtCabinName;
+            }
+            man1 = man1 + cc[i].amount_adult;
+            man2 = man2 + cc[i].amount_child;
+            money1 = money1 + cc[i].booking_pos_total_price;
+             cc4 = cc4 + cc[i].booking_pos_total_price;
+            //判断房型是否一样
+
+            if(cc[i].txtCabinName ==  cbname ){
+             %>
+
+            <%
+            }else{
+                v = v + 1;
+                cbname = cc[i].txtCabinName;
+        %>
+        <tr style="text-align: center">
+            <%
+                if(c1==""){
+                    c1 = cc[i].product_position_id;
+                    c2 = cc[i].retail_price;
+                    c3 = cc[i].retail_price_2;
+                    c4 = cc[i].price_child;
+                }else{
+                    c1 = c1 + "@" +cc[i].product_position_id;
+                    c2 = c3 + "@" +cc[i].retail_price;
+                    c3 = c4 + "@" +cc[i].retail_price_2;
+                    c4 = c4 + "@" +cc[i].price_child;
+                }
+                var a1 = ""; var a2 = "";var a3 = "";
+                if(cc[i].cabin_category_id == 9999){
+                    if(cc[i].cabin_type_id==1){a1 ="内舱房";}
+                    else if(cc[i].cabin_type_id==2){a1 ="海景房";}
+                    else if(cc[i].cabin_type_id==3){a1 ="阳台房";}
+                    else if(cc[i].cabin_type_id==4){a1 ="套房";}
+                    a2 = "-";a3 = "-";
+                }else{
+                    a1 = cc[i].txtCabinName;
+                    a2 = cc[i].txtCabinNo;
+                    a3 = cc[i].numCanCheckIn;
+                }
+                //判断房间数和成人儿童数
+                var rn = 0;
+                var an = 0;
+                var cn = 0;
+                    for(var k in cc){
+                        if(cc[k].txtCabinName==cc[i].txtCabinName){
+                            rn = rn + 1;
+                            an = an +cc[i].amount_adult;
+                            cn = cn + cc[i].amount_child;
+                        }
+                    }
+                
+                dd1 = dd1 + a1 + "x" + rn + "&nbsp;&nbsp;";
+                cc2 = cc2 + an;
+                cc3 = cc3 + cn;
+               
+            %>
+
+            <td ><%=m%></td>
+            <td><%=a1%></td>
+            <td><%=rn%></td>
+            <td>￥<span id="peo<%=m%>4"><%=cc[i].deal_price%></span></td>
+            <td>￥<span id="peo<%=m%>5"><%=cc[i].deal_price_2%></span></td>
+            <td>￥<span id="peo<%=m%>6"><%=cc[i].deal_price_child%></span></td>
+            <td><%=an%></td>
+            <td><%=cn%></td>
+
+        </tr>
+        <%
+
+            }
+
+        }%>
+    </table>
+
+    <%
+            //计算成人数和儿童数
+            var cc2 = 0;
+            var cc3 = 0;
+            for(var k in cc){
+                cc2 = cc2 +cc[k].amount_adult;
+                cc3 = cc3 + cc[k].amount_child;
+            }
+        %>
+
+<% var insuranceAmount = (booking[0].insurance_amount?booking[0].insurance_amount:0);
+    var piPrice = (pi[0].price ? pi[0].price : 0);
+    var bookingRebate = (booking[0].rebate ? booking[0].rebate : 0);
+%>
+    <table style="border:2px solid #ABBBBB;width: 100%;margin-top: 10px;"  cellpadding="0" cellspacing="0">
+            <tr style="background-image: url('images/huitou.png');">
+                <td style="font-weight: bold;font-size: 14px;text-align: left">&nbsp;&nbsp;费用清单</td>
+            </tr>
+            <tr style="height:25px;line-height:25px;">
+                <td>
+                    <table style="width:95%;margin:auto" border="0">
+                        <tr style="height:5px;line-height:5px;">
+                            <td colspan="4" style="width:400px;" >
+                               &nbsp;</td>
+                        </tr>
+                        <tr style="height:25px;line-height:25px;">
+                            <td colspan="4" style="color:#000000;font-size:14px;font-weight:bold">舱房信息：</td> 
+                        </tr>
+                        <tr style="height:25px;line-height:25px;">
+                            <td colspan="4" style="color:#000000;font-size:14px;font-weight:bold" id="roomPrice">
+                                <table style="width:895px">
+                                    <tr><td style='color:#797979;font-size:14px;;text-align:center'>舱房</td><td style='color:#797979;font-size:14px;;text-align:center'>第1/2人单价</td><td style='color:#797979;font-size:14px;;text-align:center'>第3/4成人单价</td><td style='color:#797979;font-size:14px;;text-align:center'>第3/4儿童单价</td><td style='color:#797979;font-size:14px;;text-align:center'>成人数量</td><td style='color:#797979;font-size:14px;;text-align:center'>儿童数量</td><td style='color:#797979;font-size:14px;;text-align:center'>金额</td></tr>
+        
+                                    <%for(var i in cc){%>
+                                    <tr style="height:30px;line-height:30px;">
+                                    <td style="color:#0A68BC;text-align:center"><%=cc[i].txtCabinName%></td>
+                                    <td style="color:#0A68BC;text-align:center">￥<%=cc[i].deal_price%></td>
+                                    <td style="color:#0A68BC;text-align:center">￥<%=cc[i].deal_price_2%></td>
+                                    <td style="color:#0A68BC;text-align:center">￥<%=cc[i].deal_price_child%></td>
+                                    <td style="color:#0A68BC;text-align:center"><%=cc[i].amount_adult%></td>
+                                    <td style="color:#0A68BC;text-align:center"><%=cc[i].amount_child%></td>
+                                    <td style="color:#0A68BC;text-align:center" >￥<%=cc[i].booking_pos_total_price%></td>
+                                    </tr>
+                                    <%}%>
+                                </table>
+                            </td> 
+                        </tr>
+                        <tr style="height:20px;line-height:20px;">
+                            <td colspan="2" style="width:780px;font-size:14px;background-color:#DAE8F5" id="roomPrice"><span id="qxzc1" style="color:#0A68BC;font-size:14px;"><span>
+                            <span style="font-size:14px;"><b style="font-size:14px;">&nbsp;&nbsp;&nbsp;&nbsp;总计：<%-dd1%>&nbsp;&nbsp;&nbsp;&nbsp;成人人数：</b><%=cc2%>人&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b style="font-size:14px;">儿童人数：</b><%=cc3%>人 </span>
+                            </td> 
+                            <td colspan="2" style="width:120px;vertical-align:bottom;font-weight:bold;font-size:14px;background-color:#DAE8F5">合计：<span style="color:#FF0000;font-weight:bold;font-size:14px;" id="roomPrice1"><%=cc4%>元</span></td>
+                        </tr>
+                        <tr style="height:20px;line-height:20px;">
+                            <td colspan="4" >
+                             <img src="/images/xu2.png">
+                            </td> 
+                        </tr>
+                        <tr style="height:20px;line-height:20px;">
+                            <td colspan="4" >   
+                                <div style="color:#000000;font-size:14px;font-weight:bold">保险：</div>
+                            </td> 
+                        </tr>
+                        <tr style="height:20px;line-height:20px;">
+                            <td colspan="2" style="width:400px;font-size:14px;" >
+                                <%
+                                    if(pi[0]){
+                                %>
+                                    <%if(pi[0].type!=""){%>
+                                    <img onclick="diplaybx();" src="/images/zhankai.png" />
+                                    <%}else{%>
+                                    -
+                                    <%}%>
+                                    &nbsp;<span style="cursor:pointer;color:#0A68BC;font-size:14px;" onclick="diplaybx();"><%=pi[0].type%></span>
+                                    <span id="bxcc" style="display:none"><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=pi[0].description%></span>
+                                    <br/>
+                                    <b style="font-size:14px;">单价：</b>&nbsp;<%=pi[0].price%>&nbsp;元/人
+                                    <b style="font-size:14px;margin-left:11px;">数量：</b>&nbsp;&nbsp;<%=insuranceAmount%>
+                                <%        
+                                    }
+                                %>
+                            </td> 
+                            <td colspan="2" style="font-weight:bold;font-size:14px;vertical-align:bottom;" >合计：<span style="color:#FF0000;font-weight:bold;font-size:14px;" id="bxnum"><%=insuranceAmount*piPrice%></span><span style="color:#FF0000;font-weight:bold;font-size:14px;" id="bxnum">元</span></td>
+                        </tr>
+                        <tr style="height:20px;line-height:20px;">
+                            <td colspan="4" style="width:400px;" >
+                                <img src="/images/xu2.png">
+                            </td>
+                        </tr>
+                        <tr style="height:25px;line-height:25px;">
+                            <td colspan="2">   </td>
+                            <td colspan="2">   
+                                <div style="margin-left:0px;font-weight:bold;font-size:14px;"><span style="color:#000000;font-size:14px;font-weight:bold">订单总额：</span><span style="color:#FF0000;font-weight:bold;font-size:14px;" id="moneytotal"><%=cc4+insuranceAmount*piPrice%>元</span></div></td>
+                        </tr>
+
+                        <%if(booking[0].status_id != 1){%>
+                        <tr style="height:20px;line-height:20px;">
+                            <td colspan="4" style="width:400px;" >
+                                <img src="/images/xu2.png">
+                            </td>
+                        </tr>
+                         <tr style="height:25px;line-height:25px;">
+                            <td colspan="4" style="width:400px;" >   
+                                
+                                <div style="margin-left:0px;font-weight:bold;font-size:14px;"><span style="color:#000000;font-size:14px;font-weight:bold">价格调整说明：</span><br/><%if(booking[0].comment_price_change){%><%=booking[0].comment_price_change%><%}%></div>
+                                
+                                </td>
+                        </tr>
+                         <tr style="height:25px;line-height:25px;">
+                            <td colspan="2">   </td>
+                            <td colspan="2">   
+                               <div style="margin-left:0px;font-weight:bold;font-size:14px;"><span style="color:#000000;font-size:14px;font-weight:bold">最终结算价：</span><span style="color:#FF0000;font-weight:bold;font-size:14px;" id="bxnum"><%=bookingRebate%>元</span></div>
+                           </td>
+                        </tr>
+                        <%}%>
+
+                        <tr style="height:10px;line-height:10px;">
+                            <td colspan="4" style="width:400px;" >
+                               &nbsp;</td>
+                        </tr>
+                    </table>
+                </td>    
+            </tr>
+        </table>
+
+    <table class="pclass" style="display:none;border:2px solid #ABBBBB;width: 100%;margin-top: 0px;border-top: 0" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="padding: 10px;font-weight: bold;font-size:14px;width: 240px;">
+                订单总人数：<%=man1%>成人&nbsp;&nbsp;&nbsp;<%=man2%>儿童
+            </td>
+            <td style="padding: 10px;font-weight: bold;font-size:14px;width: 240px;">
+                订单总金额：<b style="color:#FF0000;font-size:14px;"><%=money1%>元</b>
+            </td>
+            <td style="padding: 10px;font-weight: bold;font-size:14px;width: 240px;">
+                <%if(booking[0].rebate){%>
+                优惠金额：<b style="color:#FF0000;font-size:14px;"><%=booking[0].rebate%> 元</b>
+                <%}else{%>
+                优惠金额：<b style="color:#FF0000;font-size:14px;">0元</b>
+                <%}%>
+            </td>
+            <td style="padding: 10px;font-weight: bold;font-size:14px;width: 240px;">
+                <%if(booking[0].rebate){%>
+                最终结算价：<b id="zzjsj" style="color:#FF0000;font-size:14px;"><%=money1-booking[0].rebate%>元</b>
+                <%}else{%>
+                最终结算价：<b id="zzjsj" style="color:#FF0000;font-size:14px;"><%=money1%>元</b>
+                <%}%>
+            </td>
+        </tr>
+    </table>
+
+    <table style="border:2px solid #ABBBBB;width: 100%;margin-top: 10px;"  cellpadding="0" cellspacing="0">
+            <tr style="background-image: url('images/huitou.png');">
+                <td style="font-weight: bold;font-size: 14px;text-align: left">&nbsp;&nbsp;留言</td>
+            </tr>
+            <tr>
+                <td style="color:#0495D4;padding-left:10px">
+                    <%if(booking[0].comment_buyer){%><%-(booking[0].comment_buyer).replace(/\n/g,"<br/>")%><%}%>
+                </td>    
+            </tr>
+            <tr style="height: 3px;line-height: 3px">
+                <td style="height: 3px;line-height: 3px"></td>
+            </tr>
+    </table>
+
+
+
+    <%
+    var bh = "";
+    var bbh = "";
+    if(inf[0].incl_cruise_ticket==1){bh = bh + "船票费用"+inf[0].incl_cruise_ticket_comment+"<br/>";}else if(inf[0].incl_cruise_ticket==0){bbh = bbh + "船票费用"+inf[0].incl_cruise_ticket_comment+"<br/>";}
+
+    if(inf[0].incl_port_tax==1){
+        if(inf[0].port_tax_fee==0){
+            bh = bh + "港务费"+inf[0].incl_port_tax_comment+"<br/>";
+        }else{
+            bh = bh + "港务费"+inf[0].port_tax_fee+"元/人"+inf[0].incl_port_tax_comment+"<br/>";
+        }
+    }else if(inf[0].incl_port_tax==0){bbh = bbh + "港务费"+inf[0].port_tax_fee+"元/人"+inf[0].incl_port_tax_comment+"<br/>";}
+
+    if(inf[0].incl_visa_fee==1){
+
+        if(inf[0].visa_fee==0){
+            bh = bh + "签证费"+inf[0].incl_visa_comment+"<br/>";
+        }else{
+            bh = bh + "签证费"+inf[0].visa_fee+"元/人"+inf[0].incl_visa_comment+"<br/>";
+        }
+    }else if(inf[0].incl_visa_fee==0){bbh = bbh + "签证费"+inf[0].visa_fee+"元/人"+inf[0].incl_visa_comment+"<br/>";}
+
+
+    if(inf[0].incl_tip==1){
+
+        if(inf[0].tip==0){
+            bh = bh + "小费"+inf[0].incl_tip_comment+"<br/>";
+        }else{
+            bh = bh + "小费"+inf[0].tip+"元/人"+inf[0].incl_tip_comment+"<br/>";
+        }
+    }else if(inf[0].incl_tip==0){
+        if(inf[0].tip==0){
+            bbh = bbh + "小费"+inf[0].incl_tip_comment+"<br/>";
+        }else{
+            bbh = bbh + "小费"+inf[0].tip+"元/人"+inf[0].incl_tip_comment+"<br/>";
+        }
+
+    }
+
+
+    if(inf[0].incl_tourist_guide==1){
+
+        if(inf[0].tourist_guide_fee==0){
+            bh = bh + "领队派遣费"+inf[0].incl_tourist_guide_comment+"<br/>";
+        }else{
+            bh = bh + "领队派遣费"+inf[0].tourist_guide_fee+"元/人"+inf[0].incl_tourist_guide_comment+"<br/>";
+        }
+    }else if(inf[0].incl_tourist_guide==0){bbh = bbh + "领队派遣费"+inf[0].tourist_guide_fee+"元/人"+inf[0].incl_tourist_guide_comment+"<br/>";}
+
+
+    if(inf[0].incl_excursion==1){
+
+        if(inf[0].excursion_fee==0){
+            bh = bh + "岸上观光费"+inf[0].incl_excursion_comment+"<br/>";
+        }else{
+            bh = bh + "岸上观光费"+inf[0].excursion_fee+"元/人"+inf[0].incl_excursion_comment+"<br/>";
+        }
+    }else if(inf[0].incl_excursion==0){bbh = bbh + "岸上观光费"+inf[0].excursion_fee+"元/人"+inf[0].incl_excursion_comment+"<br/>";}
+
+
+
+    if(inf[0].incl_entertainment==1){bh = bh + "邮轮免费娱乐活动"+inf[0].incl_entertainment_comment+"<br/>";}else if(inf[0].incl_entertainment==0){bbh = bbh + "邮轮免费娱乐活动"+inf[0].incl_entertainment_comment+"<br/>";}
+    if(inf[0].incl_passport==1){bh = bh + "护照费"+inf[0].incl_passport_comment+"<br/>";}else if(inf[0].incl_passport==0){bbh = bbh + "护照费"+inf[0].incl_passport_comment+"<br/>";}
+    if(inf[0].incl_transfer==1){bh = bh + "出发地至港口交通费"+inf[0].incl_transfer_comment+"<br/>";}else if(inf[0].incl_transfer==0){bbh = bbh + "出发地至港口交通费"+inf[0].incl_transfer_comment+"<br/>";}
+    if(inf[0].incl_single_room_fee==1){bh = bh + "邮轮单人房差价费用"+inf[0].incl_single_room_fee_comment+"<br/>";}else if(inf[0].incl_single_room_fee==0){bbh = bbh + "邮轮单人房差价费用"+inf[0].incl_single_room_fee_comment+"<br/>";}
+    if(inf[0].incl_self_consumption==1){bh = bh + "邮轮上私人消费费用"+inf[0].incl_self_consumption_comment+"<br/>";}else if(inf[0].incl_self_consumption==0){bbh = bbh + "邮轮上私人消费费用"+inf[0].incl_self_consumption_comment+"<br/>";}
+    if(inf[0].incl_travel_insurance==1){bh = bh + "旅游保险费用"+inf[0].incl_travel_insurance_comment+"<br/>";}else if(inf[0].incl_travel_insurance==0){bbh = bbh + "旅游保险费用"+inf[0].incl_travel_insurance_comment+"<br/>";}
+    if(inf[0].incl_fee_not_mentioned==1){bh = bh + "未提及的其他费用"+inf[0].incl_fee_not_mentioned_comment+"<br/>";}else if(inf[0].incl_fee_not_mentioned==0){bbh = bbh + "未提及的其他费用"+inf[0].incl_fee_not_mentioned_comment+"<br/>";}
+
+    %>
+    <table style="margin-top: 10px;width: 960px;border:2px solid #ABBBBB;" cellspacing="0" cellpadding="0">
+        <tr  style="background-color: #F2F0F5;line-height: 20px;">
+            <td style="font-weight: bold;text-align: center;width: 100px;">费用包含</td>
+            <td style="padding-left: 10px;padding-top:10px;padding-bottom:10px;"><span id="bh1"><%=bh%></span></td>
+        </tr>
+        <tr style=";line-height: 20px;">
+            <td style="font-weight: bold;text-align: center">费用不包含</td>
+            <td style="padding-left: 10px;padding-top:10px;padding-bottom:10px;"><span id="bh2"><%=bbh%></span></td>
+        </tr>
+        <%if(inf[0].fee_comment!=""){%>
+        <tr  style="background-color: #F2F0F5;line-height: 20px;">
+            <td style="font-weight: bold;text-align: center">其他费用说明</td>
+            <td style="padding-left: 10px;padding-top:10px;padding-bottom:10px;">&nbsp;<%=inf[0].fee_comment%></td>
+        </tr>
+        <%}%>
+    </table>
+
+    <%if(booking[0].status_id == 2 || booking[0].status_id == 6){%>
+
+
+    <table style="border:2px solid #ABBBBB;width: 960px;border-bottom:0px;width: 100%;height: 30px;background-image: url('images/huitou.png');margin-top: 10px;" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="font-weight: bold;font-size: 14px;">&nbsp;&nbsp;其他信息</td>
+
+            <td style="text-align: right"></td>
+        </tr>
+    </table>
+    <table style="border:2px solid #ABBBBB;width: 960px;border-top:0px;width: 100%;margin-top: 0px;border-top: 0"  cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="padding: 10px;">
+                    <span style="font-size: 14px;color: #FF0000;font-weight: bold;margin-left: 0px;">
+                    签证材料收取截止日：<%=(new Date(booking[0].visa_application_until)).Format("yyyy-MM-dd")%>
+
+                        </span>
+            </td>
+        </tr>
+    </table>
+
+
+
+    <%}%>
+
+    <a name="tab2" id="tab2"></a>
+    <table style="border:2px solid #ABBBBB;width: 960px;border-bottom:0px;width: 100%;height: 30px;background-image: url('images/huitou.png');margin-top: 10px;" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="font-weight: bold;font-size: 14px;">&nbsp;&nbsp;签证资料</td>
+
+            <td style="text-align: right"></td>
+        </tr>
+    </table>
+    <table style="border:2px solid #ABBBBB;margin-top: 0px;width: 960px;border-top:0px;width: 100%;margin-top: 0px;border-top: 0" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="padding: 10px;">
+        <%
+        for(var i in pf){
+            if(pf[i].file_name!=""){
+        %>
+        <a href="#" onclick="window.open('files/<%=pf[i].file_path%>');"><image src="images/fileatt.gif"></image><%=pf[i].file_name%></a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <%
+            }
+        }%>
+            </td>
+        </tr>
+    </table>
+
+    <table style="border:2px solid #ABBBBB;width: 960px;border-bottom:0px;width: 100%;height: 30px;background-image: url('images/huitou.png');margin-top: 10px;" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="font-weight: bold;font-size: 14px;">&nbsp;&nbsp;取消政策</td>
+
+            <td style="text-align: right"></td>
+        </tr>
+    </table>
+    <table style="border:2px solid #ABBBBB;margin-top: 0px;width: 960px;border-top:0px;width: 100%;margin-top: 0px;border-top: 0" cellpadding="0" cellspacing="0">
+        <tr style="height:25px;line-height:25px">
+            <td style="padding: 10px;" id="qxzc"><%=product[0].cancellation_policy%></td>
+        </tr>
+    </table>
+
+    
+
+    <table style="display:none;border:2px solid #ABBBBB;width: 960px;border-bottom:0px;width: 100%;height: 30px;background-image: url('images/huitou.png');margin-top: 10px;" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="font-weight: bold;font-size: 14px;">&nbsp;&nbsp;发票信息</td>
+
+            <td style="text-align: right"></td>
+        </tr>
+    </table>
+    <table style="display:none;border:2px solid #ABBBBB;width: 960px;width: 100%;margin-top: 0px;border-top: 0"  cellpadding="0" cellspacing="0">
+        <tr>
+            <%
+            var f = "";
+            if(product[0].payment_transfer == 1){f = f + "银行转账;"}
+            if(product[0].payment_online_banking == 1){f = f + "网上银行;"}
+            if(product[0].payment_alipay == 1){f = f + "支付宝;"}
+            if(product[0].payment_cheque == 1){f = f + "支票;"}
+            if(product[0].payment_cash == 1){f = f + "现金;"}
+            %>
+            <td><div style="margin: 10px;">
+                    发票抬头：<%=booking[0].receipt_title%>
+                    快递地址：<%=booking[0].shipping_address%>
+                    接收人：<%=booking[0].recipient%>
+                    电话：<%=booking[0].recipient_telephone%>
+                </div></td>
+        </tr>
+    </table>
+    <br/>
+    <%if(booking[0].status_id == 1){%>
+    <a name="tab1" id="tab1"></a>
+    <table style="margin-left: 330px;width: 300px;margin-top: 20px;">
+        <tr>
+            <td><a href="javascript:history.go(-1);" ><img src="/images/retune.png" style="cursor: pointer"/></a></td>
+            <td><img src="/images/cancel.png" style="cursor: pointer" onclick="cancelBooking();"/></td>
+        </tr>
+    </table>
+    <br/>
+    <%}%>
+
+    <%if(booking[0].status_id == 1){%>
+    <div style="line-height: 15px;font-weight: bold;margin-top: 25px;font-size: 16px;">订单待确认状态下，游客信息暂不能修改</div>
+    <div style="line-height: 10px;"><img src="/images/ora.jpg" style="margin-top: 0px;width: 100%;height: 4px;" /></div>
+    <table style="border:2px solid #ABBBBB;width: 100%;margin-top: 10px;"  cellspacing="0" cellpadding="0">
+        <tr style="text-align: center;color: #000000;font-weight: bold;background-image: url('images/huitou.png');">
+            <td >序号</td>
+            <td >舱房类型</td>
+            <td >第1、2人</td>
+            <td >第3、4人</td>
+            <td >儿童价</td>
+            <td >成人数量</td>
+            <td >儿童数量</td>
+            <td style="width: 80px;">合计</td>
+        </tr>
+        <%
+            var m = 0;
+            var c1 = "";var c2 = "";var c3 = "";var c4 = "";  var cb = "";  var man1 = 0; var man2 = 0;var money1 = 0;
+                for(var i in cc){
+            m = m + 1;
+            if(cb==""){
+                cb = cc[i].txtCabinName;
+            }else{
+                cb = cb+"  "+cc[i].txtCabinName;
+            }
+            man1 = man1 + cc[i].amount_adult;
+            man2 = man2 + cc[i].amount_child;
+            money1 = money1 + cc[i].booking_pos_total_price;
+        %>
+        <tr style="text-align: center;background-color: #eeeeee">
+            <%
+                if(c1==""){
+                    c1 = cc[i].product_position_id;
+                    c2 = cc[i].retail_price;
+                    c3 = cc[i].retail_price_2;
+                    c4 = cc[i].price_child;
+                }else{
+                    c1 = c1 + "@" +cc[i].product_position_id;
+                    c2 = c3 + "@" +cc[i].retail_price;
+                    c3 = c4 + "@" +cc[i].retail_price_2;
+                    c4 = c4 + "@" +cc[i].price_child;
+                }
+                var a1 = ""; var a2 = "";var a3 = "";
+                if(cc[i].cabin_category_id == 9999){
+                    if(cc[i].cabin_type_id==1){a1 ="内舱房";}
+                    else if(cc[i].cabin_type_id==2){a1 ="海景房";}
+                    else if(cc[i].cabin_type_id==3){a1 ="阳台房";}
+                    else if(cc[i].cabin_type_id==4){a1 ="套房";}
+                    a2 = "-";a3 = "-";
+                }else{
+                    a1 = cc[i].txtCabinName;
+                    a2 = cc[i].txtCabinNo;
+                    a3 = cc[i].numCanCheckIn;
+                }
+            %>
+            <td ><%=m%></td>
+            <td><%=a1%></td>
+            <td>￥<span id="peo<%=m%>4"><%=cc[i].deal_price%></span></td>
+            <td>￥<span id="peo<%=m%>5"><%=cc[i].deal_price_2%></span></td>
+            <td>￥<span id="peo<%=m%>6"><%=cc[i].deal_price_child%></span></td>
+            <td><%=cc[i].amount_adult%></td>
+            <td><%=cc[i].amount_child%></td>
+            <td >￥<%=cc[i].booking_pos_total_price%></td>
+
+        </tr>
+        <tr id="mx<%=m%>" >
+            <td  colspan="8" >
+                <table class="pclass" style="border-collapse: collapse;border-left:0px;border-right:0px;width: 100%;margin-top: 0px;border-top: 0;border-bottom: 0" border="0" cellspacing="0" cellpadding="0">
+                    <tr style="text-align: center">
+                            <td style="width: 130px;"><b>姓</b></td>
+                            <td style="width: 130px;"><b>名</b></td>
+                            <td style="width: 130px;"><b>姓(拼音)</b></td>
+                            <td style="width: 130px;"><b>名(拼音)</b></td>
+                            <td style="width: 130px;"><b>护照</b></td>
+                            <td style="display:none;width: 200px;"><b>出生年月日</b></td>
+                            <td style="display:none;width: 80px;"><b>护照号</b></td>
+                            <td style="display:none;width: 200px;"><b>护照签发地</b></td>
+                            <td style="display:none;width: 200px;"><b>护照签发日期</b></td>
+                            <td style="display:none;width: 70px;"><b>护照有效期</b></td>
+                    </tr>
+                    <%
+                        var ny1 = "";
+                        var ny2 = "";
+                        var ny3 = "";
+                    for(var k in cc1){
+                            if(cc1[k].booking_pos_id==cc[i].id){
+                        ny1 = (new Date(cc1[k].birthday)).Format("yyyy-MM-dd")+"";
+                        if(ny1=="NaN-aN-aN"){ny1= "";}
+                        ny2 = (new Date(cc1[k].pass_issue_at)).Format("yyyy-MM-dd")+"";
+                        if(ny2=="NaN-aN-aN"){ny2= "";}
+                    %>
+                    <tr style="text-align: center">
+                        <td><%=cc1[k].lastname%></td>
+                        <td><%=cc1[k].firstname%></td>
+                        <td><%=cc1[k].lastname_en%></td>
+                        <td><%=cc1[k].firstname_en%></td>
+                        <td>
+                            <%if(cc1[k].pass_file_path!="" && cc1[k].pass_file_path.indexOf(".")!=-1){
+                            %>
+                            <a href="#" onclick="window.open('files/<%=cc1[k].pass_file_path%>');"><image style="margin-top:3px" src="images/passport.png"></image>&nbsp;护照</a>
+                            
+                            <%   
+                            }%>
+                        </td>
+                        <td style="display:none"><%=ny1%></td>
+                        <td style="display:none"><%=cc1[k].pass_number%></td>
+                        <td style="display:none"><%=cc1[k].pass_issue_place%></td>
+                        <td style="display:none"><%=ny2%></td>
+                        <%
+                            if(ny2!=="") {
+                                var y = new Date(cc1[k].pass_issue_at);
+                                var ny = y.getFullYear() + Number(cc1[k].pass_valid_period);
+                                var nm = y.getMonth() + 1 + "";
+                                if (nm.length == 1) {
+                                    nm = "0" + nm;
+                                }
+                                var nd = y.getDate() - 1;
+                                ny3 = ny+"-"+nm+"-"+nd;
+                            }else{
+                                ny3 = "";
+                            }
+                        %>
+                        <td style="display:none"><%=ny3%></td>
+                    </tr>
+                    <%
+                    }
+                    }
+                    %>
+                </table>
+            </td>
+        </tr>
+        <%
+        }%>
+    </table>
+
+    <table style="border:2px solid #ABBBBB;width: 960px;border-bottom:0px;width: 100%;height: 30px;background-image: url('images/huitou.png');margin-top: 10px;" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="font-weight: bold;font-size: 14px;">&nbsp;&nbsp;游客签证资料</td>
+
+            <td style="text-align: right"></td>
+        </tr>
+    </table>
+    <table style="border:2px solid #ABBBBB;margin-top: 0px;width: 960px;border-top:0px;width: 100%;margin-top: 0px;border-top: 0" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="padding: 10px;">
+        <%
+        for(var k in bf){
+        if(bf[k].file_name!=""){
+        %>
+        <a href="#" onclick="window.open('files/<%=bf[k].file_path%>');"><image src="images/fileatt.gif"></image><%=bf[k].file_name%></a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <%}
+        }%>
+            </td>
+        </tr>
+    </table>
+    <%}%>
+    <%if(booking[0].status_id == 2 || booking[0].status_id == 6){%>
+    <a name="tab4" id="tab4"></a>
+    <table style="width:100%" border="0">
+        <tr style="height:10px;line-height:10px;">
+            <td>
+                <div style="font-weight: bold;font-size: 16px;">供应商已确认订单，舱房已保留，请于<span style="color: #FF0000;font-weight: bold;font-size: 16px;"><%=booking[0].visa_application_until%></span>之前补全游客信息</div>
+            </td>
+            <td style="text-align:right"><img src="/images/sure.png" style="cursor: pointer;margin-top:0px" class="sure" /></td>
+        </tr>
+    </table>
+    
+    <div style="line-height: 1px;height:1px;"><img src="/images/ora.jpg" style="margin-top: 0px;width: 100%;height: 4px;" /></div>
+    <table style="border:2px solid #ABBBBB;border-bottom:0px;width: 100%;height: 30px;background-image: url('images/huitou.png');margin-top: 10px;" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="font-weight: bold;font-size: 14px;">&nbsp;&nbsp;游客信息</td>
+            <%var tp = "";
+            if(product[0].type_id==1){
+                tp = "单船票"
+            }else{
+                tp = "团队游"
+            }
+            %>
+            <td style="text-align: right"></td>
+        </tr>
+    </table>
+    <table style="border:2px solid #ABBBBB;width: 100%;margin-top: 0px;border-top: 0"  cellspacing="0" cellpadding="0">
+        <tr style="text-align: center;color: #000000;font-weight: bold;background-color: #EDEBEC">
+            <td >序号</td>
+            <td >舱房类型</td>
+            <td >第1、2人</td>
+            <td >第3、4人</td>
+            <td >儿童价</td>
+            <td >成人数量</td>
+            <td >儿童数量</td>
+            <td style="width: 80px;">合计</td>
+        </tr>
+
+        <%
+        var m = 0;
+        var c1 = "";var c2 = "";var c3 = "";var c4 = "";  var cb = "";  var man1 = 0; var money1 = 0;
+        for(var i in cc){
+            m = m + 1;
+            if(cb==""){
+                cb = cc[i].txtCabinName;
+            }else{
+                cb = cb+"  "+cc[i].txtCabinName;
+            }
+            man1 = man1 + cc[i].amount_adult;
+            man1 = man1 + cc[i].amount_child;
+            money1 = money1 + cc[i].booking_pos_total_price;
+        %>
+        <%if(i!=0){%>
+        <tr style="line-height: 3px;height: 3px;">
+            <td colspan="10" style="height: 3px"><img src="/images/xu2.png"></td>
+        </tr>
+        <%}%>
+        <tr style="text-align: center">
+            <%
+                if(c1==""){
+                    c1 = cc[i].product_position_id;
+                    c2 = cc[i].retail_price;
+                    c3 = cc[i].retail_price_2;
+                    c4 = cc[i].price_child;
+                }else{
+                    c1 = c1 + "@" +cc[i].product_position_id;
+                    c2 = c3 + "@" +cc[i].retail_price;
+                    c3 = c4 + "@" +cc[i].retail_price_2;
+                    c4 = c4 + "@" +cc[i].price_child;
+                }
+                var a1 = ""; var a2 = "";var a3 = "";
+                if(cc[i].cabin_category_id == 9999){
+                    if(cc[i].cabin_type_id==1){a1 ="内舱房";}
+                    else if(cc[i].cabin_type_id==2){a1 ="海景房";}
+                    else if(cc[i].cabin_type_id==3){a1 ="阳台房";}
+                    else if(cc[i].cabin_type_id==4){a1 ="套房";}
+                    a2 = "-";a3 = "-";
+                }else{
+                    a1 = cc[i].txtCabinName;
+                    a2 = cc[i].txtCabinNo;
+                    a3 = cc[i].numCanCheckIn;
+                }
+            %>
+            <td ><%=m%></td>
+            <td><%=a1%></td>
+            <td>￥<span id="peo<%=m%>4"><%=cc[i].deal_price%></span></td>
+            <td>￥<span id="peo<%=m%>5"><%=cc[i].deal_price_2%></span></td>
+            <td>￥<span id="peo<%=m%>6"><%=cc[i].deal_price_child%></span></td>
+            <td><%=cc[i].amount_adult%></td>
+            <td><%=cc[i].amount_child%></td>
+            <td >￥<%=cc[i].booking_pos_total_price%></td>
+
+        </tr>
+        <tr id="mx<%=m%>" >
+            <td  colspan="10" >
+                <table style="width: 100%;margin-top: 0px;border-top: 0;border-bottom: 0" border="0" cellspacing="0" cellpadding="0">
+                    <tr style="text-align: center">
+                        <td style="width: 130px;"><b>姓</b></td>
+                            <td style="width: 130px;"><b>名</b></td>
+                            <td style="width: 130px;"><b>姓(拼音)</b></td>
+                            <td style="width: 130px;"><b>名(拼音)</b></td>
+                            <td style="width: 130px;"><b>护照上传</b></td>
+                            <td style="display:none;width: 200px;"><b>出生年月日</b></td>
+                            <td style="display:none;width: 80px;"><b>护照号</b></td>
+                            <td style="display:none;width: 200px;"><b>护照签发地</b></td>
+                            <td style="display:none;width: 200px;"><b>护照签发日期</b></td>
+                            <td style="display:none;width: 70px;"><b>护照有效期</b></td>
+                    </tr>
+                    <%
+                        var n = 0;
+                        for(var t in cc1){
+                            if(cc1[t].booking_pos_id==cc[i].id){
+                                n = n + 1;
+                    %>
+                        <tr style="line-height:25px;text-align: center;">
+                            <td style="display:none">
+                                <input style="width: 120px;" type="text" id="r<%=m%><%=n%>0" value="<%=cc1[t].id%>" />
+                            </td>
+                            <td>
+                                <input style="width: 120px;" type="text" id="r<%=m%><%=n%>1" value="<%=cc1[t].lastname%>" />
+                            </td>
+                            <td><input style="width: 120px;" type="text" id="r<%=m%><%=n%>2" value="<%=cc1[t].firstname%>" /></td>
+                            <td><input style="width: 120px;" type="text" id="r<%=m%><%=n%>9" value="<%=cc1[t].lastname_en%>" /></td>
+                            <td><input style="width: 120px;" type="text" id="r<%=m%><%=n%>10" value="<%=cc1[t].firstname_en%>" /></td>
+                            <td style="text-align:left;width:170px">
+                                <input style="width: 120px;" type="file" id="q<%=m%><%=n%>11" name="q<%=m%><%=n%>11" />
+                                <%if(cc1[t].pass_file_path!="" && cc1[t].pass_file_path.indexOf(".")!=-1){
+                            %>
+                            <a href="#" onclick="window.open('files/<%=cc1[t].pass_file_path%>');"><image style="margin-top:3px" src="images/passport.png"></image>&nbsp;护照</a>
+                            
+                            <%   
+                            }%>
+                            </td>
+                        </tr>
+                    <%            
+                            }
+                        }
+                    %>
+                    <%
+                        var numPeople = 1;
+                        numPeople = numPeople + cc[i].amount_adult + cc[i].amount_child;
+                        var style1="";
+                            for(var k=1;k<numPeople;k++){
+                        style1="";
+                        if(k>a3){style1="display:none";}
+                    %>
+                    <tr style="line-height:25px;text-align: center;<%=style1%>;display:none">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td style="display:none">
+                            <select style="width:70px;" id="q<%=m%><%=k%>3a" >
+                                <option value="-">年</option>
+                                <%
+                                for(var i = 0;i<95;i++){
+                                %>
+                                <option value="<%=1920+i%>"><%=1920+i%></option>
+                                <%
+                                }
+                                %>
+                            </select>
+                            <select style="width:50px;" id="q<%=m%><%=k%>3b" >
+                                <option value="-">月</option>
+                                <%
+                                for(var i = 1;i<13;i++){
+                                %>
+                                <option value="<%=i%>"><%=i%></option>
+                                <%
+                                }
+                                %>
+                            </select>
+                            <select style="width:50px;" id="q<%=m%><%=k%>3c" >
+                                <option value="-">日</option>
+                                <%
+                                for(var i = 1;i<32;i++){
+                                %>
+                                <option value="<%=i%>"><%=i%></option>
+                                <%
+                                }
+                                %>
+                            </select>
+                        </td>
+                        <td style="display:none"><input style="width: 70px;" onKeyUp="value=value.replace(/[\W]/g,'')" type="text" id="q<%=m%><%=k%>4" /></td>
+                        <td style="display:none">
+                            <select id="province<%=m%><%=k%>" onchange="showcity('<%=m%><%=k%>');" style="width:80px">
+                                <option value="-">省</option>
+                                <%
+                                for (var i in province) {
+                                %>
+                                <option value="<%=province[i].id%>"><%=province[i].name%></option>
+                                <%
+                                }
+                                %>
+                            </select>
+
+                            <select id="city<%=m%><%=k%>" style="width:90px"></select>
+
+                        </td>
+                        <td style="display:none">
+                            <select style="width:70px;" id="q<%=m%><%=k%>3d" >
+                                <option value="-">年</option>
+                                <%
+                                for(var i = 0;i<14;i++){
+                                %>
+                                <option value="<%=2001+i%>"><%=2001+i%></option>
+                                <%
+                                }
+                                %>
+                            </select>
+                            <select style="width:50px;" id="q<%=m%><%=k%>3e" >
+                                <option value="-">月</option>
+                                <%
+                                for(var i = 1;i<13;i++){
+                                %>
+                                <option value="<%=i%>"><%=i%></option>
+                                <%
+                                }
+                                %>
+                            </select>
+                            <select style="width:50px;" id="q<%=m%><%=k%>3f" >
+                                <option value="-">日</option>
+                                <%
+                                for(var i = 1;i<32;i++){
+                                %>
+                                <option value="<%=i%>"><%=i%></option>
+                                <%
+                                }
+                                %>
+                            </select>
+
+                        </td>
+                        <td style="display:none">
+                            <select class="easyui-combobox" style="width:50px;" id="q<%=m%><%=k%>7" >
+                                <option value="10">10</option>
+                                <option value="5">5</option>
+                            </select>年
+                        </td>
+                    </tr>
+                    <%
+                    }
+                    %>
+                    <tr style="line-height: 5px;height: 5px;">
+                        <td colspan="7" style="height: 5px"></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <%
+        }%>
+    </table>
+
+    <table style="border:2px solid #ABBBBB;width: 960px;border-bottom:0px;width: 100%;height: 30px;background-image: url('images/huitou.png');margin-top: 10px;" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="font-weight: bold;font-size: 14px;">&nbsp;&nbsp;游客签证资料</td>
+
+            <td style="text-align: right"></td>
+        </tr>
+    </table>
+    <table style="border:2px solid #ABBBBB;margin-top: 0px;width: 960px;border-top:0px;width: 100%;margin-top: 0px;border-top: 0" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="padding: 10px;">
+        <%
+        for(var k in bf){
+        if(bf[k].file_name!=""){
+        %>
+        <span id="fj<%=k%>"><a href="#" onclick="window.open('files/<%=bf[k].file_path%>');"><image src="images/fileatt.gif"></image><%=bf[k].file_name%></a>
+        &nbsp;&nbsp;
+
+                <a style="cursor:pointer" onclick="$('#fj<%=k%>').css('display','none');">删除</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <%}
+        }%>
+            </td>
+        </tr>
+    </table>
+
+    <table style="border:2px solid #ABBBBB;width: 100%;margin-top: 10px;"  cellpadding="0" cellspacing="0">
+        <tr style="background-image: url('images/huitou.png');">
+            <td style="font-weight: bold;font-size: 14px;text-align: left">&nbsp;&nbsp;游客资料补充上传</td>
+        </tr>
+        <tr>
+            <td>
+                &nbsp;&nbsp;&nbsp;<span style="color:#F68421">用于上传游客护照扫描件及各类申请表格等，最大上传大小为3MB，支持上传类型：jpg bmp doc docx xls xlsx rar zip</span><br/>
+                &nbsp;&nbsp;&nbsp;<b>文件名：</b><input type="text" name="filename1" /> <input onchange="getname('1');" type="file" name="file1" id="file1"></input><br/>
+                <div id="filearea"></div>
+
+                &nbsp;&nbsp;&nbsp;<input type="button" value="添加" onclick="addfj();" />
+                &nbsp;&nbsp;&nbsp;<input type="button" value="确认上传" class="sure" />
+                <br/>
+                <input type="hidden" name="fnum" id="fnum" value="1" >
+        </tr>
+        <tr style="height: 3px;line-height: 3px">
+            <td style="height: 3px;line-height: 3px"></td>
+        </tr>
+    </table>
+
+    <%if(booking[0].status_id == 2){%>
+    <a name="tab3" id="tab3"></a>
+    <table style="margin-left: 320px;width: 400px;margin-top: 20px;">
+        <tr>
+            <td><img src="/images/cancel.png" style="cursor: pointer" onclick="cancelBooking();"/></td>
+            <td style="text-align: center;display:none"><img src="/images/downloadbooking.png" style="cursor: pointer" onclick="jAlertIframe('开发中！');" /></td>
+            <td style="text-align: center;"><a style="cursor: pointer" onclick="paid()"><img src="/images/paidd.png" style="cursor: pointer" /></a></td>
+            
+            <td style="text-align: center"> <a href="javascript:history.go(-1);" ><img src="/images/retune.png" style="cursor: pointer" /></a></td>
+        </tr>
+    </table>
+    <%}%>
+
+    <%}%>
+
+    <%if(booking[0].status_id == 3 || booking[0].status_id == 4 || booking[0].status_id == 5 || booking[0].status_id == 6 || booking[0].status_id == 7){%>
+    <a name="tab1" id="tab1"></a>
+    <div style="width: 100%;align:center">
+        <a href="javascript:history.go(-1);" ><img src="/images/retune.png" style="cursor: pointer"  /></a>
+    </div>
+    <br/>
+    <%}%>
+
+        <%
+        var a1="";
+        var a2="";
+        for (var i in city) {
+            a1= a1+";"+ city[i].name;
+            a2 = a2 +";"+city[i].pid;
+        }
+        %>
+        <div style="display: none">
+            <input id="a1" value="<%=a1%>"></input>
+            <input id="a2" value="<%=a2%>"></input>
+        </div>
+
+
+
+        <input type="hidden" name="booking_number"  value="<%=no%>" />
+        <input type="hidden" name="bid"  value="<%=booking[0].id%>" />
+        <input type="hidden" name="owner_id"  value="<%=user[0].id%>" />
+        <input type="hidden" name="product_id"  value="<%=product[0].id%>" />
+        <input type="hidden" name="zd1"  value="<%=c1%>" />
+        <input type="hidden" name="zd2"  value="<%=c2%>" />
+        <input type="hidden" name="zd3"  value="<%=c3%>" />
+        <input type="hidden" name="zd4"  value="<%=c4%>" />
+        <input type="hidden" name="zd5" id="zd5" />
+        <input type="hidden" name="zd6" id="zd6" />
+        <input type="hidden" name="zd7" id="zd7" />
+
+        <input type="hidden" name="pas1" id="pas1" />
+        <input type="hidden" name="pas2" id="pas2" />
+        <input type="hidden" name="pas3" id="pas3" />
+        <input type="hidden" name="pas4" id="pas4" />
+        <input type="hidden" name="pas5" id="pas5" />
+        <input type="hidden" name="pas6" id="pas6" />
+        <input type="hidden" name="pas7" id="pas7" />
+        <input type="hidden" name="pas8" id="pas8" />
+        <input type="hidden" name="sType" id="sType" />
+        <input type="hidden" id="mm1"  value="<%=m%>" />
+    <input type="hidden" id="docid" name="docid" value="<%=booking[0].id%>" />
+    <input type="hidden" name="bsdid" value="<%=bsd[0].id%>" />
+    <input type="hidden" name="delid" id="delid" />
+    <input type="hidden" name="canreason" id="canreason" />
+    <input type="hidden" id="beforetmp" name="beforetmp" />
+
+    
+    </form>
+    <br/><br/>
+    
+    <div id="chooseinfo" class="A1" >
+
+        <div id="htmlxc" style="height:120px;margin-top:20px;margin-left:20px;margin-right:20px;overflow:auto;line-height:20px;">123</div>
+        <div id="htmlxc2" style="width:90%;text-align:right;margin-left:20px;margin-right:20px;">
+        </div>
+    </div>
+</div>

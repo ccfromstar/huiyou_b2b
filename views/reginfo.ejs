@@ -1,0 +1,30 @@
+<form method="post" style="font-size: 12px;">
+用户信息<br/>
+    姓名：<%=user[0].name%><br/>
+    所属部门：<%=user[0].departmentName%><br/>
+    职位：<%=user[0].position%><br/>
+    联系电话：<%=user[0].telephone%><br/>
+    传真：<%=user[0].fax%><br/>
+    手机：<%=user[0].mobile_phone%><br/>
+    邮箱：<%=user[0].email%><br/>
+    <br/><br/>
+公司信息<br/>
+    公司名称：<%=company[0].name%><br/>
+    公司简称：<%=company[0].short_name%><br/>
+    公司地址：<%=company[0].address%><br/>
+    公司区号: <%=company[0].telephone_area_code%> <br/>
+    公司电话：<%=company[0].telephone%><br/>
+    公司传真：<%=company[0].fax%><br/>
+    公司开户银行：<%=company[0].bank%><br/>
+    公司账号：<%=company[0].account_number%><br/>
+    <br/><br/>
+    公司logo：<img src="/files/<%=company[0].logo%>" style="margin-left: 30px;height: 70px;" /><br/><br/>
+    <input type="button" value="审核通过" onclick="document.all.type.value='yes';document.forms[0].submit();"> (点击审核通过，将激活当前账号，并将初始密码发送到用户注册时候填写的邮箱)<br/>
+    <input type="button" value="审核不通过" onclick="document.all.type.value='no';document.forms[0].submit();">
+    <br/>
+    <input type="hidden" type="text" name="id" value="<%=user[0].id%>"></input>
+    <input type="hidden" type="text" name="company_id" value="<%=user[0].company_id%>"></input>
+    <input type="hidden" type="text" name="email" value="<%=user[0].email%>"></input>
+    <input type="hidden" type="text" name="userTel" value="<%=user[0].mobile_phone%>"></input>
+    <input type="hidden" type="text" name="type" id="type" ></input>
+</form>

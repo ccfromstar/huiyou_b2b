@@ -1,0 +1,32 @@
+<div style="width:960px;background-color: #FFFFFF;margin:auto;">
+    <form method="post">
+        <table style="width: 100%;background-image:url(images/titlebg.jpg)" border="0">
+            <tr>
+                <td><img src="/images/logo.png" style="margin-left: 20px;height:80px;margin-top:10px;" /></td>
+                <td style="text-align: right;vertical-align: top">
+                <b>用户名：</b><input  value="邮箱/手机号" onFocus="if(value==defaultValue){value='';this.style.color='#000'}" onBlur="if(!value){value=defaultValue;this.style.color='#999'}" style="margin-left:0px;width: 128px" class="easyui-validatebox" type="text" id="name" name="username"/>
+                &nbsp;&nbsp;&nbsp;<b>密码：</b><input style="margin-left:0px;width: 68px" class="easyui-validatebox" onkeydown="if(event.keyCode==13){document.getElementById('bt').click();return false;}" type="password" id="pwd" name="password"/>
+                &nbsp;&nbsp;&nbsp;<span onclick="login()"id="bt" style="color:#3A6EA5;cursor: pointer;font-weight:bold">登陆</span>
+                <span style="margin-left: 10px;"><input type="checkbox" style="vertical-align: middle;margin-right: 5px;margin-left: 10px;" id="txtRememberKey" name="txtRememberKey" >记住用户名和密码</span> <span style="margin-left: 20px;cursor: pointer" onclick="forgetpwd();">忘记密码</span>&nbsp;&nbsp;&nbsp;
+                </td>
+            </tr>
+        </table>
+    <table width="100%" style="margin-top:5px;height:390px;background-image:url('/images/cover01.jpg')" border="0">
+        <tr style="line-height:40px;height:40px;">
+            <td style="text-align:center">
+                <div style="font-size:42px;font-weight:bold">荟邮轮</div>
+                <div style="font-size:32px;font-weight:bold;margin-top:3px;">荟萃天下邮轮</div>
+                <div style="font-size:24.5px;font-weight:bold;margin-top:-3px;">专业邮轮分销平台及营销服务商</div>
+                <div style="font-size:38.5px;font-weight:bold">只为邮轮销售更从容</div>
+                <br/>
+                <img style="cursor: pointer" src="/images/reg.png" onclick="window.location='/userregist';" />
+                <a href="publichome" style="margin-left:100px"><img  style="cursor: pointer" src="/images/guest.png" onclick="login(true)" /></a> 
+            </td>
+        </tr>
+    </table>
+    <img src="/images/cover02.png">
+    <div style="width:100%;background-color:#FFFFFF;height:50px"></div>
+        <input id="info" type="hidden" value="<%=error%>"  />
+    </form>
+</div>
+

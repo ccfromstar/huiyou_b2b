@@ -1,0 +1,370 @@
+<!doctype html>
+<html>
+<head>
+    <title>荟邮轮</title>
+    <meta name="title" content="荟邮轮 荟邮网络科技 专业邮轮分销平台及营销服务商 同行邮轮分销
+" />
+    <meta name="keywords" content="荟邮轮 荟邮网络科技 专业邮轮分销平台及营销服务商 同行邮轮分销
+" />
+    <meta name="description" content="荟邮轮 荟邮网络科技 专业邮轮分销平台及营销服务商 同行邮轮分销
+" />
+    <script type="text/javascript" src="/javascripts/jquery.min.js"></script>
+    <script type="text/javascript" src="/javascripts/b_frame.js"></script>
+    <script type="text/javascript" src="/javascripts/detect_mobile.js"></script>
+    <script type="text/javascript" src="/javascripts/cookiesoperator.js"></script>
+    <script type="text/javascript" src="/javascripts/datapicker.js"></script>
+    <script type="text/javascript" src="/javascripts/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript" src="/javascripts/jquery-easyui-1.4.1/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="/javascripts/jquery-easyui-1.4.1/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="/javascripts/utils.js"></script>
+    <script type="text/javascript" src="/javascripts/My97DatePicker/WdatePicker.js"></script>
+
+    <link href="/images/favicon.ico" mce_href="favicon.ico" rel="bookmark" type="image/x-icon" />   
+    <link href="/images/favicon.ico" mce_href="favicon.ico" rel="icon" type="image/x-icon" />  
+    <link href="/images/favicon.ico" mce_href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+    <link rel="stylesheet" type="text/css" href="/javascripts/jquery-easyui-1.4.1/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="/javascripts/jquery-easyui-1.4.1/themes/icon.css">
+
+    <link href="/stylesheets/demozi.css" rel="stylesheet" type="text/css"/>
+    <link href="/stylesheets/chat.css" rel="stylesheet" type="text/css"/>
+
+    <link rel="stylesheet" href="/javascripts/jGrowl-master/jquery.jgrowl.css" type="text/css"/>
+    <script type="text/javascript" src="/javascripts/jGrowl-master/jquery.jgrowl.js"></script>
+
+    <script type="text/javascript" src="/javascripts/jquery/jquery_tsk/js/jquery.alerts.js"></script>
+    <link rel="stylesheet" href="/javascripts/jquery/jquery_tsk/js/jquery.alerts.css" type="text/css"/>
+
+</head>
+<body style="background-color: #D8D8D8;">
+
+<input type="hidden" id="current-user-id" value="<%=user[0].id%>">
+<input type="hidden" id="m2-changed" value="0">
+<input type="hidden" id="m3-changed" value="0">
+<input type="hidden" id="m7-changed" value="0">
+<input type="hidden" id="m8-changed" value="0">
+<input type="hidden" id="m9-changed" value="0">
+<input type="hidden" id="focus-page1">
+<input type="hidden" id="focus-page2">
+<input type="hidden" id="focus-page3">
+<input type="hidden" id="focus-page4">
+<input type="hidden" id="focus-page5">
+<input type="hidden" id="focus-page6">
+<input type="hidden" id="focus-page7">
+<input type="hidden" id="focus-page8">
+<input type="hidden" id="focus-page9">
+<input type="hidden" id="focus-page10">
+<input type="hidden" id="focus">
+<input type="hidden" id="new-count" value="0">
+<script>
+
+    var IO_KEY = <%-JSON.stringify(io_keys)%>;
+
+    var DEFAULT_TITLE = '新话题';
+
+    var socket = io();
+    var isConnected = false;
+
+    /* 和服务器连接上了 */
+    socket.on('connect', function(msg){
+        var currentUser = document.getElementById('current-user-id');
+        //notify I'm online
+        if ( currentUser && currentUser.value ) {
+            socket.emit(IO_KEY.ONLINE, {'user_id': currentUser.value});
+        }
+        isConnected = true;
+    });
+
+//    socket.on(IO_KEY.GET_CITY_FILTER, function(result){
+//        window.frames['page2'].createDepartureFilter(result);
+//    });
+//    socket.on(IO_KEY.GET_CRUISE_COMPANY_SHIP, function(result){
+//        window.frames['page2'].createCompanyShipFilter(result);
+//    });
+//    socket.on(IO_KEY.GET_PRODUCT_LIST, function(result) {
+//        window.frames['page2'].createProductList(result);
+//    });
+
+    socket.on(IO_KEY.SYS_NOTIFICATION_TOP, function(msg){
+        showSysNotification(msg);
+    });
+
+    socket.on(IO_KEY.PRODUCT_PUBLISHED, function(msg){
+        if (msg.owner_id == '<%=user[0].id%>' && isCurrentPage(4) && isPageRefreshable(4)) {
+             document.getElementById('page4').contentWindow.reload(); // reload the published products
+        } else {
+            notifyChanges('产品有更新', 2);
+        }
+    });
+
+    socket.on(IO_KEY.PRODUCT_DELETED, function(msg){
+        notifyChanges('产品有更新', 2);
+    });
+
+    socket.on(IO_KEY.SUPPLY_NEW, function(msg){
+        notifyChanges('产品有更新', 3);
+    });
+    socket.on(IO_KEY.DEMAND_NEW, function(msg){
+        notifyChanges('需求有更新', 3);
+    });
+
+    socket.on(IO_KEY.CHAT, function(msg){
+        notifyNewMessage(msg);
+    });
+	socket.on(IO_KEY.NOTIFY_MSG_NEW, function(msg){
+        //console.log('socket-id:'+socket.id);
+        if ( msg.new_msg_count > 0 ) {
+            notifyNewMessage();
+        }
+    });
+    socket.on(IO_KEY.BOOKING_STATUS_CHANGED, function(msg){
+        var pageNum;
+        if(msg.to == 'S') {//seller
+            pageNum = 7;
+        } else if(msg.to == 'B') {//buyer
+            pageNum = 8;
+        }
+
+        if( !pageNum ) return false; //something goes wrong
+      
+        jAlert(msg.msg, '系统消息');
+
+        if( isCurrentPage(pageNum) && isPageRefreshable(pageNum) ) {
+            changepage(pageNum); // reload the current page
+        } else {
+            notifyChanges('订单有更新', pageNum);
+        }
+    });
+    
+    socket.on(IO_KEY.WARNING, function(msg){
+        jWarning('<span style="color:red">'+msg+'</span>', '警告');
+    });
+    socket.on('error', function(msg){
+        if ( msg == IO_KEY.INVALID_SOCKET ) {
+            /*
+            jConfirm('<span style="color:red">很抱歉！您当前和服务器的连接无效，继续使用系统需要重新登陆。</span><br/>现在退出系统重新登陆吗？', '错误', function (yes) {
+                        if (yes) {
+                            logout();
+                        }
+                    }
+            );*/
+        }
+//        else if ( msg.description) {
+//            jWarning(msg.description, '系统错误');//socket.io error message
+//        } else {
+//            jWarning(msg, '系统错误');
+//        }
+    });
+    socket.on(IO_KEY.URGENT, function(msg){    
+        var hasFocus = $('#focus').val() == '1';
+        for( i = 1; !hasFocus && i < 7; i++) {
+            hasFocus = $('#focus-page'+i).val() == '1';
+        }
+        if ( !hasFocus ) {//page not in focus
+            var count = parseInt($('#new-count').val())+1;
+            document.title = document.title.substring(0, 3) + '('+count+')';
+            $('#new-count').val(count);
+            parent.alert(msg.title + '\n\n' + msg.message + '\n\n' + msg.date + ' - ' + msg.sender);
+        } else {
+            parent.jWarning(msg.message + '<br><br>' + msg.date + ' - ' + msg.sender, msg.title);
+        }
+    });
+
+    function error(message) {
+        return { "errMsg": "系统错误，请稍后再试或联系客服。"+message};
+    }
+    /**
+     * 在即时消息标签上显示来了新消息
+     * @param msg
+     */
+    function notifyNewMessage(msg){
+        notifyChanges('新消息', 5);
+    }
+    /**
+     * @parameters
+     * recipient(必须的):收信人用户id
+     * ext_p_id(optional):相关的产品id,
+     * ext_type(optional):相关的产品类型, 1->邮轮产品, 2->尾舱供应, 3->尾舱需求，4->订单
+     * title(必须的):消息主题
+     * */
+    function goToMessage(parameters) {
+        changepage(5, parameters);
+    }
+
+    function showSysNotification(msg) {
+        //TODO dialog
+    }
+
+    function logout() {
+        deleteCookie('logousername');
+        socket.disconnect();
+        window.location='/';
+    }
+
+    function _getbookingstatus(){
+        $.ajax({ type:"POST" , url: "/getbookingstatus", data:{userid:"<%=user[0].id%>"}, success: function(data){
+            $("#sell1").html(data.sell1);
+            $("#sell2").html(data.sell2);
+            $("#sell3").html(data.sell3);
+            $("#sell4").html(data.sell4);
+            $("#sell5").html(data.sell5);
+            $("#sell6").html(data.sell6);
+            $("#buy1").html(data.buy1);
+            $("#buy2").html(data.buy2);
+            $("#buy3").html(data.buy3);
+            $("#buy4").html(data.buy4);
+            $("#buy5").html(data.buy5);
+            $("#buy6").html(data.buy6);
+        }});
+    }
+    _getbookingstatus();
+
+</script>
+<table style="width: 96%;margin: auto;margin-top: 20px;" cellspacing="0">
+    <tr>
+        <td style="background-image: url('/images/left.png');width: 25px;"></td><td  style="background-image: url('/images/top.png')"></td><td style="background-image: url('/images/right.png');width: 25px;"></td>
+    </tr>
+    <tr>
+        <td style="background-image: url('/images/leftbian.png');width: 25px;"></td>
+        <td style="background-color: #FFFFFF">
+            <div style="width:960px;background-color: #FFFFFF;margin:0 auto;">
+                <table style="width: 100%;" border="0">
+                    <tr>
+                        <td style="width: 160px;"><img src="/images/logo.png" style="margin-left: 0px;height:80px;" /></td>
+                        <td style="text-align: right;vertical-align: top">
+                            <img style="margin-right: 10px;height: 30px;" src="/images/callto.jpg" style="margin-left: 20px;" />
+                            <div style="margin-right: 15px;margin-top: 0px;font-size: 12px;"><img src="/images/user.png" style="width: 20px;"><span style="color: #0B68BB;font-weight: bold" id="cookierole"></span>&nbsp;&nbsp;&nbsp;用户名：<span id="cookieusername"></span>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<span style="cursor: pointer" onclick="return logout();">退出</span></div>
+                            <%if(user[0].role_sys_admin==1){%>
+                            <a href="#" onclick="window.open('https://117.121.25.228:1337/');">荟邮云管理系统</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a style="display:none" href="#" onclick="window.open('/userdominomanagement');">管理员界面</a>
+                            <a href="#" onclick="htg('optionordersellall');" id="manager">客服主管界面</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <%}%>
+                            <%if(company[0].name=="上海荟邮网络科技有限公司"){%>
+                            <a style="display:none" href="#" onclick="window.open('/linelist');">航次列表</a>
+                            <%}%>
+                        </td>
+                    </tr>
+                </table>
+                <table style="width: 960px;" border="0" cellspacing="0">
+                    <tr>
+                        <td class="tdfooter0" id="m1" style="width:100px;">
+                            <span id="m1-txt" class="tdfooter1-txt" style="color:#FFFFFF;width:100%;text-align:center" onmousedown="changePageOnTouch(1);" onclick="changePageOnClick(1)">&nbsp;&nbsp;&nbsp;首页</span>
+                        </td>
+                        <td class="tdfooter" id="m2" style="width:100px;" onmouseover="changePageOnTouch(2)" onclick="changePageOnClick(2)" >
+                            <div id="m2-txt" class="tdfooter1-txt" >邮轮集市</div><div id="m2-notify"></div>
+                        </td>
+
+                        <td class="tdfooter" id="m3" onmouseover="changePageOnTouch(3)" onclick="changePageOnClick(3)">
+                            <div id="m3-txt" class="tdfooter1-txt">尾舱买卖</div><div id="m3-notify"></div>
+                        </td>
+                        <td class="tdfooter" id="m5" onmouseover="changePageOnTouch(5)" onclick="changePageOnClick(5)" >
+                            <div id="m5-txt" class="tdfooter1-txt" >即时通讯</div><div id="m5-notify" ></div>
+                        </td>
+                        <td class="tdfooter" id="m6" style="display: none" onmouseover="changePageOnTouch(6)" onclick="changePageOnClick(6)" >产品发布</td>
+                        <td class="tdfooter" id="m4" onmouseover="changePageOnTouch(4)" onclick="changePageOnClick(4)">个人中心</td>
+                        <td class="tdfooter" id="m9" onmouseover="changePageOnTouch(9)" onclick="changePageOnClick(9)">帮助</td>
+                        <td style="width: auto"></td>
+                        <%if(company[0].role_seller == 1){%>
+                        <td class="tdfooter" id="m7" style="width:100px;">
+                            <div id="m7-txt"  style=""><span id="m7-span" style="" onmouseover="_getbookingstatus();changePageOnTouch(7)" onclick="changePageOnClick(7)">我的销售订单</span>
+                             
+                                <ul class="select">
+                                   <li><a onclick="setCookie('bookingtype','1');changepage(7)">待确认&nbsp; &nbsp;</a>&nbsp;&nbsp;<span id="sell1">
+                                   </span></li>
+                                   <li><a onclick="setCookie('bookingtype','2');changepage(7)">待付款&nbsp; &nbsp;</a>&nbsp;&nbsp;<span id="sell2">
+                                   </span></li>
+                                   <li><a onclick="setCookie('bookingtype','3');changepage(7)">已付款&nbsp; &nbsp;</a>&nbsp;&nbsp;<span id="sell6">
+                                   </span></li>
+                                   <li><a onclick="setCookie('bookingtype','4');changepage(7)">待出团&nbsp; &nbsp;</a>&nbsp;&nbsp;<span id="sell5">
+                                   </span></li>
+                                   <li><a onclick="setCookie('bookingtype','5');changepage(7)">已出团&nbsp; &nbsp;</a>&nbsp;&nbsp;<span id="sell4">
+                                   </span></li>
+                                   <li><a onclick="setCookie('bookingtype','6');changepage(7)">交易关闭</a>&nbsp;&nbsp;<span id="sell3">
+                                   </span></li>
+                                </ul>
+                                 <span id="m7-notify"  style="float:right;right:20px"></span>
+                            </div>        
+                           
+                        </td>
+                        <%}%>
+                        <td class="tdfooter" id="m8" style="width:100px;">
+                            <div id="m8-txt"  style=""><span id="m8-span" style="" onmouseover="_getbookingstatus();changePageOnTouch(8)" onclick="changePageOnClick(8)">我的购买订单</span>
+
+                                <ul class="select">
+                                   <li><a onclick="setCookie('bookingtype','1');changepage(8)">待确认&nbsp; &nbsp;</a>&nbsp;&nbsp;<span id="buy1">
+                                   </span></li>
+                                   <li><a onclick="setCookie('bookingtype','2');changepage(8)">待付款&nbsp; &nbsp;</a>&nbsp;&nbsp;<span id="buy2">
+                                   </span></li>
+                                   <li><a onclick="setCookie('bookingtype','3');changepage(8)">已付款&nbsp; &nbsp;</a>&nbsp;&nbsp;<span id="buy6">
+                                   </span></li>
+                                   <li><a onclick="setCookie('bookingtype','4');changepage(8)">待出团&nbsp; &nbsp;</a>&nbsp;&nbsp;<span id="buy5">
+                                   </span></li>
+                                     <li><a onclick="setCookie('bookingtype','5');changepage(8)">已出团&nbsp; &nbsp;</a>&nbsp;&nbsp;<span id="buy4">
+                                     </span></li>
+                                   <li><a onclick="setCookie('bookingtype','6');changepage(8)">交易关闭</a>&nbsp;&nbsp;<span id="buy3">
+                                   </span></li>
+                                </ul>
+                                  <span id="m8-notify"  style="float:right;right:20px"></span>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </td>
+        <td style="background-image: url('/images/rightbian.png');width: 25px;"></td>
+    </tr>
+    <tr style="height: 6px;">
+        <td style="background-image: url('/images/orange3.png')"></td>
+        <td style="background-image: url('/images/orange.png')">
+
+        </td>
+        <td style="background-image: url('/images/orange6.png')"></td>
+    </tr>
+</table>
+<table style="width: 96%;margin: auto" cellspacing="0">
+    <tr>
+        <td style="background-image: url('/images/leftbian.png');width: 25px;"></td>
+        <td style="background-color: #FFFFFF;">
+<%- body %>
+        </td>
+        <td style="background-image: url('/images/rightbian.png');width: 25px;"></td>
+    </tr>
+</table>
+<table style="width: 96%;margin: auto" cellspacing="0">
+    <tr style="height: 1px;">
+        <td style="background-image: url('/images/orange7.png')"></td>
+        <td style="background-image: url('/images/orange2.png')">
+
+        </td>
+        <td style="background-image: url('/images/orange8.png')"></td>
+    </tr>
+    <tr>
+        <td style="background-image: url('/images/leftbian.png');width: 25px;"></td>
+        <td style="background-color: #FFFFFF;">
+            <div style="width:960px;margin:0 auto;line-height:20px">
+                <div style="font-weight: bold;padding-top: 10px;font-size: 13px;text-align: left">上海荟邮网络科技有限公司版权所有<span onclick="window.open('aboutus');" style="font-size: 13px;margin-left:20px;cursor:pointer">联系我们</span></div>
+                <div style="padding-top: 2px;font-size: 14px;">Copyright © 2014 www.huiyoulun.com - All Rights Reserved.</div>
+                <div style="padding-top: 2px;font-size: 14px;text-align: left">备案号 沪ICP备14019890号-2.</div>
+            </div>
+        </td>
+        <td style="background-image: url('/images/rightbian.png');width: 25px;"></td>
+    </tr>
+    <tr>
+        <td style="background-image: url('/images/zuojiao.png');width: 25px;"></td><td  style="background-image: url('/images/dibian.png')"></td><td style="background-image: url('/images/youjiao.png');width: 25px;"></td>
+    </tr>
+</table>
+<input id="info" style="display: none" value="<%=error%>" />
+<br/>
+<script>
+    $("#cookieusername").html(getCookie("logousername"));
+    $("#cookieimage").attr("src", "files/" + getCookie("logopath"));
+
+    if(getCookie("logorole")==0){
+        $("#cookierole").html("买家");
+    }else{
+        $("#cookierole").html("卖家");
+    }
+</script>
+</body>
+</html>

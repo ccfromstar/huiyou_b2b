@@ -1,0 +1,216 @@
+<div style="width:960px;background-color: #FFFFFF;margin:0 auto;">
+    <form method="post">
+        <div style="font-weight: bold;margin-top: 25px;font-size: 16px;">在线预订</div>
+        <img src="/images/ora.jpg" style="margin-top: 5px;width: 100%;height: 4px;" />
+        <table style="width: 100%;height: 30px;background-image: url('images/huitou.png');margin-top: 10px;" cellpadding="0" cellspacing="0">
+            <tr>
+                <td style="font-weight: bold;font-size: 14px;">&nbsp;&nbsp;订单号:<span id="ddh"><%=no%></span></td>
+            </tr>
+        </table>
+        <table style="width: 100%;" border="1" cellpadding="0" cellspacing="0">
+            <tr>
+                <td style="width: 480px;"><div style="margin:10px;"><span style="font-weight: bold">供应商信息：</span><br/>
+                     <img src="files/<%=product[0].logo%>" style="width: 100px;height: 100px;" /><span style="display: inline-block;margin-left: 5px;"><%=product[0].short_name%><br/>联系人：<%=product[0].contact_person%><br/>电话：<%=product[0].contact_mobile_phone%><br/>邮箱：<%=product[0].contact_email%><br/></span>
+                    </div></td>
+                <td style="width: 480px;"><div style="margin:10px;"><span style="font-weight: bold">预订方信息：</span><br/>
+                        <img src="files/<%=company[0].logo%>" style="width: 100px;height: 100px;" /><span style="display: inline-block;margin-left: 5px;"><%=company[0].short_name%><br/>联系人：<%=user[0].name%><br/>电话：<%=user[0].mobile_phone%><br/>邮箱：<%=user[0].email%><br/></span>
+                    </div></td>
+            </tr>
+        </table>
+        <table style="width: 100%;height: 30px;background-image: url('images/huitou.png');margin-top: 0px;" cellpadding="0" cellspacing="0">
+            <tr>
+                <td style="font-weight: bold;font-size: 14px;">&nbsp;&nbsp;订单详情</td>
+                <%var tp = "";
+                if(product[0].type_id==1){
+                    tp = "单船票"
+                }else{
+                    tp = "团队游"
+                }
+                %>
+                <td style="text-align: right">产品类型：<%=tp%>&nbsp;&nbsp;</td>
+            </tr>
+        </table>
+        <table style="width: 100%;text-align: center;border-bottom: 0" border="1" cellpadding="0" cellspacing="0">
+            <tr>
+                <td>产品编号</td>
+                <td>产品名称</td>
+                <td>出发日期</td>
+                <td>邮轮名称</td>
+                <td>停靠港口</td>
+            </tr>
+            <tr>
+                <td><%=product[0].product_number%></td>
+                <td><%=product[0].title%></td>
+                <td><%=product[0].start_date%></td>
+                <td><%=product[0].txtShipName%></td>
+                <%
+                var hx = "";
+                for(var i in ts){
+                    if(hx ==""){
+                        hx = ts[i].location;
+                    }else{
+                        hx = hx + "-" + ts[i].location;
+                    }
+                }%>
+                <td><%=hx%></td>
+            </tr>
+        </table>
+        <table style="width: 100%;margin-top: 0px;border-top: 0;border-bottom: 0" border="1" cellspacing="0" cellpadding="0">
+            <tr style="text-align: center;color: #000000;font-weight: bold;background-color: #EDEBEC">
+                <td >序号</td>
+                <td >舱房类型</td>
+                <td >第1、2人</td>
+                <td >第3、4人</td>
+                <td >儿童价</td>
+                <td >成人数量</td>
+                <td >儿童数量</td>
+                <td style="width: 80px;">合计</td>
+                <td >&nbsp;</td>
+            </tr>
+            <%
+                var m = 0;
+                var c1 = "";var c2 = "";var c3 = "";var c4 = "";
+            for(var i in qq){
+                m = m + 1;
+            %>
+            <tr style="text-align: center">
+                <%
+                    if(c1==""){
+                        c1 = qq[i].product_position_id;
+                        c2 = qq[i].retail_price;
+                        c3 = qq[i].retail_price_2;
+                        c4 = qq[i].price_child;
+                    }else{
+                        c1 = c1 + "@" +qq[i].product_position_id;
+                        c2 = c3 + "@" +qq[i].retail_price;
+                        c3 = c4 + "@" +qq[i].retail_price_2;
+                        c4 = c4 + "@" +qq[i].price_child;
+                    }
+                    var a1 = ""; var a2 = "";var a3 = "";
+                    if(qq[i].cabin_category_id == 9999){
+                        if(qq[i].cabin_type_id==1){a1 ="内舱房";}
+                        else if(qq[i].cabin_type_id==2){a1 ="海景房";}
+                        else if(qq[i].cabin_type_id==3){a1 ="阳台房";}
+                        else if(qq[i].cabin_type_id==4){a1 ="套房";}
+                        a2 = "-";a3 = "-";
+                    }else{
+                        a1 = qq[i].txtCabinName;
+                        a2 = qq[i].txtCabinNo;
+                        a3 = qq[i].numCanCheckIn;
+                    }
+                %>
+                <td ><%=m%></td>
+                <td><%=a1%></td>
+                <td>￥<span id="peo<%=m%>4"><%=qq[i].retail_price%></span></td>
+                <td>￥<span id="peo<%=m%>5"><%=qq[i].retail_price_2%></span></td>
+                <td>￥<span id="peo<%=m%>6"><%=qq[i].price_child%></span></td>
+                <td><input type="text" id="peo<%=m%>1" onchange="gettotal(<%=m%>);" style="width: 30px;text-align: center" value="0" /></td>
+                <td><input type="text" id="peo<%=m%>2" onchange="gettotal(<%=m%>);" style="width: 30px;text-align: center" value="0" /></td>
+                <td >￥<span id="peo<%=m%>3">0</span></td>
+                <td style="color:#0169C0;cursor: pointer" onclick="hovmx1(<%=m%>);">输入游客信息</td>
+            </tr>
+            <tr id="mx<%=m%>" style="display:none">
+                <td  colspan="9" >
+                    <table style="width: 100%;margin-top: 0px;border-top: 0;border-bottom: 0" border="1" cellspacing="0" cellpadding="0">
+                        <tr style="text-align: center">
+                            <td>姓名</td>
+                            <td>拼音(大写字母)</td>
+                            <td>出生年月日</td>
+                            <td>护照号</td>
+                            <td>护照签发地</td>
+                            <td>护照签发日期</td>
+                            <td>护照有效期至</td>
+                        </tr>
+                        <%
+                        for(var k=1;k<5;k++){
+                        %>
+                        <tr style="text-align: center">
+                            <td><input type="text" id="q<%=m%><%=k%>1" /></td>
+                            <td><input type="text" id="q<%=m%><%=k%>2" /></td>
+                            <td><input type="text" id="q<%=m%><%=k%>3" /></td>
+                            <td><input type="text" id="q<%=m%><%=k%>4" /></td>
+                            <td><input type="text" id="q<%=m%><%=k%>5" /></td>
+                            <td><input type="text" id="q<%=m%><%=k%>6" /></td>
+                            <td><input type="text" id="q<%=m%><%=k%>7" /></td>
+                        </tr>
+                        <%
+                        }
+                        %>
+                    </table>
+                </td>
+            </tr>
+            <%
+            }%>
+        </table>
+        <%
+        var bh = "";
+        var bbh = "";
+        if(inf[0].incl_cruise_ticket==1){bh = bh + "船票费用"+inf[0].incl_cruise_ticket_comment+"<br/>";}else if(inf[0].incl_cruise_ticket==0){bbh = bbh + "船票费用"+inf[0].incl_cruise_ticket_comment+"<br/>";}
+        if(inf[0].incl_port_tax==1){bh = bh + "港务费"+inf[0].port_tax_fee+"元/人"+inf[0].incl_port_tax_comment+"<br/>";}else if(inf[0].incl_port_tax==0){bbh = bbh + "港务费"+inf[0].port_tax_fee+"元/人"+inf[0].incl_port_tax_comment+"<br/>";}
+        if(inf[0].incl_visa_fee==1){bh = bh + "签证费"+inf[0].visa_fee+"元/人"+inf[0].incl_visa_comment+"<br/>";}else if(inf[0].incl_visa_fee==0){bbh = bbh + "签证费"+inf[0].visa_fee+"元/人"+inf[0].incl_visa_comment+"<br/>";}
+        if(inf[0].incl_tourist_guide==1){bh = bh + "领队派遣费"+inf[0].tourist_guide_fee+"元/人"+inf[0].incl_tourist_guide_comment+"<br/>";}else if(inf[0].incl_tourist_guide==0){bbh = bbh + "领队派遣费"+inf[0].tourist_guide_fee+"元/人"+inf[0].incl_tourist_guide_comment+"<br/>";}
+        if(inf[0].incl_excursion==1){bh = bh + "岸上观光费"+inf[0].excursion_fee+"元/人"+inf[0].incl_excursion_comment+"<br/>";}else if(inf[0].incl_excursion==0){bbh = bbh + "岸上观光费"+inf[0].excursion_fee+"元/人"+inf[0].incl_excursion_comment+"<br/>";}
+        if(inf[0].incl_meal_on_board==1){bh = bh + "邮轮免费餐厅用餐"+inf[0].incl_meal_on_board_comment+"<br/>";}else if(inf[0].incl_meal_on_board==0){bbh = bbh + "邮轮免费餐厅用餐"+inf[0].incl_meal_on_board_comment+"<br/>";}
+        if(inf[0].incl_entertainment==1){bh = bh + "邮轮免费娱乐活动"+inf[0].incl_entertainment_comment+"<br/>";}else if(inf[0].incl_entertainment==0){bbh = bbh + "邮轮免费娱乐活动"+inf[0].incl_entertainment_comment+"<br/>";}
+        if(inf[0].incl_passport==1){bh = bh + "护照费"+inf[0].incl_passport_comment+"<br/>";}else if(inf[0].incl_passport==0){bbh = bbh + "护照费"+inf[0].incl_passport_comment+"<br/>";}
+        if(inf[0].incl_transfer==1){bh = bh + "出发地至港口交通费"+inf[0].incl_transfer_comment+"<br/>";}else if(inf[0].incl_transfer==0){bbh = bbh + "出发地至港口交通费"+inf[0].incl_transfer_comment+"<br/>";}
+        if(inf[0].incl_single_room_fee==1){bh = bh + "邮轮单人房差价费用"+inf[0].incl_single_room_fee_comment+"<br/>";}else if(inf[0].incl_single_room_fee==0){bbh = bbh + "邮轮单人房差价费用"+inf[0].incl_single_room_fee_comment+"<br/>";}
+        if(inf[0].incl_self_consumption==1){bh = bh + "邮轮上私人消费费用"+inf[0].incl_self_consumption_comment+"<br/>";}else if(inf[0].incl_self_consumption==0){bbh = bbh + "邮轮上私人消费费用"+inf[0].incl_self_consumption_comment+"<br/>";}
+        if(inf[0].incl_travel_insurance==1){bh = bh + "旅游保险费用"+inf[0].incl_travel_insurance_comment+"<br/>";}else if(inf[0].incl_travel_insurance==0){bbh = bbh + "旅游保险费用"+inf[0].incl_travel_insurance_comment+"<br/>";}
+        if(inf[0].incl_fee_not_mentioned==1){bh = bh + "未提及的其他费用"+inf[0].incl_fee_not_mentioned_comment+"<br/>";}else if(inf[0].incl_fee_not_mentioned==0){bbh = bbh + "未提及的其他费用"+inf[0].incl_fee_not_mentioned_comment+"<br/>";}
+        %>
+        <table style="margin-top: 0px;width: 960px;border-bottom: 0" border="1" cellspacing="0" cellpadding="0">
+            <tr style="background-color: #F2F0F5">
+                <td style="font-weight: bold;text-align: center;width: 200px;">费用包含</td>
+                <td style="padding-left: 10px;"><span id="bh1"><%=bh%></span></td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;text-align: center">费用不包含</td>
+                <td style="padding-left: 10px;"><span id="bh2"><%=bbh%></span></td>
+            </tr>
+            <tr style="background-color: #F2F0F5">
+                <td style="font-weight: bold;text-align: center">其他费用说明</td>
+                <td style="padding-left: 10px;">&nbsp;<%=inf[0].fee_comment%></td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;text-align: center">预定需知</td>
+                <td style="padding-left: 10px;">&nbsp;<%=product[0].booking_note%></td>
+            </tr>
+        </table>
+        <table style="width: 100%;margin-top: 0px;border-top: 0" border="1" cellpadding="0" cellspacing="0">
+            <tr>
+                <%
+                var f = "";
+                if(product[0].payment_transfer == 1){f = f + "银行转账;"}
+                if(product[0].payment_online_banking == 1){f = f + "网上银行;"}
+                if(product[0].payment_alipay == 1){f = f + "支付宝;"}
+                if(product[0].payment_cheque == 1){f = f + "支票;"}
+                if(product[0].payment_cash == 1){f = f + "现金;"}
+                %>
+                <td><div style="margin: 10px;">支付方式：<%=f%><br/><%=product[0].bank+" "+product[0].account_number%><br/>
+                        发票抬头：<input type="text" name="receipt_title" />
+                        快递地址：<input type="text" name="shipping_address" />
+                        接收人：<input type="text" name="recipient" />
+                        电话：<input type="text" name="telephone" />
+                    </div></td>
+            </tr>
+        </table>
+        <table style="margin-left: 660px;width: 300px;margin-top: 20px;">
+            <tr>
+                <td><div style="cursor:pointer;margin:auto;background-color: #0169C0;width: 100px;height: 30px;color:#FFFFFF;text-align: center" onclick="history.go(-1);">返回</div></td>
+                <td><div id="bookingbtn" style="cursor:pointer;margin:auto;background-color: #0169C0;width: 100px;height: 30px;color:#FFFFFF;text-align: center" >提交</div></td>
+            </tr>
+        </table>
+        <input type="hidden" name="booking_number"  value="<%=no%>" />
+        <input type="hidden" name="owner_id"  value="<%=user[0].id%>" />
+        <input type="hidden" name="product_id"  value="<%=product[0].id%>" />
+        <input type="hidden" name="zd1"  value="<%=c1%>" />
+        <input type="hidden" name="zd2"  value="<%=c2%>" />
+        <input type="hidden" name="zd3"  value="<%=c3%>" />
+        <input type="hidden" name="zd4"  value="<%=c4%>" />
+        <input type="hidden" name="zd5" id="zd5" />
+        <input type="hidden" name="zd6" id="zd6" />
+        <input type="hidden" name="zd7" id="zd7" />
+    </form>
+    <br/><br/>
+</div>

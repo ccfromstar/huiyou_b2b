@@ -1,0 +1,982 @@
+<% var debug = false; %>
+<div style="width:960px; <%if(user[0].role_sys_user==1 || user[0].role_sys_admin==1){%>height: 1000px;<%}%>background-color: #FFFFFF;margin:0 auto;">
+    <div>
+        <div id="err-msg" style="color: #ff0000"></div>
+    </div>
+<div class="easyui-layout" style="width: 960px; border: 0; height:500px;" >
+    <div id="west" data-options="region:'west',split:true" style="width:280px; height: 100%; overflow: hidden">
+        <div data-options="fit:true,autoFill:true,autoWidth:true,autoHeight:false,border:false" style="padding:0px;height:500px;display: block">
+            <div data-options="selected:true" style="padding:10px; display: block">
+                <div style="width: 100%; display: inline-block; border-bottom: 1px; border-bottom-style: dotted; ">
+                    <div class="menu_msg" style="width: 50%; float: left; text-align: center; cursor: pointer" onclick="return showTopicList()">消息主题</div>
+                    <div style="float: left; width: 0px; height: 12px; color: #aaaaaa">|</div>
+                    <div class="menu_msg" style="width:49%; float: right; text-align: center; cursor: pointer" onclick="return showUserList()">通讯录</div>
+                </div>
+                <div id="topicList" style="height:430px; overflow-y: auto;">
+                    <div>
+						<div id="search-topic-text" style="display:inline">
+							<input id="search-topic-text-input" type="text" title="您可以输入对话用户名称、公司名称、主题或对话里包含的文字">&nbsp;
+							<div id="datepicker-img" style="cursor:pointer;background-image:url(/images/datePicker_expand.png);background-repeat:no-repeat;background-position: center;display: inline-block;" title="打开时间搜索栏" onclick="return onclickSearchDate()">&nbsp;&nbsp;&nbsp;&nbsp;</div>&nbsp;
+							<a class="button_blue" onclick="return searchTopic()">开始搜索</a>
+						</div> 
+                        <div id="search-topic-date" style="display: none; height: 50px">
+                            从 <input type="text" readonly class="Wdate"
+                                     onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',onpicked:function(){validateDate('search-from-date', 'search-to-date');}})"
+                                     title="消息从该日期始" id="search-from-date" style="width: 85px;cursor:pointer">
+                            至 <input type="text" readonly class="Wdate"
+                                     onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',onpicked:function(){validateDate('search-from-date', 'search-to-date');}})"
+                                     title="消息至该日期为止" id="search-to-date" style="width: 85px;cursor:pointer">
+                        </div>
+                    </div>
+                    <div id="topic-sys" class="topic" onclick="openSysMsg();" onmouseover="return highlightTopic('sys')" onmouseout="return unhighlightTopic('sys')">
+                        <img id="sys-msg" src="<%if(newSysCount>0){%>/images/new_msg.png<%}else{%>/images/mail.png<%}%>"
+                                 style="border:none; margin-right: 2px"/><span style="font-weight:bold;padding-bottom:5px">系统消息</span>
+                        
+                    </div>
+					<div id="topic-items"></div>
+                    <% if ( topicList.length < topic_total_count[0].topic_count ) {%>
+                    <div id="more-topic-items"></div>
+                    <div>
+                        <div id="more-topic" style="cursor: pointer; height:25px" onclick="return openGetMoreTopic()">查找更多主题...</div>
+                        <div id="search-more-topic" style="display: none; height: 50px">
+                            从 <input type="text" readonly class="Wdate"
+                                     onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',onpicked:function(){moreTopic();}})"
+                                     name="topic_from_date" title="单击选择日期" id="topic-from-date" style="width: 85px;cursor:pointer">
+                            至 <input type="text" readonly class="Wdate"
+                                     onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',onpicked:function(){moreTopic();}})"
+                                     name="topic_to_date" title="单击选择日期" id="topic-to-date" style="width: 85px;cursor:pointer">
+                        </div>
+                    </div>
+                    <% } %>
+                </div>
+
+                <div id="userList" style="height:450px;display:none">
+                    <div>搜索用户 <input id="search-users" onkeyup="return filterUser();" ></div>
+                    <div id="user-list" style="height:400px; overflow-y: auto;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="east-div" data-options="region:'center',split:true" >
+        <div style="height:450px; ">
+            <div style="width: 100%;border-bottom: 1px dashed #999999; text-align: center">
+                <% if (talkTo) {%>
+                    <p id="chat-title" style="font-weight: bold"><%=title%></p>
+                    <p id="chat-partner"><%=supplier_company%>&nbsp; <%=talkTo[0].name%> &nbsp;电话: <%=talkTo[0].telephone%></p>
+                <% } else {%>
+                    <p id="chat-title" style="font-weight: bold">请选择消息主题查看和回复消息</p>
+                    <p id="chat-partner">或者在通讯录里选择联系人开始对话</p>
+                <% } %>
+            </div>
+            <div id="msg-panel" style="overflow-y: auto; height:380px">
+                <div id="show-older" style="width: 100%; text-align:center;display: none; height:18px;">
+                    <img src="images/previours_page_h.png" title="查看更早的对话记录" style="margin:auto;cursor: pointer;" onclick="return getHistories('O')"/>
+                </div>
+                <table id="messages" style="width: 100%;"></table>
+                <div id="show-newer" style="width: 100%; text-align:center; bottom:0; display: none; height:18px;">
+                    <img src="images/next_page_h.png" title="查看更新的对话记录" style="margin:auto;cursor: pointer;" onclick="getHistories('N')"/>
+                </div>
+            </div>
+        </div>
+        <div id='send-msg' style="margin-left:5px; bottom:0; height:40px;<%if(!talkTo){%>display:none<%}%>">
+            <input type="hidden" id="chat-id" value=""/>
+            <input type="hidden" id="current-user-id" value="<%=user[0].id%>"/>
+            <input type="hidden" id="recipient_id" value="<%=talkTo?talkTo[0].id:""%>"/>
+            <input type="hidden" id="recipient_name" value="<%=talkTo?talkTo[0].name:""%>"/>
+            <input type="hidden" id="msg_offset_older" value="0" />
+            <input type="hidden" id="msg_offset_newer" value="0" />
+			<input type="hidden" id="topic_reset" value="0" />
+			<input type="hidden" id="new-chat-title">
+			<input type="hidden" id="ext-p-id">
+			<input type="hidden" id="ext-type">
+            <input type="hidden" id="callback">
+            <input id="m" autocomplete="off" style="width:80%;" onkeypress="return messageEnter(event)"/><button id="send-button" onclick="send()" style="margin-left: 15px; width: 80px;">发送</button>
+        </div>
+    </div>
+</div>
+    <br/>
+    <% if ( user[0].role_sys_user == 1 || user[0].role_sys_admin == 1 ){%>
+    <div style="height: 220px">
+        系统消息标题：
+        <input id="sys_title" autocomplete="off" style="width: 200px" /><br>
+        系统消息内容：<br>
+        <textarea id="sys_m" autocomplete="off" style="width: 100%; height: 100px" ></textarea>
+        <button onclick="sendToAll()" style="margin-left: 15px; width: 120px;">发送给所有用户</button>
+    </div>
+    <br>
+    <div style="height: 220px">
+        <span style="color:#ff0000;">紧急通知标题：</span>
+        <input id="urgent_title" value="紧急通知" autocomplete="off" style="width: 200px;" />
+        <p style="color:#ff0000">紧急通知内容：</p>
+        <textarea id="urgent_m" autocomplete="off" style="width: 100%; height: 90px" ></textarea>
+        <button onclick="sendUrgent()" style="margin-left: 15px; width: 120px; color:red">发送给所有在线用户</button>
+    </div>
+    <% } %>
+
+<script>
+    var CHAT_CONSTANTS =<%-JSON.stringify(io_constants)%>;
+    var IO_KEY = parent.IO_KEY;
+    var users = {};
+    var user_keys =[];
+	var socket = parent.socket;
+    var newChatPartner;
+
+	socket.on(IO_KEY.ONLINE, function(msg){
+		$('#talkimg'+msg.user_id).attr('src', "/images/talk_online.png");
+		changeUserInTopic(msg.user_id, true);		
+	});
+	socket.on(IO_KEY.OFFLINE, function(msg){
+		$('#talkimg'+msg.user_id).attr('src', "/images/talk_offline.png");
+		changeUserInTopic(msg.user_id, false);
+	});
+	socket.emit(IO_KEY.GET_ONLINE_USERS, {'required_by':'<%=user[0].id%>'});
+	socket.on(IO_KEY.GET_ONLINE_USERS, function(online_users){
+		for( var i in online_users.users ){
+			$('#talkimg'+online_users.users[i]).attr('src', "/images/talk_online.png");	
+			changeUserInTopic(online_users.users[i], true);
+			<%if(debug){%>console.log('changeUserInTopic online: '+online_users.users[i]);<%}%>
+		}
+	});
+    /*等待系统消息*/
+    socket.on(IO_KEY.SYS, function(msg){
+        checkErrorMessage(msg.errMsg);
+		notifyNewSysMsg();
+        var currentChatId = document.getElementById('chat-id');
+        //是当前主题
+        if ( 'sys' == currentChatId.value ) {
+            appendLineSysMsg(msg);
+        }
+    });
+    socket.on(IO_KEY.NOTIFY_ERROR, function(msg){
+        checkErrorMessage(msg.errMsg);
+    });
+    socket.on(IO_KEY.NOTIFY_SYS_NEW, function(msg){
+        checkErrorMessage(msg.errMsg);
+        if ( msg.new_msg_count > 0 ) {
+            notifyNewSysMsg();
+        }
+    });	
+	
+    socket.on(IO_KEY.GET_SYS_MSG, function(msg){
+        checkErrorMessage(msg.errMsg);
+        for( var i in msg.messages ) {
+            appendLineSysMsg(msg.messages[i]);
+        }
+        calculateOffset(msg.msg_count.msg_count, msg.msg_offset_older, msg.msg_offset_newer);
+        if ( msg.new_msg_count > 0 ){
+            socket.emit(IO_KEY.RECEIVED_ALL_SYS, {
+                'user_id' : '<%=user[0].id%>',
+                'received_at' : getCurrentDateString()
+            });
+        }
+    });
+
+    /* 等待一条新消息 */
+    socket.on(IO_KEY.CHAT, function(msg){
+        checkErrorMessage(msg.errMsg);
+
+        // 如果该消息是当前会话主题
+        var isCurrentTopic = msg.chat_id == document.getElementById('chat-id').value;
+        if ( isCurrentTopic ) {
+
+            //显示消息
+            appendLine(msg.sender_name, msg.message, getDateString(msg.date));
+            //notify message received
+            //通知服务器收到
+            socket.emit(IO_KEY.RECEIVED, {
+                'chat_id' : msg.chat_id,
+                'history_id' : msg.history_id,
+                'received_at' : getCurrentDateString()
+            });
+			showSendMsg('回复');
+        }
+
+        // is not talking with this one
+        // add new message to the topic list if it does not exists
+        // 如果该消息的主题不在主题列表->添加到主题列表, 对方是发送者
+        if ( !document.getElementById('topic-' + msg.chat_id) ) {
+			if ( !getUser(msg.sender_id) ){
+				socket.emit(IO_KEY.GET_USER, {required_by:'<%=user[0].id%>', user_id:msg.sender_id});
+			}
+            addTopic(msg.chat_id, msg.title, msg.sender_name, msg.sender_id, msg.partner_company, true);
+        }
+
+        // 如果该消息不是当前会话主题, 在相关主题显示新消息提醒图标
+        if ( !isCurrentTopic ) {
+            topicListNotifyNew( 'topic-'+msg.chat_id, 'new-msg-' + msg.chat_id );
+        }
+    });
+
+    /*当前用户创建新主题后等待服务器返回新会话主题id->添加到主题列表, 对方是接收者*/
+    socket.on(IO_KEY.TOPIC_CREATED, function(msg){
+        checkErrorMessage(msg.errMsg);
+        //var partnerName = msg.partner_name;
+        //是当前的话题
+        //if ( !partnerName && document.getElementById('partner-id').value == msg.chat_id ) {
+          //  partnerName = document.getElementById('partner-name').value;
+        //}
+        addTopic(msg.chat_id, msg.title, msg.partner_name, msg.partner_id, msg.partner_company, false);
+		highlightTopic(msg.chat_id, true);
+        document.getElementById('chat-id').value = msg.chat_id;
+    });
+
+    /*在点击了新的主题向服务器发出查询该主题消息的请求后, 等待服务器返回查询的消息*/
+    socket.on(IO_KEY.GET_HISTORY, function(msg){
+        checkErrorMessage(msg.errMsg);
+    //server response with all chat histories of the required topic
+
+        //发生错误
+        if ( msg.errMsg ) {
+            setChatHeader(msg.errMsg, '', '', '', '');
+            return false;
+        }
+
+        //消息到达
+        //设置显示标题下的对话对象的信息
+        //set new title and the current chat partner (recipient)
+        setChatHeader(msg.title, msg.partner[0].user_name, msg.partner[0].company, msg.partner[0].telephone_area_code+'-'+msg.partner[0].telephone, msg.partner[0].mobile_phone);
+        document.getElementById('recipient_id').value = msg.partner[0].user_id;
+        document.getElementById('recipient_name').value = msg.partner[0].user_name;
+		//document.getElementById('partner_company').value = msg.partner[0].company;
+
+        //判断是否显示查看更新或更早的记录
+        calculateOffset(msg.msg_count.msg_count, msg.msg_offset_older, msg.msg_offset_newer);
+
+        //清除旧的主题消息内容, 显示新的主题消息内容
+        if ( msg.chat_messages ){
+
+            cleanMessages();
+
+			var lastSender;
+            var hasNew = false;
+            //adds messages of the required topic
+            for( var i in msg.chat_messages ){
+                appendLine(msg.chat_messages[i].sender,msg.chat_messages[i].message, getDateString(msg.chat_messages[i].sent_at));
+                //没有接收日期, 当前用户不是发送者 -> 新消息
+                if ( !hasNew && msg.chat_messages[i].received_at == null && msg.chat_messages[i].sender_id != '<%=user[0].id%>') {
+                    hasNew = true;
+                }
+				if ( i+1 == msg.chat_messages.length ){
+					lastSender = msg.chat_messages[i].sender_id;
+				}
+            }
+
+            //有新消息->通知服务器全部消息收到
+            if ( hasNew ){				
+                socket.emit(IO_KEY.RECEIVED_ALL, {
+                    'chat_id' : msg.chat_id,
+					'user_id' : '<%=user[0].id%>',
+                    'received_at' : getCurrentDateString()
+                });
+            } 
+			
+			if ( '<%=user[0].id%>' == lastSender ){
+				showSendMsg('发送');
+			} else {
+				showSendMsg('回复');
+			}
+        }
+
+    });
+	socket.on(IO_KEY.SEARCH_TOPIC, function(msg){
+        checkErrorMessage(msg.errMsg);        
+		$('#topic-items').empty();
+		$('#more-topic-items').empty();
+		$('#more-topic').hide();
+		$('#search-more-topic').hide();
+		if ( msg.topicList.length == 0 ) return false;
+		for ( i in msg.topicList ) {
+			$('#topic-items').append(getTopicItem(msg.topicList[i].chat_id, msg.topicList[i].title, msg.topicList[i].partner, msg.topicList[i].partner_id, msg.topicList[i].partner_company, msg.topicList[i].has_new));		
+		}
+		if ( !$('#search-topic-text-input').val() && !$('#search-from-date').val() && !$('#search-to-date').val() ) $('#more-topic').show();
+	});
+	socket.on(IO_KEY.MORE_TOPIC, function(msg){
+        checkErrorMessage(msg.errMsg);        
+		$('#more-topic-items').empty();
+		if ( msg.topicList.length == 0 ) return false;
+		$('#more-topic-items').append('<div>----- 找到的其他主题 ----</div>');
+		for ( i in msg.topicList ) {
+			$('#more-topic-items').append(getTopicItem(msg.topicList[i].chat_id, msg.topicList[i].title, msg.topicList[i].partner, msg.topicList[i].partner_id, msg.topicList[i].partner_company, msg.topicList[i].has_new));		
+		}		
+	});
+	socket.on(IO_KEY.LOOKUP_TOPIC, function(msg){
+		if(msg) { 
+			checkErrorMessage(msg.errMsg);
+		} else { 
+			checkErrorMessage();
+		}
+
+		if (msg && msg.chat_id ){
+            unmaskIframe();
+			openTopic(msg.chat_id);
+		} else {
+			talkToUser(newChatPartner);
+		}
+	});
+    socket.on(IO_KEY.GET_USER, function(msg){
+        if(msg) {
+            checkErrorMessage(msg.errMsg);
+        } else {
+            checkErrorMessage();
+        }
+		var user = msg;
+        
+        if ( !user.id ) return false;
+        
+        addUser(user);
+		if ( user.online ){
+			changeUserInTopic(user.id, true);
+		}
+        if ( $('#callback').val() == 'talkToUser' ) {
+            talkToUser(user.id);
+			$('#callback').val('');
+        }
+    });
+	
+    /*发送消息*/
+    function send(){
+
+        var currentPartner = document.getElementById('recipient_id');
+
+        //当前没有对话对象->不继续执行
+        if ( !currentPartner.value ) {
+            alert("发送消息前请选择一个消息主题或从通讯录里选择一个联系人！您也可以从供需市场或产品详情里点击联系买家或卖家开始对话");
+            return false;
+        }
+
+        if ( currentPartner.value == 'sys' ) {
+            alert("对不起，系统消息不能回复！");
+            return false;
+        }
+
+        //防止发送空的内容
+        if ( !$('#m').val() ) {
+            return false;
+        }
+
+        //用输入的第一条消息取代默认消息标题
+        if ( parent.DEFAULT_TITLE == document.getElementById('chat-title').textContent) {
+            setChatTitle($('#m').val());
+        }
+
+        //显示自己输入的消息
+        appendLine('<%=user[0].name%>', htmlEscape($('#m').val()), '今天 '+getCurrentTimeString());
+        //发送给服务器
+        socket.emit(IO_KEY.CHAT, {
+            'chat_id' : document.getElementById('chat-id').value,
+            'history_id' : '',
+            'sender_id' : '<%=user[0].id%>',
+            'sender_name' : '<%=user[0].name%>',
+            'recipient_id':currentPartner.value,
+            'recipient_name':document.getElementById('recipient_name').value,
+			'partner_company':'',
+            'title': document.getElementById('chat-title').textContent,
+            'message': htmlEscape($('#m').val()),
+            'date' : getCurrentDateString(),
+            'time' : getCurrentTimeString(),
+			'ext_p_id' : $('#ext-p-id').val(),
+			'ext_type' : $('#ext-type').val()
+        });
+		resetTalkTo();
+        $('#m').val('');
+		showSendMsg('发送');
+
+    };
+
+    /* 处理Enter键发送消息*/
+    function messageEnter(event) {
+        if (event.which == 13 || event.keyCode == 13) {
+            send();
+        }
+        return true;
+    }
+
+    /* 添加一道消息 */
+    function appendLine(userName, msg, date) {
+        $('#messages').append($('<tr>').html('<td style="width: 60px; float: left;">' + userName +
+                '</td><td style="width:70%;"><span style="display: block;word-wrap:break-word;  margin: 0; padding: 0;">' + msg +
+                '</span></td><td style="width:70px; text-align: center">' + date + '</td>'));
+        msgScrollToBottom();
+    }
+
+    function appendLineSysMsg(msg) {
+        $('#messages').append($('<tr>').html('<td style="width:100%; "><p style="font-weight: bold; text-align: center">' +
+                msg.title + '</p><p style="border-bottom:thin; text-align: center">' +
+                msg.sent_at + '</p>' + htmlUnescape(msg.message) +'</td>'));
+        msgScrollToBottom();
+    }
+
+    /* 在主题列表里添加一个其他用户发起的新主题 */
+    function addTopic(chatId, msgTitle, partnerName, partnerId, partnerCompany, isNew){
+        //check if chat topic list contains this title
+        if ( document.getElementById('topic-'+chatId) ) return true;
+
+        $('#topic-items').prepend(getTopicItem(chatId, msgTitle, partnerName, partnerId, partnerCompany, isNew));
+
+        //确保显示主题列表
+        showTopicList();
+        topicListScrollToTop();
+    }
+	
+	function getTopicItem(chatId, msgTitle, partnerName, partnerId, partnerCompany, isNew){
+        var icon = isNew? '/images/new_msg.png' : '/images/mail.png';
+		var onlineIcon = $('#talkimg'+partnerId).attr('src');
+		if ( !onlineIcon ) onlineIcon = "/images/talk_offline.png";
+		//var blank = 'c';
+		//if ( partnerName.length < 3 ) blank += '&nbsp;&nbsp;&nbsp;';
+		var partner = '<img class="talkimg'+partnerId+'" src="'+onlineIcon+'" style="border:none; margin-right: 2px;padding-left:20px"/>' +
+			 partnerCompany + ' - ' + partnerName;
+		var topic = '<img id="new-msg-' + chatId + '" src="'+icon+'" style="border:none;"/>&nbsp;' + msgTitle;
+        return '<div id="topic-' + chatId + '" title="'+msgTitle+'" class="topic" onclick="openTopic(' + chatId + ');" onmouseover="return highlightTopic('+chatId+')" onmouseout="return unhighlightTopic('+chatId+')">'+
+			'<span class="topic-partner">' + topic +
+			'</span><span title="'+ partnerCompany + ' - ' +partnerName +  '">'+partner+'</span></div>';
+	}
+
+    function topicListScrollToTop(){
+        document.getElementById('topicList').scrollTop = 0;
+    }
+
+    function msgScrollToBottom(){
+        var msgPanel = document.getElementById('msg-panel');
+        msgPanel.scrollTop = msgPanel.scrollHeight;
+    }
+
+    /**
+     * 点击打开一个主题
+     * @param chatId 主题id
+     * @param partnerId 对话对象用户id
+     */
+    function openTopic(chatId) {
+		
+        var currentChatId = document.getElementById('chat-id');
+
+        //如果是当前正在对话的主题, 不继续执行
+        if ( chatId == currentChatId.value ) {
+            return;
+        }
+		
+		unhighlightTopic(currentChatId.value, true);
+		highlightTopic(chatId, true);
+
+        currentChatId.value = chatId;
+
+        //设定并显示新的对话对象
+        //var currentPartner = document.getElementById('recipient_id');
+        //currentPartner.value = partnerId;
+
+        //设定消息标题
+        var msgTitle = document.getElementById('topic-'+chatId).title;
+        setChatHeader( msgTitle, '', '', '', '' );
+
+        resetOffset();
+		resetTalkTo();
+        cleanMessages();
+
+        //打开主题表示该主题下的消息已经收到 -> 隐藏新消息图标
+        hideNewMsgIcon(chatId);
+
+        //请求服务器端查询该主题相关消息
+        socket.emit(IO_KEY.GET_HISTORY, {
+            'chat_id' : chatId,
+            'user_id' : '<%=user[0].id%>',
+            'msg_offset_older' : 0,
+            'msg_offset_newer' : 0
+        });
+    }
+	function highlightTopic(chatId, select){
+		if(!select && chatId == document.getElementById('chat-id').value ) return;
+		$('#topic-'+chatId).css('background-color', '#E0EBFF');
+	}
+	function unhighlightTopic(chatId, select){
+		if(!select && chatId == document.getElementById('chat-id').value ) return;
+		$('#topic-'+chatId).css('background-color', '#FFFFFF');
+	}
+	
+    function openSysMsg() {	
+		
+		hideSendMsg();
+        
+		var currentChatId = document.getElementById('chat-id');
+
+        //如果是当前主题, 不继续执行
+        if ( 'sys' == currentChatId.value ) {
+            return;
+        }
+		unhighlightTopic(currentChatId.value, true);
+        currentChatId.value = 'sys';
+		highlightTopic(currentChatId.value, true);
+
+        //设定并显示新的对话对象
+        var currentPartner = document.getElementById('recipient_id');
+        currentPartner.value = 'sys';
+
+        //设定消息标题
+        setChatHeader( '系统消息', '', '', '', '' );
+
+        resetOffset();
+
+        cleanMessages();
+
+        //显示普通消息图标表示已读
+        document.getElementById('sys-msg').src = "/images/mail.png";
+
+        //发出获取系统消息的请求
+        socket.emit(IO_KEY.GET_SYS_MSG, {
+            'user_id' : '<%=user[0].id%>',
+            'msg_offset_older' : 0,
+            'msg_offset_newer' : 0
+        });
+    }
+
+    //显示更早或更新的信息, parameter:'O'->older, 'N'->newer
+    function getHistories(olderOrNewer){
+        var offsetNewer = document.getElementById('msg_offset_newer');
+        var offsetOlder = document.getElementById('msg_offset_older');
+        //console.log('getOlder: offsetOlder ' + offsetOlder.value);
+        //console.log('getOlder: offsetNewer ' + offsetNewer.value);
+        var ioKey = IO_KEY.GET_HISTORY;
+        if ( document.getElementById('chat-id').value == 'sys' ){
+            ioKey = IO_KEY.GET_SYS_MSG;
+        }
+        socket.emit(ioKey, {
+           'chat_id': document.getElementById('chat-id').value,
+           'user_id' : '<%=user[0].id%>',
+            'msg_offset_older' : offsetOlder.value,
+            'msg_offset_newer' : offsetNewer.value,
+            'paging' : olderOrNewer
+        });
+    }
+	function getTopics(){
+		var topics = {};
+		var keys = [];
+		<% if ( topicList ) { for ( var i in topicList ) {%>
+		keys.push(<%= topicList[i].id%>);
+        topics['<%= topicList[i].id%>'] = {id:'<%= topicList[i].id%>', title:'<%= topicList[i].title%>', hasNew:'<%=topicList[i].has_new%>', partner:'<%= topicList[i].partner%>', partner_id:'<%= topicList[i].partner_id%>', partner_company:'<%=topicList[i].partner_company%>'}
+         <%}}%>
+		 return {keys:keys,topics:topics};
+	}
+	(function createTopicList(){
+		var topics = getTopics();
+		var keys = topics.keys;
+		for(i in keys) {
+			var topic = topics.topics[keys[i]];
+			var hasNew = topic.hasNew=='<%=user[0].id%>';
+			var item = getTopicItem(topic.id, topic.title, topic.partner, topic.partner_id, topic.partner_company, hasNew);
+			if( hasNew ){
+				$('#topic-items').prepend(item);
+			} else {
+				$('#topic-items').append(item);
+			}
+		}
+	}());
+	
+	function getUsers(){
+
+		<% if ( sys_user_list ) {   for ( var i in sys_user_list ) {%>
+		users["<%= sys_user_list[i].user_id%>"] = {i:'<%= sys_user_list[i].user_id%>',n:'<%= sys_user_list[i].user_name%>', c:'<%= sys_user_list[i].company_name%>', t:'<%= sys_user_list[i].telephone_area_code%>-<%= sys_user_list[i].telephone%>',m:'<%= sys_user_list[i].mobile_phone%>'};                           
+        user_keys.push(<%= sys_user_list[i].user_id%>);
+		<% } }%>
+        <% if ( userList ) { for ( var i in userList ) {%>
+         users['<%= userList[i].user_id%>'] = {i:'<%= userList[i].user_id%>',n:'<%= userList[i].user_name%>', c:'<%= userList[i].company_name%>',t:'<%= userList[i].telephone_area_code%>-<%= userList[i].telephone%>',m:'<%= userList[i].mobile_phone%>'};                           
+         user_keys.push(<%= userList[i].user_id%>);
+		<% } }%>
+					<% if ( debug ) {%>
+                    <!-- test -->
+                    <% for ( i = 5; i < 1000; i++ ) {%>
+                    users['<%= i%>'] = {i:'<%= i%>',n:'某某某<%= i%>', c:'某某某旅行社<%= i%>',t:'<%= i*10%>'}; 
+                    <!-- end test -->
+                    <%    } } %>
+		return {keys:user_keys, users:users};
+	}
+    function addUser(user){
+        user_keys.push(user.id);
+        users[user.id] = {i:user.id, n:user.user_name, c:user.company_name, t:user.telephone_area_code+'-'+user.telephone, m:user.mobile_phone};
+        createUserItem(getUser(user.id));
+    }
+	function getUser(id){
+		var users = getUsers().users;
+		return users[id];
+	}
+	function createUserItem(user){
+        if(!user||!user.i) return false;
+		var statusIcon = user.online ? '/images/talk_online.png':'/images/talk_offline.png';
+		$('#user-list').append( '<div id="user-'+user.i+'" style="height:25px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden" title="'+user.c+' - '+user.n+'">'+
+                    '<a style="text-decoration: none" href="javascript:void(0)" onclick="return talkToUser('+user.i+',true);">'+
+                        '<img id="talkimg'+user.i+'" src="/images/talk_offline.png" style="border:none; margin-right: 2px"/>'+
+                    user.c+' - '+user.n+'</a></div>');
+	}
+	
+	(function createUserList(){
+		var users = getUsers();
+		var keys = users.keys;
+		for(i in keys){
+			createUserItem(users.users[keys[i]]);
+		}
+	}());
+
+    /*和指定用户开始新的对话*/
+    function talkToUser(partnerUserId, fromContactList) {
+		showSendMsg('发送');
+		var currentChatId = document.getElementById('chat-id');
+		if(currentChatId.value)unhighlightTopic(currentChatId.value, true);
+        //no chat id jet -> reset chat id
+        currentChatId.value = '';
+        //set current chat partner
+		var user = getUser(partnerUserId);
+        if ( !user ) {
+            socket.emit(IO_KEY.GET_USER, {required_by:'<%=user[0].id%>', user_id:partnerUserId});
+            $('#callback').val('talkToUser');
+            return false;
+        }
+        document.getElementById('recipient_id').value = partnerUserId;
+        document.getElementById('recipient_name').value = user.n;
+		//document.getElementById('partner_company').value = user.c;
+        //set new title
+		var title = $('#new-chat-title').val();
+		var ext_p_id = $('#ext-p-id').val();
+		var ext_type = $('#ext-type').val();
+		if ( !fromContactList && title && ext_p_id && ext_type ) {
+			var pageNum = ext_p_id == 1 ? 2 : 3;
+			title = '<div style="cursor:pointer;" onclick="parent.changepage('+pageNum+')">'+title+'</div>';
+		}
+        setChatHeader((title?title:parent.DEFAULT_TITLE), user.n, user.c, user.t, user.m);
+        cleanMessages();
+		resetOffset();
+		if(fromContactList)	resetTalkTo();
+        unmaskIframe();
+    }	
+	function openOrCreateTopic(parameters){
+        if(parameters.recipient&&!parameters.ext_p_id&&!parameters.ext_type){
+            talkToUser(parameters.recipient);
+            return;
+        }
+        $('#new-chat-title').val(parameters.title);
+		newChatPartner = parameters.recipient;
+		$('#ext-p-id').val(parameters.ext_p_id);
+		$('#ext-type').val(parameters.ext_type);
+        //look up if a topic exists according parameters
+		socket.emit(IO_KEY.LOOKUP_TOPIC, {user_id:'<%=user[0].id%>', recipient_id:parameters.recipient,ext_p_id:parameters.ext_p_id,ext_type:parameters.ext_type});
+		maskIframe('加载数据...', true);
+	}
+	function resetTalkTo(){
+		$('#new-chat-title').val('');
+		newChatPartner = '';
+		$('#ext-p-id').val('');
+		$('#ext-type').val('');
+	}
+	function filterUser(){
+        var f = document.getElementById('search-users').value;
+		var userIds = Object.keys(getUsers().users);
+		for ( i in userIds ) {
+			var u = document.getElementById('user-'+userIds[i]);
+			if ( f && u && u.innerHTML.indexOf(f) < 0 ){
+                $(u).hide();
+            } else if ( u ) {
+                $(u).show();
+            }
+		}        
+    }	
+	
+	function hideSendMsg(){
+		if ( $('#send-msg').is(":visible") )$('#send-msg').hide();
+	}
+	function showSendMsg(buttonTitle){
+		if (buttonTitle)$('#send-button').text(buttonTitle);
+		if ( !$('#send-msg').is(":visible") )$('#send-msg').show();		
+	}
+    function showTopicList() {
+        var userList = document.getElementById('userList');
+        userList.style.display = "none";
+        var topicList = document.getElementById('topicList');
+        topicList.style.display = "block";
+    }
+
+    function showUserList() {
+        document.getElementById('topicList').style.display = "none";
+        document.getElementById('userList').style.display = "block";
+    }
+
+    /*设定显示主题内容和对话对象相关信息*/
+    function setChatHeader(msgTitle, chatPartnerName, chatPartnerCompany, chatPartnerTel, chatPartnerMobile) {
+        //console.log(' chatPartnerName:' + chatPartnerName + ' chatPartnerCompany: ' + chatPartnerCompany + ' chatPartnerTel: ' + chatPartnerTel)
+        if (msgTitle) {
+            setChatTitle(msgTitle);
+        }
+        document.getElementById('chat-partner').innerHTML =
+                (chatPartnerCompany?chatPartnerCompany:'') + '&nbsp;' +
+                        (chatPartnerName?chatPartnerName:'') +
+                        (chatPartnerTel?'&nbsp;电话：' + chatPartnerTel:'') +
+						(chatPartnerMobile?'&nbsp;手机：' +chatPartnerMobile:'');
+    }
+
+    /*设定显示主题*/
+    function setChatTitle(msgTitle) {
+        document.getElementById('chat-title').innerHTML = msgTitle;
+    }
+
+    /*清除当前所有消息内容*/
+    function cleanMessages() {
+        document.getElementById('messages').innerHTML = '';
+    }
+
+    function getCurrentTimeString() {
+        var currentDate = new Date();
+        return currentDate.getHours()+':'+currentDate.getMinutes();
+    }
+
+    function getDateString(date) {
+        var year = getYear(date);
+        var month = getMonth(date);
+        var day = getDay(date);
+        var currentDate = getCurrentDateString();
+        if (getYear(currentDate) === year && getMonth(currentDate) === month ) {
+            if ( getDay(currentDate) === day ){
+                return '今天 '+getTime(date);
+            }
+
+            var diff = parseInt(getDay(currentDate) - parseInt(day));
+            if ( diff == 1 ) {
+                return '昨天 '+getTime(date);
+            }
+            if ( diff == 2 ) {
+                return '前天 '+getTime(date);
+            }
+        }
+        return '<p style="font-size: 9; padding: 0; margin: 0; line-height: 15px">' + year + '-' + month + '-' + day + '<br>' +
+                getTime(date) + '</p>';
+    }
+
+    /*标题列表里的新消息图标换成普通消息图标*/
+    function hideNewMsgIcon(chatId){
+        document.getElementById('new-msg-' + chatId).src = "/images/mail.png"
+    }
+	
+    /*标题列表里显示新消息图标, 相关标题放到第一个位置*/
+    function topicListNotifyNew(elementId, imgId){
+        document.getElementById(imgId).src = "/images/new_msg.png"
+        $("#" + elementId).detach().prependTo('#topic-items');
+        topicListScrollToTop();
+    }
+	
+	function notifyNewSysMsg(){
+		$('#sys-msg').attr('src', "/images/new_msg.png");
+		topicListScrollToTop();
+	}
+
+    /*判断是否显示查看更新或更早的记录*/
+    function calculateOffset(msgCount, msgOffsetOlder, msgOffsetNewer) {
+        if ( msgCount >  CHAT_CONSTANTS.MSG_LIMIT ) {
+            var offsetOlder = document.getElementById('msg_offset_older');
+            var offsetNewer = document.getElementById('msg_offset_newer');
+            //用服务器端传递过来的offset更新客户端的offset
+            offsetOlder.value = msgOffsetOlder;
+            offsetNewer.value = msgOffsetNewer;
+
+            var offsetOlderValue = parseInt(msgOffsetOlder);
+            var offsetNewerValue = parseInt(msgOffsetNewer);
+            //console.log('msg_count: ' + msgCount + ' offset value older: ' + offsetOlderValue);
+
+            if (msgCount > CHAT_CONSTANTS.MSG_LIMIT && msgCount > offsetOlderValue) {
+                displayShowOlder(true);
+            } else {
+                displayShowOlder(false);
+            }
+            if (offsetOlderValue > CHAT_CONSTANTS.MSG_LIMIT) {
+                displayShowNewer(true);
+            } else {
+                displayShowNewer(false);
+            }
+        }
+    }
+	
+	function displayShowOlder(display){
+		var e = document.getElementById('show-older');
+		if(display){
+			e.style.display = 'block';
+		} else {
+			e.style.display = 'none';
+		}
+	}
+	
+	function displayShowNewer(display){
+		var e = document.getElementById('show-newer');
+		if(display){
+			e.style.display = 'block';
+		} else {
+			e.style.display = 'none';
+		}
+	}
+	
+	function changeUserInTopic(userId, online){
+		var imgs = document.getElementsByClassName('talkimg'+userId);
+		if ( imgs[0] ) {
+			for ( var i in imgs ){
+				if ( online ) imgs[i].src = "/images/talk_online.png";
+				else imgs[i].src = "/images/talk_offline.png";
+			}
+		}
+	}
+
+    function resetOffset(){
+        displayShowOlder(false);
+		displayShowNewer(false);
+        document.getElementById('msg_offset_older').value = '0';
+        document.getElementById('msg_offset_newer').value = '0';
+    }
+
+    function checkErrorMessage(errMsg){        
+		if ( errMsg ) {
+            document.getElementById('err-msg').innerHTML = errMsg;
+			setChatHeader('', '', '', '');
+			cleanMessages();
+            return false;
+        }
+		document.getElementById('err-msg').innerHTML = '';
+    }
+	function searchTopic(){
+		var fromDate = $('#search-from-date').val();
+		var toDate = $('#search-to-date').val();
+		var txt = $('#search-topic-text-input').val();
+		var s = $('#topic_reset');
+		if($(s).val() == '0' && !fromDate && !toDate && !txt){
+			return false;
+		}
+		if($(s).val() == '0'){
+			$(s).val('1');
+		} else if (!fromDate && !toDate && !txt) {
+			$(s).val('0');
+		}
+		socket.emit(IO_KEY.SEARCH_TOPIC, {
+            'user_id' : '<%=user[0].id%>',
+            'date_from' : fromDate,
+            'date_to' : toDate,
+            'search_text' : txt
+        });
+	}
+	function onclickSearchDate() {
+		var e = document.getElementById('search-topic-date');
+		var i = document.getElementById('datepicker-img');
+		if($(e).css('display') == 'block') {
+		//date search fields are visible -> hide fields and reset their values
+			$(e).hide();
+			$('#search-from-date').val('');
+			$('#search-to-date').val('');
+			$(i).css('background-image', 'url(/images/datePicker_expand.png)');
+			$(i).attr('title', '打开时间搜索栏');			
+		} else {
+			$(e).show();
+			$(i).css('background-image', 'url(/images/datePicker_collapse.png)');
+			$(i).attr('title', '隐藏时间搜索栏');
+		}
+	}	
+    function openGetMoreTopic(){
+        $('#search-more-topic').show();
+        $('#more-topic').hide();
+    }
+    function moreTopic(){
+		var res = validateDate('topic-from-date', 'topic-to-date');
+		if(!res) return;
+        $('#search-more-topic').hide();
+        $('#more-topic').show();
+        socket.emit(IO_KEY.MORE_TOPIC, {
+            'user_id' : '<%=user[0].id%>',
+            'date_from' : res.fromDate,
+            'date_to' : res.toDate,
+            'topic_exclude' : [
+            <% if ( topicList ) {for ( var i in topicList ) {%>
+                    <%= topicList[i].id%>,
+            <% }}%>
+            ]
+        });
+    }
+	
+	function validateDate(idFromDate, idToDate){
+		var fromDate = document.getElementById(idFromDate).value;
+		var toDate = document.getElementById(idToDate).value;
+		if ( !fromDate || !toDate ) return false;
+		if ( parseInt(getYear(toDate)+getMonth(toDate)+getDay(toDate)) < parseInt(getYear(fromDate)+getMonth(fromDate)+getDay(fromDate))){
+            jAlertIframe('所选日期无效:后面的日期早于前面的日期！', '提示');
+            return false;
+        }
+		return { toDate: toDate, fromDate: fromDate };
+	}
+    
+    <% if ( user[0].role_sys_user == 1 || user[0].role_sys_admin == 1 ){%>
+    /*仅供系统用户使用: 发送系统消息给所有用户*/
+    function sendToAll(){
+        //防止发送空的内容
+        if ( !$('#sys_m').val() ) {
+            return false;
+        }
+
+        jConfirmIframe('确定要发送吗？', '确认', function(yes) {
+            if (!yes) {
+                return false;
+            }
+            //发送给服务器
+            socket.emit(IO_KEY.SYS, {
+                'sender_id' : '<%=user[0].id%>',
+                'sender_name' : '<%=user[0].name%>',
+                'title': $('#sys_title').val(),
+                'message': htmlEscape($('#sys_m').val()),
+                'date' : getCurrentDateString(),
+                'time' : getCurrentTimeString()
+            });
+            $('#sys_m').val('');
+            $('#sys_title').val('');
+        });
+
+    };
+    function sendUrgent(){
+        //防止发送空的内容
+        if ( !$('#urgent_m').val() ) {
+            return false;
+        }
+
+        jConfirmIframe('确定要发送吗？', '确认', function(yes){
+            if ( !yes ) {
+                return false;
+            }
+            //发送给服务器
+            socket.emit(IO_KEY.URGENT, {
+                'title': $('#urgent_title').val(),
+                'message': htmlEscape($('#urgent_m').val()),
+                'sender': '荟邮轮',
+                'date': getCurrentDateString()
+            });
+            $('#urgent_m').val('');
+            $('#urgent_title').val('紧急通知');
+        });
+
+    };
+    <%}%>
+
+    //----------- TODO 翻页 ----------
+    function onPageValueChanged(totalPages, pageId){
+        var page =  parseInt(document.getElementById(pageId).value);
+        if ( page > 0 && page <= totalPages ) {
+            goTo(page);
+        }
+    }
+    function onPreviousPageClicked(currentPage){
+        if ( currentPage > 1 ) {
+            goTo(currentPage-1);
+        }
+    }
+    function onNextPageClicked(currentPage, totalPages) {
+        if ( currentPage < totalPages ) {
+            goTo(currentPage+1);
+        }
+    }
+    function goTo(page){
+
+    }
+    //----------- TODO 通讯录翻页 ---------------
+
+    //----------- TODO 主题翻页 ----------------
+
+
+
+</script>
+
+</div>

@@ -1,0 +1,203 @@
+<div style="width:960px;background-color: #FFFFFF;margin:0 auto;">
+
+    <table style="width: 150px;margin-top: 22px;" border="0" cellspacing="0">
+        <tr>
+            <td class="tdfooter1" style="background-color: #F7861E;color:#FFFFFF" id="n1">中国出发</td>
+            <td class="tdfooter1" id="n2" onclick="window.location='/productoverseas'">海外出发</td>
+        </tr>
+    </table>
+    <table style="width: 100%;margin-top:0px;background-color: #F7861E" border="0" cellspacing="0">
+        <tr style="font-weight: bold;height: 50px;">
+            <td style="width: 18%"><span style="margin-left: 20px;color: #FFFFFF;">出发日期</span></td>
+            <td style="width: 18%"><span style="margin-left: 20px;color: #FFFFFF;">航区</span></td>
+            <td style="width: 18%"><span style="margin-left: 20px;color: #FFFFFF;">出发港口</span></td>
+            <td style="width: 18%"><span style="margin-left: 20px;color: #FFFFFF;">邮轮名称</span></td>
+            <td style="width: 10%"><span style="margin-left: 20px;color: #FFFFFF;">产品类型</span></td>
+            <td></td>
+        </tr>
+        <tr style="font-weight: bold;height: 35px;">
+            <td style="vertical-align: top"><span style="margin-left: 10px;color: #FFFFFF;"><select style="width: 140px;"></select></span></td>
+            <td style="vertical-align: top"><span style="margin-left: 10px;color: #FFFFFF;"><select style="width: 140px;"></select></span></td>
+            <td style="vertical-align: top"><span style="margin-left: 10px;color: #FFFFFF;"><select style="width: 140px;"></select></span></td>
+            <td style="vertical-align: top"><span style="margin-left: 10px;color: #FFFFFF;"><select style="width: 140px;"></select></span></td>
+            <td style="vertical-align: top"><span style="margin-left: 10px;color: #FFFFFF;"><select style="width: 140px;"></select></span></td>
+            <td style="vertical-align: top"><div style="cursor:pointer;margin-left: 30px;margin-top: 0px;width: 70px;background-color: #0068BD;color:#FFFFFF;font-weight: bold;text-align: center">搜！</div></td>
+        </tr>
+    </table>
+
+
+
+   <table title="点击打开价格明细" style="width: 100%;margin-top: 20px;" border="0" cellpadding="2" cellspacing="2">
+       <tr style="background-image: url('images/huitou.png');text-align: center">
+           <td style="width: 100px;"><span style="font-weight: bold;color: #000000">产品编号</span></td>
+           <td style="width: 80px;"><span style="font-weight: bold;color: #000000">船公司</span></td>
+           <td style="width: 80px;"><span style="font-weight: bold;color: #000000">供应商</span></td>
+           <td style="width: 80px;"><span style="font-weight: bold;color: #000000">航区</span></td>
+           <td  style="width: 80px;"><span style="font-weight: bold;color: #000000">出发日期</span></td>
+           <td style="width: 170px;"><span style="font-weight: bold;color: #000000">产品名称</span></td>
+           <td style="width:40px;"><span style="font-weight: bold;color: #000000">出发</span></td>
+           <td  style="width: 150px;"><span style="font-weight: bold;color: #000000">航线</span></td>
+           <td style="width: 50px;"><span style="font-weight: bold;color: #000000">类型</span></td>
+           <td style="width: 30px;"><span style="font-weight: bold;color: #000000">几晚</span></td>
+           <td><span style="font-weight: bold;color: #000000">结算价</span></td>
+       </tr>
+        <%for(var i in product){
+            if(product[i].status_id==3){
+        %>
+        <tr onclick="hovmx1(<%=i%>);" style="cursor:pointer;background-color: #F2F0F5;text-align: center">
+            <td rowspan="2"><%=product[i].product_number%><br/>状态：<%=product[i].statusname%></td>
+            <td rowspan="2"><%=product[i].txtCompanyName%></td>
+            <td rowspan="2"><%=product[i].short_name%></td>
+            <td><%=product[i].txtCruiseArea%></td>
+            <td><%=product[i].start_date%></td>
+            <%var tp = "";
+                if(product[i].type_id==1){
+                    tp = "单船票"
+                }else{
+                    tp = "团队游"
+                }
+             %>
+            <td style="color: #3280C6"><%=product[i].title%></td>
+            <%
+                var h1 = "";
+                var hx = "";
+                for(j in ts){
+                if(ts[j].product_id ==product[i].id && ts[j].day_number == 1){
+                    h1 = ts[j].location;
+                }
+                if(ts[j].product_id ==product[i].id){
+                    if(ts[j].location!="航海日"){
+                        if(hx==""){
+                            hx = ts[j].location;
+                        }else{
+                            hx = hx + "-" + ts[j].location;
+                        }
+                    }
+
+                }
+            }%>
+            <td><%=h1%></td>
+            <td><%=hx%></td>
+            <td><%=tp%></td>
+            <td><%=Number(product[i].days)-1%></td>
+            <%
+                var dp = 99999;
+                for(var j in pp){
+                if(pp[j].product_id==product[i].id){
+                      if(pp[j].retail_price < dp && pp[j].retail_price != 0){
+                          dp = pp[j].retail_price;
+                      }
+                }
+            }
+             %>
+            <td rowspan="2"><span style="font-size: 16px;color: #000000;font-weight: bold"><%=dp%></span><br/>起</td>
+        </tr>
+        <tr onclick="hovmx1(<%=i%>);" style="cursor:pointer;background-color: #F2F0F5;text-align: center">
+            <td colspan="7" style="text-align: left;color: #FF0000;font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=product[i].advertising%></td>
+        </tr>
+       <tr id="mx<%=i%>" style="display:none">
+           <td colspan="11">
+               <table style="width: 100%;" border="0" cellpadding="2" cellspacing="2">
+                    <tr style="background-color: #F2F0F5;text-align: center">
+                        <td colspan="2">内舱</td>
+                        <td colspan="2">海景</td>
+                        <td colspan="2">阳台</td>
+                        <td colspan="2">套房</td>
+                        <td>港务费税费</td>
+                        <td>岸上游</td>
+                        <td>邮轮小费</td>
+                        <td>领队服务费</td>
+                        <td>签证费</td>
+                        <td>保险</td>
+                        <td rowspan="2">
+                            <span style="cursor:pointer;color: #FA8723;font-weight: bold;font-size: 16px;width: 45px" onclick="window.location='/productdetailbooking?p=<%=product[i].product_number%>';">预定</span>
+                            <span style="cursor:pointer;color: #FA8723;font-weight: bold;font-size: 16px;width: 45px" onclick="window.location='/productdetail?p=<%=product[i].product_number%>';">|详情</span>
+                        </td>
+                    </tr>
+                   <tr style="background-color: #F2F0F5;text-align: center">
+                       <%
+                           var dp1 = 99999;
+                           var dp2 = 0;
+                           var dp3 = 99999;
+                           var dp4 = 0;
+                           var dp5 = 99999;
+                           var dp6 = 0;
+                           var dp7 = 99999;
+                           var dp8 = 0;
+                           for(var j in pp){
+                               if(pp[j].product_id==product[i].id && pp[j].cabin_type_id==1){
+                                   if(pp[j].retail_price < dp1 && pp[j].retail_price != 0){
+                                       dp1 = "￥"+pp[j].retail_price;
+                                       dp2 = pp[j].amount+"间";
+                                   }
+                               }
+                               if(pp[j].product_id==product[i].id && pp[j].cabin_type_id==2){
+                                   if(pp[j].retail_price < dp3 && pp[j].retail_price != 0){
+                                       dp3 = "￥"+pp[j].retail_price;
+                                       dp4 = pp[j].amount+"间";
+                                   }
+                               }
+                               if(pp[j].product_id==product[i].id && pp[j].cabin_type_id==3){
+                                   if(pp[j].retail_price < dp5 && pp[j].retail_price != 0){
+                                       dp5 = "￥"+pp[j].retail_price;
+                                       dp6 = pp[j].amount+"间";
+                                   }
+                               }
+                               if(pp[j].product_id==product[i].id && pp[j].cabin_type_id==4){
+                                   if(pp[j].retail_price < dp7 && pp[j].retail_price != 0){
+                                       dp7 = "￥"+pp[j].retail_price;
+                                       dp8 = pp[j].amount+"间";
+                                   }
+                               }
+                           }
+                           if(dp1==99999){dp1="-";dp2="-";}
+                           if(dp3==99999){dp3="-";dp4="-";}
+                           if(dp5==99999){dp5="-";dp6="-";}
+                           if(dp7==99999){dp7="-";dp8="-";}
+                       %>
+                       <td><%=dp1%></td>
+                       <td><%=dp2%></td>
+                       <td><%=dp3%></td>
+                       <td><%=dp4%></td>
+                       <td><%=dp5%></td>
+                       <td><%=dp6%></td>
+                       <td><%=dp7%></td>
+                       <td><%=dp8%></td>
+                       <%
+                        for(j in inf){
+                        if(inf[j].product_id ==product[i].id){
+                            var b1="不含";var b2="不含";var b3="不含";var b4="不含";var b5="不含";var b6="不含";
+                            if(inf[j].incl_port_tax==1){b1="含";}
+                            if(inf[j].incl_excursion==1){b2="含";}
+                            if(inf[j].incl_tip==1){b3="含";}
+                            if(inf[j].incl_tourist_guide==1){b4="含";}
+                            if(inf[j].incl_visa_fee==1){b5="含";}
+                            if(inf[j].incl_travel_insurance==1){b6="含";}
+                           if(inf[j].port_tax_fee == 0){c1="";}else{c1="￥"+inf[j].port_tax_fee;}
+                            if(inf[j].excursion_fee == 0){c2="";}else{c2="￥"+inf[j].excursion_fee;}
+                            if(inf[j].tip == 0){c3="";}else{c3="￥"+inf[j].tip;}
+                            if(inf[j].tourist_guide_fee == 0){c4="";}else{c4="￥"+inf[j].tourist_guide_fee;}
+                            if(inf[j].visa_fee == 0){c5="";}else{c5="￥"+inf[j].visa_fee;}
+                            if(inf[j].incl_travel_insurance_comment == 0){c6="";}else{c6="￥"+inf[j].incl_travel_insurance_comment;}
+                       %>
+
+                       <td><%=c1%><%=b1%></td>
+                       <td><%=c2%><%=b2%></td>
+                       <td><%=c3%><%=b3%></td>
+                       <td><%=c4%><%=b4%></td>
+                       <td><%=c5%><%=b5%></td>
+                       <td><%=c6%><%=b6%></td>
+                       <%
+                       }
+                       }
+                       %>
+                   </tr>
+               </table>
+           </td>
+       </tr>
+        <%
+        }
+        }%>
+   </table>
+    <br/><br/>
+</div>

@@ -1,0 +1,122 @@
+<div style="width:960px;background-color: #FFFFFF;margin:0 auto;">
+    <table style="width: 100%;margin-top: 20px;margin-bottom: 50px;" border="0">
+         <tr style="line-height: 25px;">
+             <td style="width: 200px;text-align: center;vertical-align: top">
+                <div style="font-weight:bold;font-size:14px">使用说明</div>
+                <table style="width: 80%;margin: auto" border="0">
+                     <tr>
+                         <td id="h5" class="tdfooter2" style="cursor:pointer;line-height:30px;color: #ffffff;text-align: center;background-color: #ABBBBB;font-weight: bold;font-size: 14px;"  onclick="changeg(1)">购买流程</td>
+                     </tr>
+                     <%if(company[0].role_seller == 1){%>
+                     <tr>
+                         <td id="h6" class="tdfooter2" style="cursor:pointer;line-height:30px;color: #ffffff;text-align: center;background-color: #ABBBBB;font-weight: bold;font-size: 14px;"  onclick="changeg(2)">销售流程</td>
+                     </tr>
+                     <%}%>
+                 </table>
+                 <br/>
+                <div style="font-weight:bold;font-size:14px">常见问题</div>
+                 <table style="width: 80%;margin: auto" border="0">
+                     <%if(company[0].role_seller == 1){%>
+                     <tr>
+                         <td id="h1" class="tdfooter2" style="cursor:pointer;line-height:30px;color: #ffffff;text-align: center;background-color: #ABBBBB;font-weight: bold;font-size: 14px;"  onclick="changeh(1)">用户管理</td>
+                     </tr>
+                     <tr>
+                         <td id="h2" class="tdfooter2" style="cursor:pointer;line-height:30px;color: #ffffff;text-align: center;background-color: #ABBBBB;font-weight: bold;font-size: 14px;"  onclick="changeh(2)">产品管理</td>
+                     </tr>
+                     
+                     <tr>
+                         <td id="h3" class="tdfooter2" style="cursor:pointer;line-height:30px;color: #ffffff;text-align: center;background-color: #ABBBBB;font-weight: bold;font-size: 14px;" onclick="changeh(3)">销售订单</td>
+                     </tr>
+                     <%}%>
+                     <%if(company[0].role_seller == 0){%>
+                     <tr>
+                         <td id="h8" class="tdfooter2" style="cursor:pointer;line-height:30px;color: #ffffff;text-align: center;background-color: #ABBBBB;font-weight: bold;font-size: 14px;" onclick="changeh(8)">账户管理</td>
+                     </tr>
+                     <%}%>
+                     <tr>
+                         <td id="h4" class="tdfooter2" style="cursor:pointer;line-height:30px;color: #ffffff;text-align: center;background-color: #ABBBBB;font-weight: bold;font-size: 14px;" onclick="changeh(4)">购买订单</td>
+                     </tr>
+                     <tr>
+                         <td id="h7" class="tdfooter2" style="cursor:pointer;line-height:30px;color: #ffffff;text-align: center;background-color: #ABBBBB;font-weight: bold;font-size: 14px;" onclick="changeh(7)">尾舱买卖</td>
+                     </tr>
+                 </table>
+             </td>
+             <td style="vertical-align: top;width:750px">
+                <div id="help3" style="display:none">
+                <%
+                    for(var i in r){
+
+                %>
+                    <div id="ghelp<%=i%>" style="color: #00B3E6;cursor: pointer;font-size: 16px;" ><img id="jt<%=i%>" src="/images/02.png" /> <span style="display:none" id="ghelpa<%=i%>"><%=r[i].role_id%></span><span style="display:none" id="ghelpb<%=i%>"><%=r[i].type%></span><%=r[i].title%><br/>
+                    <table id="jtb<%=i%>" >
+                        <tr>
+                            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                            <td><div  style="color: #7D7D7D;font-size: 14px;margin-top: 5px;margin-bottom: 5px;"><%-r[i].answer%></div></td>
+                        </tr>
+                    </table>
+                    </div>
+                <%
+                    }
+                %>
+                </div>
+                <div id="help1">
+                    <div style="color:#0A68B9;font-size:14px;font-weight:bold">第一步：预订订单。进入”邮轮集市”版块，搜索产品点击预订。</div>
+                    <div style="color:#000000">1、  选择舱房及数量</div>
+                    <img src="/images/buy/1.jpg" style="width:750px;" />
+                    <div style="color:#000000">2、录入游客信息。</div>
+                    <div style="color:#FF0000">注：游客姓名为必填项，如暂时未收齐姓名，可随意录入内容，并在留言内说明之后修改。如有其他需求可在留言内说明，包括发票、舱房位置等。</div>
+                    <img src="/images/buy/2.jpg" style="width:750px;" />
+                    <div style="color:#000000">3、点击“提交”后，等待供应商确认订单。</div>
+                    <br/>
+                    <div style="color:#0A68B9;font-size:14px;font-weight:bold">第二步：卖家已确认订单，收到《订单付款通知单》，待买家付款。</div>
+                    <img src="/images/buy/3.jpg" style="width:750px;" />
+                    <img src="/images/buy/4.jpg" style="width:750px;" />
+                    <img src="/images/buy/5.jpg" style="width:750px;" />
+                    <br/>
+                    <div style="color:#0A68B9;font-size:14px;font-weight:bold">第三步：买家付款完成，录入付款记录。等待卖家确认收款。</div>
+                    <div style="color:#000000">线下付款后，点击“录入支付信息”，订单状态变为“已付款”。</div>
+                    <img src="/images/buy/6.jpg" style="width:750px;" />
+                    <br/>
+                    <div style="color:#0A68B9;font-size:14px;font-weight:bold">第四步：补充游客资料</div>
+                    <div style="color:#000000">可单独上传护照扫描件，也可将所有游客签证资料打包上传。</div>
+                    <img src="/images/buy/7.jpg" style="width:750px;" />
+                    <br/>
+                    <div style="color:#0A68B9;font-size:14px;font-weight:bold">第五步：等待卖家收款和发送《出团通知书》</div>
+                    <div style="color:#000000">当订单状态变为”已收款“时，表示卖家已收到全款。</div>
+                    <div style="color:#000000">当订单状态变为“待出团”时，卖家已上传《出团通知书》，可在线查看。</div>
+                    <img src="/images/buy/8.jpg" style="width:750px;" />
+                    <br/>
+                    <div style="color:#0A68B9;font-size:14px;font-weight:bold">第六步：“已出团”游客顺利出团。</div>
+                </div>
+                <div id="help2" style="display:none">
+                    <div style="color:#0A68B9;font-size:14px;font-weight:bold">第一步：查看新订单，确认订单是否可预订。</div>
+                    <div style="color:#000000">1、进入“我的销售订单”查看新订单的订单详情。</div>
+                    <img src="/images/sell/1.jpg" style="width:750px" />
+                    <div style="color:#000000">2、进入订单详情页面，确认订单是否可预订。如确认可预订，点击“补充付款信息”。如不可预订，可点击“关闭交易”。</div>
+                    <div style="color:#000000">1)确定最终结算价</div>
+                    <img src="/images/sell/2.jpg" style="width:750px" />
+                    <div style="color:#000000">2）填写付款说明信息</div>
+                    <img src="/images/sell/3.jpg" style="width:750px" />
+                    <div style="color:#000000">3）点击“确认订单”生成《订单付款通知单》。</div>
+                    <br/>
+                    <div style="color:#0A68B9;font-size:14px;font-weight:bold">第二步：核对”已付款“订单收款情况，确认收款</div>
+                    <div style="color:#000000">买家付款完成，卖家核对收款。</div>
+                    <img src="/images/sell/4.jpg" style="width:750px" />
+                    <div style="color:#000000">确认收到全款后点击“确认收款”。</div>
+                    <br/>
+                    <div style="color:#0A68B9;font-size:14px;font-weight:bold">第三步：查收游客签证等资料。</div>
+                    <img src="/images/sell/5.jpg" style="width:750px" />
+                    <div style="color:#000000">点击“查看订单游客信息”，可查看或下载相应文档。</div>
+                    <img src="/images/sell/6.jpg" style="width:750px" />
+                    <br/>
+                    <div style="color:#0A68B9;font-size:14px;font-weight:bold">第四步：“待出团”航次订单，卖家上传《出团通知书》。</div>
+                    <img src="/images/sell/7.jpg" style="width:750px" />
+                    <br/>
+                    <div style="color:#0A68B9;font-size:14px;font-weight:bold">第五步：“已出团”游客顺利出团。</div>
+                </div>
+             </td>
+         </tr>
+    </table>
+    <input type="hidden" id="tabid" value = "5" />
+    <input type="hidden" id="htype" value = "<%=company[0].role_seller%>" />
+</div>

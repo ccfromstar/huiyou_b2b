@@ -1,0 +1,131 @@
+<div style="width:960px;background-color: #FFFFFF;margin:0 auto;">
+    <form method="post" enctype="multipart/form-data">
+        <table style="width: 120px;margin-top: 20px;" border="0" cellspacing="0">
+            <tr>
+                <td class="tdfooter1" style="background-color: #F7861E;color:#FFFFFF" id="n1" >修改供应信息</td>
+            </tr>
+        </table>
+        <table style="width: 100%;margin-top:0px;" border="0" cellspacing="0">
+            <tr style="height: 6px;">
+                <td colspan="3" style="background-image: url('/images/orange.png')">
+            </tr>
+        </table>
+        <div style="width: 100%;height: 200px;background-color: #F2F0F5">
+            <div style="padding-left: 20px;padding-top: 20px;font-weight: bold">
+                <span style="color:#F68421">*</span><span>邮轮名称：
+              <select style="width:145px" id="ship_id1" name="ship_id">
+                  <option value="*"></option>
+                  <%
+                  for (var i in cruiseship) {
+                  var t = "";
+                  if(cruiseship[i].id==supply[0].ship_id){t = "selected";}
+                  %>
+                  <option <%=t%> value="<%=cruiseship[i].id%>"><%=cruiseship[i].txtShipName%></option>
+                  <%
+                  }
+                  %>
+              </select></span>
+              <span style="margin-left: 20px;"><span style="color:#F68421">*</span>出航日期：
+              <input type="text" readonly  onclick="new Calendar().show(this);" name="departure_date" title="单击选择日期" id="departure_date" style="width: 75px;cursor:pointer" value="<%=supply[0].departure_date%>"></input></span>
+                <span style="margin-left: 20px;"><span style="color:#F68421">*</span><input type="text" name="day" id="days" style="width: 25px;" value="<%=supply[0].days%>" /> 天 <input id="wan" type="text" style="width: 25px;" value="<%=Number(supply[0].days)-1%>" /> 晚 </span>
+                <span style="margin-left: 20px;"><span style="color:#F68421">*</span>航线：<input type="text" name="cruise_route" id="cruise_route" style="width: 290px;" value="<%=supply[0].cruise_route%>" /></span>
+            </div>
+            <div style="padding-left: 20px;padding-top: 0px;font-weight: bold">
+                <span style="color:#F68421">*</span><span>舱房类型：
+                <select style="width:145px" id="cabin_category_id" name="cabin_category_id">
+                    <option value="9999">多种舱房类型</option>
+                    <%
+                    var q1 = "";var q2 = "";var q3 = ""
+
+                            for (var i in cabin_category) {
+                        var t = "";
+                        if(cabin_category[i].id==supply[0].cabin_category_id){t = "selected";}
+                        if(q1==""){
+                            q1 = cabin_category[i].txtShipNo;
+                            q2 = cabin_category[i].txtCabinName;
+                            q3 = cabin_category[i].id;
+                        }else{
+                            q1 = q1 + "@"+cabin_category[i].txtShipNo;
+                            q2 = q2 + "@"+cabin_category[i].txtCabinName;
+                            q3 = q3 + "@"+cabin_category[i].id;
+                        }
+                    %>
+                    <option <%=t%> value="<%=cabin_category[i].id%>"><%=cabin_category[i].txtCabinName%></option>
+                    <%
+                    }
+                   var sl = supply[0].amount;
+                        if(sl==-1){sl="";}
+                    %>
+                </select>
+            </span>
+                <span style="margin-left: 20px;">数量：<input type="text" name="amount" id="amount" value="<%=sl%>" /></span>
+                <span style="margin-left: 20px;"><span style="color:#F68421">*</span>现价：<input type="text" style="width: 120px;" name="price_now" id="price_now" value="<%=supply[0].price_now%>" /> 元/人</span>
+                <span style="margin-left: 20px;">原价：<input type="text" style="width: 120px;" value="<%=supply[0].price_old%>" name="price_old" id="price_old" /> 元/人</span>
+            </div>
+            <div style="padding-left: 20px;padding-top: 0px;font-weight: bold">&nbsp;产品描述:<textarea name="description" id="description" style="width: 96%;"><%=supply[0].description%></textarea></div>
+            <div style="width: 100%;padding-left: 20px;padding-top: 0px;font-weight: bold">
+                <table style="width: 100%">
+                    <tr>
+                        <td>
+                            <a href="#" onclick="var u ='<%=supply[0].img_url%>';var tmp=u.split('.');if(tmp[1]==''){alert('没有原图片！');return false;}window.open('files/<%=supply[0].img_url%>');" >查看原图片</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;重新上传图片：<input id='img_url' name='img_url' type="file" >
+                        </td>
+                        <td style="text-align: right;width: 130px;">
+                            <div style="cursor:pointer;margin-left-left: 20px;margin-top: 5px;width: 70px;background-color: #0068BD;color:#FFFFFF;font-weight: bold;text-align: center" onclick="sellpublish()">修改</div>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+        <input type="hidden" name="owner_id" value="<%=user[0].id%>" />
+        <input type="hidden" name="created_at" value="<%=supply[0].created_at%>" />
+        <input type="hidden" name="docid" value="<%=supply[0].id%>" />
+        <input type="hidden" name="img_url_old" value="<%=supply[0].img_url%>" />
+        <%
+        function getNow(){
+            var date = new Date(); //日期对象
+            var now = "";
+            now = date.getFullYear()+"";
+            now = now + (date.getMonth()+1)+"";//取月的时候取的是当前月-1如果想取当前月+1就可以了
+            now = now + date.getDate()+"";
+            now = now + date.getHours()+"";
+            now = now + date.getMinutes()+"";
+            now = now + date.getSeconds()+"";
+            return now;
+        }
+        var shipNo = "";
+        var shipName = "";
+        var shipComNo = "";
+        var shipNum = "";
+        for (var i in cruiseship) {
+            if(shipNo == ""){
+                shipNo =  cruiseship[i].id;
+                shipName =  cruiseship[i].txtShipName;
+                shipComNo = cruiseship[i].txtCompanyNo;
+                shipNum =  cruiseship[i].txtShipNo;
+            }else{
+                shipNo =  shipNo+";"+cruiseship[i].id;
+                shipName = shipName+";"+cruiseship[i].txtShipName;
+                shipComNo = shipComNo+";"+cruiseship[i].txtCompanyNo;
+                shipNum =  shipNum+";"+cruiseship[i].txtShipNo;
+            }
+        }
+        %>
+        <input type="hidden" name="unid" value="<%=getNow()%>"></input>
+        <input type="hidden" id="shipNo" value="<%=shipNo%>" />
+        <input type="hidden" id="shipName" value="<%=shipName%>"  />
+        <input type="hidden" id="shipComNo" value="<%=shipComNo%>"  />
+        <input type="hidden" id="shipNum" value="<%=shipNum%>"  />
+        <input type="hidden" id="ch1" value="<%=q1%>" />
+        <input type="hidden" id="ch2" value="<%=q2%>" />
+        <input type="hidden" id="ch3" value="<%=q3%>" />
+    </form>
+    <br/><br/><br/>
+    <script>
+        function goToMessage(url, msgTitle) {
+            window.location = url + encodeURIComponent(msgTitle);
+        }
+    </script>
+    </form>
+    <br/><br/><br/>
+</div>

@@ -1,0 +1,159 @@
+<script>
+    $(function(){
+        $('#w').window('close');
+
+        $('#gg').datagrid({
+            title:'用户管理',
+            fit:false,
+            height:380,
+            width:650,
+            nowrap: false,
+            striped: true,
+            toolbar:"#toolbar",
+            url:'getuserdata',
+            sortName: 'id',
+            sortOrder: 'desc',
+            idField:'id',
+            frozenColumns:[[
+                {field:'ck',checkbox:true},
+                {field:'id',title:'id',sortable:true},
+                {field:'name',title:'姓名',sortable:true},
+                {field:'login_name',title:'账户名',sortable:true},
+                {field:'email',title:'邮箱',width:'200',sortable:true},
+                {field:'certified',title:'验证',sortable:true},
+                {field:'activated',title:'激活',sortable:true},
+                {field:'_editoperate',title:'操作',formatter:editOper},
+                {field:'_deloperate',title:'操作',formatter:deleteOper}
+            ]],
+            pagination:true,
+            rownumbers:true,
+            singleSelect:false,
+            pageList:[5,10,15,20,25,30,35,40,45,50],
+            onDblClickRow :function(rowIndex,rowData){
+                //双击操作
+            }
+        });
+    });
+
+    function editOper(val,row,index){
+        return '<a href="#" onclick="editUser('+index+')">编辑</a>';
+    }
+
+    function deleteOper(val,row,index){
+        return '<a href="#" onclick="deleteUser('+index+')">删除</a>';
+    }
+
+    function editUser(index){
+        $('#gg').datagrid('selectRow',index);// 关键在这里
+        var row = $('#gg').datagrid('getSelected');
+        if (row){
+            //alert(row.id);
+            $("#if").attr("src","/useredit?id="+row.id);
+            $('#w').window('open');
+        }
+    }
+
+    function deleteUser(index){
+        $('#gg').datagrid('selectRow',index);// 关键在这里
+        var row = $('#gg').datagrid('getSelected');
+        if (row){
+            $.messager.confirm('提示', '是否确认删除?', function(r){
+                if (r){
+                    if(r==true){
+                        $.ajax({
+                            type: "POST",
+                            url: "deleteuser",
+                            data: {docid:row.id},
+                            dataType: "text",
+                            success: function(data){
+                                alert(data);
+                                $("#gg").datagrid('reload');
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    }
+
+    function destroyReocrd(){
+        var ids = [];
+        var rows = $('#gg').datagrid('getSelections');
+        for(var i=0;i<rows.length;i++){
+            ids.push(rows[i].id);
+        }
+        var idstr = ids.join(';');
+        if (idstr == ""){
+            showdialog('请选择您要删除的记录!','warning');return false;
+        }
+        $.messager.confirm('提示', '是否确认删除?', function(r){
+            if (r){
+                if(r==true){
+                    $.ajax({
+                        type: "POST",
+                        url: "deleteuser",
+                        data: {docid:idstr},
+                        dataType: "text",
+                        success: function(data){
+                           alert(data);
+                            $("#gg").datagrid('reload');
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    function newReocrd(){
+        window.location = "/userregist";
+    }
+
+    function closeWin(){
+        $('#w').window('close');
+    }
+
+    function closeAndReloadWin(){
+        $('#w').window('close');
+        $("#gg").datagrid('reload');
+    }
+
+    function searchReocrd(){
+        var  txtSearch = $("#txtSearch").val();
+        $('#gg').datagrid({'url':'getsearchdata?sid='+txtSearch});
+    }
+
+    function searchAllReocrd(){
+        $('#gg').datagrid({'url':'getuserdata'});
+    }
+
+</script>
+<div style="width:100%;text-align: center">
+
+        <table width="300px" style="margin:auto;margin-top: 5px;" border="0">
+            <tr>
+                <td><a href="#" onclick="showdialog('1','info');">首页</a>|
+                    <a href="#" onclick="showdialog('1','info');">预定</a>|
+                    <a href="#" onclick="showdialog('1','info');">我要买</a>|
+                    <a href="#" onclick="showdialog('1','info');">我要卖</a>|
+                    <a href="#" onclick="showdialog('1','info');">个人中心</a>|
+                    <a href="/" >退出平台</a>
+                </td>
+            </tr>
+        </table>
+        <input id="userid" style="display: none" value="<%=user%>" />
+    <table id="gg"></table>
+    <div id="toolbar">
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newReocrd()">新建</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyReocrd()">批量删除</a>
+        <input class="textbox" name="txtSearch" id="txtSearch" ></input>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="searchReocrd()">查询</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="searchAllReocrd()">查看全部</a>
+    </div>
+    <form method="post">
+        <input type="text" name="docid" id="docid" style="display: none" />
+    </form>
+
+</div>
+<div id="w" class="easyui-window" title="用户信息" data-options="iconCls:'icon-save'" style="width:400px;height:350px;padding:10px;">
+    <iframe id="if" style="border: none;width: 100%;height: 100%" />
+</div>

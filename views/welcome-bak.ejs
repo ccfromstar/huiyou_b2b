@@ -1,0 +1,59 @@
+<div style="width:960px;background-color: #FFFFFF;margin:auto;">
+    <form method="post">
+        <table style="width: 100%;background-image:url(images/titlebg.jpg)" border="0">
+            <tr>
+                <td><img src="/images/logo.png" style="margin-left: 20px;height:80px;margin-top:10px;" /></td>
+                <td style="text-align: right;vertical-align: top"><img style="padding-top:20px;margin-right: 10px;" src="/images/callto.jpg" style="margin-left: 20px;" /></td>
+            </tr>
+        </table>
+    <table width="100%" style="height:540px;margin:auto;" border="0">
+        <tr>
+            <td style="width: 320px;vertical-align: top;text-align: center">
+                <br/>
+                <div style="margin-left:15px;background-image: url('images/whitebar.png');width: 276px;height: 31px;padding-top: 10px;">项目1</div>
+                <div style="margin-left:15px;background-image: url('images/whitebar.png');width: 276px;height: 31px;padding-top: 10px;">项目2</div>
+                <div style="margin-left:15px;background-image: url('images/whitebar.png');width: 276px;height: 31px;padding-top: 10px;">项目3</div>
+                <div style="margin-left:15px;background-image: url('images/whitebar.png');width: 276px;height: 31px;padding-top: 10px;">项目4</div>
+                <table id="dl1" style="width:268px;;height: 130px;margin: auto;margin-top: 20px;" border="0">
+
+                    <tr >
+                        <td style="width: 90px;"><b>邮箱/手机号：</b></td>
+                        <td><input style="margin-left:0px;width: 168px" class="easyui-validatebox" type="text" id="name" name="username"/></td>
+                    </tr>
+                    <tr >
+                        <td><b>密&nbsp;&nbsp;&nbsp;码：</b></td>
+                        <td><input style="margin-left:0px;width: 168px" class="easyui-validatebox" onkeydown="if(event.keyCode==13){document.getElementById('bt').click();return false;}" type="password" id="pwd" name="password"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><span style="margin-left: 10px;"><input type="checkbox" style="vertical-align: middle;margin-right: 10px;margin-left: 10px;" id="txtRememberKey" name="txtRememberKey" ><b>记住用户名和密码</span> <span style="margin-left: 20px;cursor: pointer" onclick="forgetpwd();">忘记密码</span></b></td>
+                    </tr>
+                </table>
+                <table style="width:268px;margin: auto;margin-top: 0px;" border="0">
+                    <tr>
+                        <td style="text-align: left;width: 134px">
+
+                            <img id="bt" style="cursor: pointer" src="/images/login.png" onclick="login()" />
+                        </td>
+                        <td  style="text-align: center">
+                            <a href="publichome"><img id="bt" style="cursor: pointer" src="/images/guest.png" onclick="login()" /></a>
+                        </td>
+                    </tr>
+                </table>
+        </td>
+            <td style="vertical-align: top">
+                <img src="/images/righttop.jpg" style="width:600px;margin-left: 0px;margin-top: 5px;" />
+                <br/>
+                <div style="font-weight: bold;padding-top: 10px;font-size: 16px;">上海荟邮网络科技有限公司介绍</div>
+                <div style="width:600px;font-weight: bold;padding-top: 10px;font-size: 14px;line-height: 25px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;爱生活，爱大海，爱自由，爱邮轮旅游，爱网络，爱越界，爱创新，相信，怒海争锋，未来我创，有知识，有资源，有能力，有经验，我们不是神马纯粹的OTA，我们是邮轮客,邮轮时代的推进者</div>
+                <div style="width: 100%;text-align: left">
+                    <img style="margin-left: 210px;cursor: pointer" src="/images/reg.png" onclick="window.location='/userregist';" />
+                </div>
+
+            </td>
+        </tr>
+    </table>
+
+        <input id="info" type="hidden" value="<%=error%>" />
+    </form>
+</div>
+

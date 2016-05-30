@@ -1,0 +1,60 @@
+<div style="width:960px;background-color: #FFFFFF;margin:0 auto;">
+    <img onclick="window.location='loading?page=optioncompany';window.parent.htotop();" style="cursor:pointer;margin-left: 100px;" src="/images/retune.png" />
+    <table style="width: 700px;margin-top: 5px;margin-bottom: 20px;margin-left: 100px;" border="0" >
+        <tr style="height: 65px;">
+            <td rowspan="3" style="width: 170px">
+                <img src="/images/seller.png" />
+            </td>
+            <td style="width: 360px;"></td>
+            <td style="width: 170px;">
+
+            </td>
+        </tr>
+        <tr style="height: 110px;">
+
+            <td>
+                <%if(user[0].role_sys_admin==1){%>
+                <img id="fa1" onclick="window.location='publishproduct';" src="/images/fa1.png" style="cursor: pointer" />
+                <%}else{%>
+                发布产品功能升级中，如需发布产品，请联系客服，4009986121，客服QQ：57613279,179601188。
+                <%}%>
+            </td>
+            <td>
+                <img id="jian1" style="display: none" src="/images/orangeright.gif" style="width: 35px;" />
+            </td>
+        </tr>
+        <tr style="height: 110px;">
+
+            <td>
+                <img id="fa2" onclick="window.parent.hometoMarketFB(3);" src="/images/fa2.png" style="cursor: pointer" />
+            </td>
+            <td>
+                <img id="jian2" style="display: none" src="/images/orangeright.gif" style="width: 35px;" />
+            </td>
+        </tr>
+
+        <tr style="height: 65px;">
+            <td></td>
+            <td></td>
+            <td rowspan="3">
+                <img src="/images/buyer.png" />
+            </td>
+        </tr>
+        <tr style="height: 110px;">
+            <td style="text-align: right">
+                <img id="jian3" style="display: none" src="/images/greenleft.gif" style="width: 35px;" />
+            </td>
+            <td>
+                <img id="fa3" onclick="window.parent.hometoMarketFB2(3);" src="/images/fa3.png" style="cursor: pointer" />
+            </td>
+
+        </tr>
+        <tr style="height: 110px;">
+            <td></td>
+            <td></td>
+
+        </tr>
+
+    </table>
+    <img onclick="window.location='loading?page=optioncompany';window.parent.htotop();" style="cursor:pointer;margin-left: 100px;" src="/images/retune.png" />
+</div>

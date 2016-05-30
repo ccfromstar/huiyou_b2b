@@ -1,0 +1,467 @@
+<div style="width:960px;background-color: #FFFFFF;margin:0 auto;">
+    <form method="post" enctype="multipart/form-data" >
+    <img style="margin-top: 20px;" src="/images/no2.png" />
+
+
+        <table style="width: 100%;text-align: center;border-bottom: 0;border:2px solid #ABBBBB;"  cellpadding="0" cellspacing="0">
+            <tr style="background-image: url('images/huitou.png');">
+                <td style="font-weight: bold;font-size: 14px;text-align: left">&nbsp;&nbsp;订单联系人信息</td>
+            </tr>
+            <tr>
+                <td style="text-align:left;line-height: 45px;">&nbsp;&nbsp;
+                    <b>公司：</b><input type="text" name="booker_company" style="width: 200px;border:none" readonly value="<%=company[0].name%>"/> &nbsp;&nbsp;&nbsp;&nbsp;
+                    <b>姓名：</b><input type="text" name="booker_name" value="<%=user[0].name%>" /> &nbsp;&nbsp;&nbsp;&nbsp;
+                        <b>电话：</b><input type="text" name="booker_telephone" value="<%=user[0].mobile_phone%>" />  &nbsp;&nbsp;&nbsp;&nbsp;
+                            <b>邮箱：</b><input type="text" name="booker_email" value="<%=user[0].email%>" />&nbsp;&nbsp;&nbsp;&nbsp;
+
+                </td>
+            </tr>
+        </table>
+
+        <table style="width: 100%;margin-top: 10px;border-top: 0;border-bottom: 0;border:2px solid #ABBBBB;" cellspacing="0" cellpadding="0">
+        <tr style="background-image: url('images/huitou.png');">
+            <td colspan="10" style="font-weight: bold;font-size: 14px;text-align: left">&nbsp;&nbsp;确认舱房入住人数及游客信息</td>
+        </tr>
+            <tr style="text-align: center;color: #000000;font-weight: bold;background-color: #F2F0F4">
+                <td style="width: 50px;">序号</td>
+                <td style="width: 150px;" >舱房类型</td>
+                <td style="width: 95px;">最大入住人数</td>
+                <td style="width: 95px;">第1/2人结算价</td>
+                <td style="width: 95px;">第3/4人结算价</td>
+                <td style="width: 95px;">儿童结算价</td>
+                <td style="width: 95px;">成人数量</td>
+                <td style="width: 95px;">儿童数量</td>
+                <td style="width: 95px;">合计</td>
+                <td style="width: 95px;"></td>
+            </tr>
+            <%
+                var m = 0;
+                var c1 = "";var c2 = "";var c3 = "";var c4 = "";     var cb = "";
+                var str1 = "";  var w = 0;
+                var arrayObj = new Array();
+            for(var i in qq){
+                m = m + 1;
+                //2个参数，1个是房间名，1个是数量
+                if(qq[i].txtCabinName==str1){
+                    arrayObj[w] = Number(arrayObj[w]) + 1;
+                }else{
+                    w = w + 1;
+                    if(cb==""){
+                        cb = qq[i].txtCabinName;
+                    }else{
+                        cb = cb+";"+qq[i].txtCabinName;
+                    }
+                    arrayObj[w] = 1;
+                    str1 = qq[i].txtCabinName;
+                }
+
+            %>
+        <%if(i!=0){%>
+        <tr style="line-height: 3px;height: 3px;">
+            <td colspan="10" style="height: 3px"><img src="/images/xu2.png"></td>
+        </tr>
+        <%}%>
+            <tr style="text-align: center;line-height: 20px;vertical-align: bottom">
+                <%
+                    if(c1==""){
+                        c1 = qq[i].product_position_id;
+                        c2 = qq[i].retail_price;
+                        c3 = qq[i].retail_price_2;
+                        c4 = qq[i].price_child;
+                    }else{
+                        c1 = c1 + "@" +qq[i].product_position_id;
+                        c2 = c2 + "@" +qq[i].retail_price;
+                        c3 = c3 + "@" +qq[i].retail_price_2;
+                        c4 = c4 + "@" +qq[i].price_child;
+                    }
+                    var a1 = ""; var a2 = "";var a3 = "";
+                    if(qq[i].cabin_category_id == 9999){
+                        if(qq[i].cabin_type_id==1){a1 ="内舱房";}
+                        else if(qq[i].cabin_type_id==2){a1 ="海景房";}
+                        else if(qq[i].cabin_type_id==3){a1 ="阳台房";}
+                        else if(qq[i].cabin_type_id==4){a1 ="套房";}
+                        a2 = "-";a3 = "-";
+                    }else{
+                        a1 = qq[i].txtCabinName;
+                        a2 = qq[i].txtCabinNo;
+                        a3 = qq[i].numCanCheckIn;
+                    }
+                %>
+                <td ><%=m%></td>
+                <td id="icc<%=m%>"><%=a1%></td>
+                <td><span id="canc<%=m%>"><%=a3%></span></td>
+                <td>￥<span id="peo<%=m%>4"><%=qq[i].retail_price%></span></td>
+                <%if(Number(a3)>2){%>
+                <td>￥<span id="peo<%=m%>5"><%=qq[i].retail_price_2%></span></td>
+                <%
+                if(Number(qq[i].price_child)==0){
+                %>
+                <td id="peo<%=m%>6">-</td>
+                <%}else{%>
+                <td>￥<span id="peo<%=m%>6"><%=qq[i].price_child%></span></td>
+                <%}%>
+                <%}else{%>
+                <td id="peo<%=m%>5">-</td>
+                <td id="peo<%=m%>6">-</td>
+                <%}%>
+
+                <td><select id="peo<%=m%>1" style="color:#FF0000" onchange="gettotal1(<%=m%>);">
+                        <%
+                         var ck = "";
+                         for(var j=1;j<Number(a3)+1;j++){
+                         ck = "";
+                            if(j==2){ck="selected";}
+                         %>
+                        <option <%=ck%> value="<%=j%>"><%=j%></option>
+                        <%
+                         }%>
+                </select></td>
+
+                <td>
+
+                    <%if(Number(qq[i].price_child)==0 || Number(a3)<3){%>
+                        <%if(Number(a3)==2){%>
+                        <select id="peo<%=m%>2" style="color:#FF0000" onchange="gettotal2(<%=m%>);">
+                        <%}else{%>
+                        -<select style="display: none" id="peo<%=m%>2" onchange="gettotal2(<%=m%>);">
+                        <%}%>
+                    <%}else{%>
+                        <select id="peo<%=m%>2" style="color:#FF0000" onchange="gettotal2(<%=m%>);">
+                    <%}%>
+
+                        <option value="0">0</option>
+                        <%
+                        for(var j=1;j<Number(a3)+1;j++){
+                        %>
+                        <option value="<%=j%>"><%=j%></option>
+                        <%
+                        }%>
+                    </select></td>
+
+                <td >￥<span id="peo<%=m%>3"><%=Number(qq[i].retail_price)*2%></span></td>
+                <td style="width: 100px;cursor: pointer;color: #0000ff;display:none" onclick="hovmx1(<%=m%>);">立即录入</td>
+            </tr>
+
+            <tr id="mx<%=m%>"  >
+                <td  colspan="10" >
+                    <table style="width: 100%;margin-top: 0px;border-top: 0;border-bottom: 0" border="0" cellspacing="0" cellpadding="0">
+                        <tr style="text-align: center">
+                            <td style="width: 130px;"><b style="color:#FF0000">姓(必填)</b></td>
+                            <td style="width: 130px;"><b style="color:#FF0000">名(必填)</b></td>
+                            <td style="width: 130px;"><b>姓(拼音)</b></td>
+                            <td style="width: 130px;"><b>名(拼音)</b></td>
+                            <td style="width: 130px;"><b>护照上传</b></td>
+                            <td style="display:none;width: 200px;"><b>出生年月日</b></td>
+                            <td style="display:none;width: 80px;"><b>护照号</b></td>
+                            <td style="display:none;width: 200px;"><b>护照签发地</b></td>
+                            <td style="display:none;width: 200px;"><b>护照签发日期</b></td>
+                            <td style="display:none;width: 70px;"><b>护照有效期</b></td>
+                        </tr>
+                        <%
+                            var style1="";
+                        for(var k=1;k<5;k++){
+                        style1="";
+                        if(k>2){style1="display:none";}
+                        %>
+                        <tr id="q<%=m%><%=k%>" style="line-height:25px;text-align: center;<%=style1%>">
+                            <td><input style="width: 120px;" type="text" id="q<%=m%><%=k%>1" /></td>
+                            <td><input style="width: 120px;" type="text" id="q<%=m%><%=k%>2" /></td>
+                            <td><input style="width: 120px;" type="text" id="q<%=m%><%=k%>9" /></td>
+                            <td><input style="width: 120px;" type="text" id="q<%=m%><%=k%>10" /></td>
+                            <td><input style="width: 120px;" type="file" name="q<%=m%><%=k%>11" id="q<%=m%><%=k%>11" /></td>
+                            <td style="display:none;">
+                                <select style="width:70px;" id="q<%=m%><%=k%>3a" >
+                                    <option value="-">年</option>
+                                    <%
+                                    for(var i = 0;i<95;i++){
+                                    %>
+                                    <option value="<%=1920+i%>"><%=1920+i%></option>
+                                    <%
+                                    }
+                                    %>
+                                </select>
+                                <select style="width:50px;" id="q<%=m%><%=k%>3b" >
+                                    <option value="-">月</option>
+                                    <%
+                                    for(var i = 1;i<13;i++){
+                                    %>
+                                    <option value="<%=i%>"><%=i%></option>
+                                    <%
+                                    }
+                                    %>
+                                </select>
+                                <select style="width:50px;" id="q<%=m%><%=k%>3c" >
+                                    <option value="-">日</option>
+                                    <%
+                                    for(var i = 1;i<32;i++){
+                                    %>
+                                    <option value="<%=i%>"><%=i%></option>
+                                    <%
+                                    }
+                                    %>
+                                </select>
+                            </td>
+                            <td style="display:none;"><input style="width: 70px;" onKeyUp="value=value.replace(/[\W]/g,'')" type="text" id="q<%=m%><%=k%>4" /></td>
+                            <td style="display:none;">
+                                <select id="province<%=m%><%=k%>" onchange="showcity('<%=m%><%=k%>');" style="width:80px">
+                                    <option value="-">省</option>
+                                    <%
+                                    for (var i in province) {
+                                    %>
+                                    <option value="<%=province[i].id%>"><%=province[i].name%></option>
+                                    <%
+                                    }
+                                    %>
+                                </select>
+
+                                <select id="city<%=m%><%=k%>" style="width:90px"></select>
+
+                            </td>
+                            <td style="display:none;">
+                                <select style="width:70px;" id="q<%=m%><%=k%>3d" >
+                                    <option value="-">年</option>
+                                    <%
+                                    for(var i = 0;i<14;i++){
+                                    %>
+                                    <option value="<%=2001+i%>"><%=2001+i%></option>
+                                    <%
+                                    }
+                                    %>
+                                </select>
+                                <select style="width:50px;" id="q<%=m%><%=k%>3e" >
+                                    <option value="-">月</option>
+                                    <%
+                                    for(var i = 1;i<13;i++){
+                                    %>
+                                    <option value="<%=i%>"><%=i%></option>
+                                    <%
+                                    }
+                                    %>
+                                </select>
+                                <select style="width:50px;" id="q<%=m%><%=k%>3f" >
+                                    <option value="-">日</option>
+                                    <%
+                                    for(var i = 1;i<32;i++){
+                                    %>
+                                    <option value="<%=i%>"><%=i%></option>
+                                    <%
+                                    }
+                                    %>
+                                </select>
+
+                            </td>
+                            <td style="display:none;">
+                                <select class="easyui-combobox" style="width:50px;" id="q<%=m%><%=k%>7" >
+                                    <option value="10">10</option>
+                                    <option value="5">5</option>
+                                </select>年
+                            </td>
+                        </tr>
+                        <%
+                        }
+                        %>
+                        <tr style="line-height: 5px;height: 5px;">
+                            <td colspan="7" style="height: 5px"></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <%
+            }%>
+
+            <%
+            var cba = "";
+            for(var x=1;x<arrayObj.length;x++){
+                if(cba==""){
+                    cba = arrayObj[x];
+                }else{
+                    cba = cba + ";" +arrayObj[x];
+                }
+            }
+             %>
+        <tr style="line-height: 5px;height: 5px;">
+            <td colspan="10" style="height: 5px"></td>
+        </tr>
+        </table>
+
+        <table style="border:2px solid #ABBBBB;width: 100%;margin-top: 10px;"  cellpadding="0" cellspacing="0">
+            <tr style="background-image: url('images/huitou.png');">
+                <td style="font-weight: bold;font-size: 14px;text-align: left">&nbsp;&nbsp;费用清单</td>
+            </tr>
+            <tr style="height:25px;line-height:25px;">
+                <td>
+                    <table style="width:95%;margin:auto" border="0">
+                        <tr style="height:5px;line-height:5px;">
+                            <td colspan="2" style="width:400px;" >
+                               &nbsp;</td>
+                        </tr>
+                        <tr style="height:25px;line-height:25px;">
+                            <td colspan="2" style="color:#000000;font-size:14px;font-weight:bold">舱房信息：</td> 
+                        </tr>
+                        <tr style="height:25px;line-height:25px;">
+                            <td colspan="2" style="color:#000000;font-size:14px;font-weight:bold" id="roomPrice"></td> 
+                        </tr>
+                        <tr style="height:20px;line-height:20px;">
+                            <td  style="width:800px;font-size:14px;background-color:#DAE8F5" id="roomPrice2" ></td> 
+                            <td  style="font-weight:bold;font-size:14px;background-color:#DAE8F5">合计：<span style="color:#FF0000;font-weight:bold;font-size:14px;" id="roomPrice1"></span></td>
+                        </tr>
+                        <tr style="height:20px;line-height:20px;">
+                            <td  colspan="2">
+                             <img src="/images/xu2.png">
+                            </td> 
+                        </tr>
+                        <tr style="height:20px;line-height:20px;">
+                            <td colspan="2" >   
+                                <div style="color:#000000;font-size:14px;font-weight:bold">保险：</div>
+                            </td> 
+                        </tr>
+                        <tr style="height:20px;line-height:20px;">
+                            <td  style="width:400px;font-size:14px;" >
+                                <%
+                                    if(pi[0]){
+                                %>
+                                    <img onclick="diplaybx();" src="/images/zhankai.png">&nbsp;<span style="cursor:pointer;color:#0A68BC;font-size:14px;" onclick="diplaybx();"><%=pi[0].type%></span>
+                                    <span id="bxcc" style="display:none"><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=pi[0].description%></span>
+                                    <br/>
+                                    <b style="font-size:14px;">单价：</b>&nbsp;<%=pi[0].price%>&nbsp;元/人
+                                    <b style="font-size:14px;margin-left:11px;">数量：</b>&nbsp;&nbsp;<input name="insurance_amount" type="text" value="0" onFocus="if(value==defaultValue){value='';}" onBlur="if(!value){value=defaultValue}if(isNaN(value)){jAlertIframe('只能填写数字');value=0;}$('#bxnum').html(Number(value)*Number(<%=pi[0].price%>));" style="width:50px;" />
+                                <%        
+                                    }
+                                %>
+                            </td> 
+                            <td  style="font-weight:bold;font-size:14px;vertical-align:bottom;" >合计：<span style="color:#FF0000;font-weight:bold;font-size:14px;" id="bxnum">0</span><span style="color:#FF0000;font-weight:bold;font-size:14px;" id="bxnum">元</span></td>
+                        </tr>
+                        <tr style="height:20px;line-height:20px;">
+                            <td colspan="2" style="width:400px;" >
+                                <img src="/images/xu2.png">
+                            </td>
+                        </tr>
+                        <tr style="height:25px;line-height:25px;">
+                            <td></td>
+                            <td >   
+                                <div style="margin-left:0px;font-weight:bold;font-size:14px;"><span style="color:#000000;font-size:14px;font-weight:bold">订单总额：</span><span style="color:#FF0000;font-weight:bold;font-size:14px;" id="moneytotal"></span></div></td>
+                        </tr>
+                        <tr style="height:10px;line-height:10px;">
+                            <td colspan="2" style="width:400px;" >
+                               &nbsp;</td>
+                        </tr>
+                    </table>
+                </td>    
+            </tr>
+        </table>
+
+        <table style="border:2px solid #ABBBBB;width: 100%;margin-top: 10px;"  cellpadding="0" cellspacing="0">
+            <tr style="background-image: url('images/huitou.png');">
+                <td style="font-weight: bold;font-size: 14px;text-align: left">&nbsp;&nbsp;游客资料上传</td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;&nbsp;&nbsp;<span style="color:#F68421">用于上传游客护照扫描件及各类申请表格等，最大上传大小为3MB，支持上传类型：jpg bmp doc docx xls xlsx rar zip</span><br/>
+                    &nbsp;&nbsp;&nbsp;<b>文件名：</b><input type="text" name="filename1" /> <input onchange="getname('1');" type="file" name="file1" id="file1"></input><br/>
+                    <div id="filearea"></div>
+
+                    &nbsp;&nbsp;&nbsp;<input type="button" value="添加" onclick="addfj();" />
+                    <br/>
+                    <input type="hidden" name="fnum" id="fnum" value="1" >
+            </tr>
+            <tr style="height: 3px;line-height: 3px">
+                <td style="height: 3px;line-height: 3px"></td>
+            </tr>
+        </table>
+
+        <table style="border:2px solid #ABBBBB;width: 100%;margin-top: 10px;"  cellpadding="0" cellspacing="0">
+            <tr style="background-image: url('images/huitou.png');">
+                <td style="font-weight: bold;font-size: 14px;text-align: left">&nbsp;&nbsp;留言</td>
+            </tr>
+            <tr>
+                <td>
+                    <textarea id="comment_buyer" name="comment_buyer" style="width: 930px;margin-left: 10px;margin-top:10px;" rows="4"></textarea>
+                </td>    
+            </tr>
+            <tr style="height: 3px;line-height: 3px">
+                <td style="height: 3px;line-height: 3px"></td>
+            </tr>
+        </table>
+
+        <table style="display:none;border:2px solid #ABBBBB;width: 100%;margin-top: 10px;"  cellpadding="0" cellspacing="0">
+            <tr style="background-image: url('images/huitou.png');">
+                <td style="font-weight: bold;font-size: 14px;text-align: left">&nbsp;&nbsp;发票信息</td>
+            </tr>
+            <tr>
+                <%
+                var f = "";
+                if(product[0].payment_transfer == 1){f = f + "银行转账;"}
+                if(product[0].payment_online_banking == 1){f = f + "网上银行;"}
+                if(product[0].payment_alipay == 1){f = f + "支付宝;"}
+                if(product[0].payment_cheque == 1){f = f + "支票;"}
+                if(product[0].payment_cash == 1){f = f + "现金;"}
+                %>
+                <td><div style="margin: 10px;">
+
+
+                        <b>发票抬头：</b><input type="text" name="receipt_title" style="width:200px;" /> &nbsp;&nbsp;&nbsp;&nbsp;
+                            <b>快递地址：</b><input type="text" name="shipping_address" style="width:200px;" /> &nbsp;&nbsp;&nbsp;&nbsp;
+                                <b>收件人：</b><input type="text" name="recipient" style="width:100px;" /> &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <b>电话：</b><input type="text" name="recipient_telephone" onkeyup="this.value=this.value.replace(/\D/g,'')" />
+                    </div></td>
+            </tr>
+        </table>
+        <table style="width: 960px;margin-top: 20px;">
+            <tr>
+                <td style="text-align:left">
+                    <span style="margin-left:0px;margin-top:0px;color:#187ED3;cursor:pointer;display:inline-block" onclick="window.parent.htotop();parent.goToMessage({recipient:'<%=product[0].owner_id%>', ext_p_number:'<%=product[0].product_number%>', ext_p_id:'<%=product[0].id%>', ext_type:1, title:'<%=product[0].title%>'});"><img  src="/images/contactsell.png" /></span>
+                </td>
+                <td  style="width:100px">
+                    <img onclick="maskIframe('加载中...',false);history.go(-1);" style="cursor:pointer;margin-left: 80px;" src="/images/shangyibu.png" />
+                </td>
+                <td><div id="bookingsave" style="display:none;cursor:pointer;margin:auto;background-color: #0169C0;width: 100px;height: 30px;color:#FFFFFF;text-align: center" >保存</div></td>
+                <td style="width:100px">
+                    <img id="bookingbtn" style="cursor:pointer;margin-left: 20px;" src="/images/submit.png" onclick="submitBooking();"/>
+                </td>
+            </tr>
+        </table>
+        <%
+        var a1="";
+        var a2="";
+        for (var i in city) {
+            a1= a1+";"+ city[i].name;
+            a2 = a2 +";"+city[i].pid;
+        }
+        %>
+        <div style="display: none">
+            <input id="a1" value="<%=a1%>"></input>
+            <input id="a2" value="<%=a2%>"></input>
+        </div>
+        <input type="hidden" name="booking_number"  value="<%=no%>" />
+        <input type="hidden" name="owner_id"  value="<%=user[0].id%>" />
+        <input type="hidden" name="product_id"  value="<%=product[0].id%>" />
+        <input type="hidden" name="zd1"  value="<%=c1%>" />
+        <input type="hidden" name="zd2"  value="<%=c2%>" />
+        <input type="hidden" name="zd3"  value="<%=c3%>" />
+        <input type="hidden" name="zd4"  value="<%=c4%>" />
+        <input type="hidden" name="zd5" id="zd5" />
+        <input type="hidden" name="zd6" id="zd6" />
+        <input type="hidden" name="zd7" id="zd7" />
+        <input type="hidden" name="stype" id="stype"/>
+        <input type="hidden" id="mm1"  value="<%=m%>" />
+
+        <input type="hidden" name="pas1" id="pas1" />
+        <input type="hidden" name="pas2" id="pas2" />
+        <input type="hidden" name="pas3" id="pas3" />
+        <input type="hidden" name="pas4" id="pas4" />
+        <input type="hidden" name="pas5" id="pas5" />
+        <input type="hidden" name="pas6" id="pas6" />
+        <input type="hidden" name="pas7" id="pas7" />
+        <input type="hidden" name="pas8" id="pas8" />
+        <input type="hidden" name="pas9" id="pas9" />
+        <input type="hidden" name="pas10" id="pas10" />
+        <input type="hidden" name="pas11" id="pas11" />
+
+        <input type="hidden" id="cb"  value="<%=cb%>" />
+        <input type="hidden" id="cba"  value="<%=cba%>" />
+    </form>
+    <br/><br/>
+</div>
+<script type="text/javascript">
+    window.parent.ResizeIframeFromParent("page10");
+</script>

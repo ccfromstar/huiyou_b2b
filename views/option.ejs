@@ -1,0 +1,178 @@
+<div style="width:960px;background-color: #FFFFFF;margin:0 auto;">
+    <form method="post">
+    <table style="width: 100%;margin-top: 20px;margin-bottom: 50px;" border="0">
+         <tr style="line-height: 5px;">
+             <td style="width: 200px;text-align: center;vertical-align: top">
+                 <%include optionmenu%>
+             </td>
+             <td style="vertical-align: top">
+                 <table style="width: 400px;margin-top: 0px;" border="0" cellspacing="0">
+                     <tr>
+                         <td class="tdfooter1"  id="n1" onclick="window.location='loading?page=optioncompany'">公司信息</td>
+                         <td class="tdfooter1"  id="n3" onclick="window.location='loading?page=optionadmin'">管理员信息</td>
+                         <%
+                         var u1 = "";
+                         if(user[0].role_company_admin==1){
+                             u1 = "子账户信息";
+                         }else{
+                             u1 = "个人信息";
+                         }
+                         %>
+                         <td class="tdfooter1" style="background-color: #F7861E;color:#FFFFFF" id="n2" onclick="window.location='loading?page=option'"><%=u1%></td>
+                         <td class="tdfooter1" id="n4" onclick="window.location='loading?page=optionpwd'">修改密码</td>
+                     </tr>
+                 </table>
+                 <div style="background-image: url('/images/ora.jpg');width: 100%;height: 3px;"></div>
+                 <br/>
+                 <%if(user[0].role_company_admin==1){%>
+                 <%
+                 for(var i in user1){
+                 %>
+                        <table style="width: 100%;background-color: #eeeeee;margin-top: 8px;" border="0">
+                            <tr style="line-height: 5px;height: 5px"><td colspan="2"></td></tr>
+                            <tr style="line-height: 25px;">
+                                <td>&nbsp;&nbsp;&nbsp;<img src="files/<%=company[0].logo%>" style="width: 80px;padding-top: 0px;padding-right: 10px;" /></td>
+                                <td>
+                                    <%var q = "";
+                                    if(user1[i].role_company_admin==1){q="（管理员）";}%>
+                                    <b>姓名：</b><%=user1[i].name%><%=q%><span style="margin-left: 50px;"><b>隶属：</b><%=company[0].short_name+user1[i].departmentName%></span>
+                                    <%var q = "查询产品";
+                                        var q1 = "false";
+                                        var q2 = "false";
+                                        var q3 = "false";
+                                        if(user1[i].role_buyer == 1){q = q + "；购买产品";q1 = "true";}
+                                        if(user1[i].role_seller == 1){q = q + "；发布产品";q2 = "true";}
+                                        if(user1[i].role_accountant == 1){q = q + "；财务结算";q3 = "true";}
+                                    %>
+                                    <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;权限：</b><%=q%>
+                                    <br/>
+                                    <b>手机：</b><%=user1[i].mobile_phone%><span style="margin-left: 50px;"><b>固定电话：</b><%=company[0].telephone_area_code%>-<%=user1[i].telephone%></span><span style="margin-left: 50px;"><b>邮箱：</b><%=user1[i].email%></span><br/>
+                                    <div style="width: 100%;text-align: right;">
+
+                                        <img src="/images/change.png" onclick="$('#username').val('<%=user1[i].name%>');$('#departmentName').val('<%=user1[i].departmentName%>');$('#position').val('<%=user1[i].position%>');$('#usertelephone').val('<%=user1[i].telephone%>');$('#userFax').val('<%=user1[i].fax%>');$('#userTel').val('<%=user1[i].mobile_phone%>');$('#useremail').val('<%=user1[i].email%>');$('#txtPayType1').attr('checked',<%=q1%>);$('#txtPayType2').attr('checked',<%=q2%>);$('#txtPayType3').attr('checked',<%=q3%>);$('#showinfo').css('display','inline-block');$('#updateuser').css('display','inline-block');$('.a1').css('display','none');$('#docid').val('<%=user1[i].id%>');$('#adduser').css('display','none');" style="color:#0467B8;cursor: pointer"/>
+                                        <%if(user1[i].role_company_admin!=1){%>
+
+                                        <img src="/images/del.png" onclick="$('#docid').val('<%=user1[i].id%>');$('#stype').val('delete');document.forms[0].submit();" style="color:#0467B8;margin-left: 10px;cursor: pointer" />
+                                        <%}else{%>
+
+
+                                        <%}%>
+                                        &nbsp;&nbsp;
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                    <img src="/images/xu.png" style="margin-top: 5px;height: 1px;width: 100%;" /><br/>
+                 <%
+                 }
+                  %>
+                 <br/>
+                 <br/>
+                 <img src="/images/add.png" style="color:#0467B8;cursor: pointer" onclick="$('#username').val('');$('#departmentName').val('');$('#position').val('');$('#usertelephone').val('');$('#userFax').val('');$('#userTel').val('');$('#useremail').val('');$('#showinfo').css('display','inline-block');$('#adduser').css('display','inline-block');$('.a1').removeAttr('style');$('.a1').css('line-height','25px');$('#updateuser').css('display','none');" /><br/>
+                 <table id="showinfo" width="600" border="0" style="margin-top: 10px;display: none">
+                     <tr style="line-height: 25px;">
+                         <td style="width: 80px;"><span style="color:#F68421">*</span><b>姓名：</b></td>
+                         <td><input type="text" name="username" id="username" style="width: 150px;"></input></td>
+                     </tr>
+                     <tr style="line-height: 25px;">
+                         <td style="padding-left: 5px;"><b>所属部门：</b></td>
+                         <td><input type="text" name="departmentName" id="departmentName" style="width: 150px;"></input></td>
+                     </tr>
+                     <tr style="line-height: 25px;">
+                         <td style="padding-left: 5px;"><b>职位：</b></td>
+                         <td><input type="text" name="position" id="position" style="width: 150px;"></input></td>
+                     </tr>
+                     <tr style="line-height: 25px;">
+                         <td><span style="color:#F68421">*</span><b>联系电话：</b></td>
+                         <td><input type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" value="<%=company[0].telephone_area_code%>" name="zone" value="" id="zone" readonly style="width: 35px;"></input> - <input type="text" name="usertelephone" id="usertelephone" style="width: 98px;"></input></td>
+                     </tr>
+                     <tr style="line-height: 25px;">
+                         <td style="padding-left: 5px;"><b>传真：</b></td>
+                         <td><input type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" value="<%=company[0].telephone_area_code%>" name="zone0" value="" id="zone0" readonly style="width: 35px;"></input> - <input type="text" name="userFax" id="userFax" style="width: 98px;"></input></td>
+                     </tr>
+                     <tr  style="line-height: 25px;" class="a1">
+                         <td><span style="color:#F68421">*</span><b>手机：</b></td>
+                         <td><input type="text" name="userTel" id="userTel" style="width: 150px;"></input></td>
+                     </tr>
+                     <tr  style="line-height: 25px;" class="a1">
+                         <td><span style="color:#F68421">*</span><b>邮箱：</b></td>
+                         <td><input type="text" name="useremail" id="useremail" style="width: 150px;"></input></td>
+                     </tr>
+                     <tr style="line-height: 25px;" class="a1">
+                         <td style="padding-left: 0px;"><span style="color:#F68421">*</span><b>密码：</b></td>
+                         <td><input style="margin-left:0px;width: 150px"  type="password" id="password2" name="password2"/></td>
+                     </tr>
+                     <tr style="line-height: 25px;"  class="a1">
+                         <td style="padding-left: 0px;"><span style="color:#F68421">*</span><b>再次输入：</b></td>
+                         <td><input style="margin-left:0px;width: 150px"  type="password" id="password3" name="password3"/></td>
+                     </tr>
+                     <tr style="line-height: 25px;">
+                         <td style="padding-left: 5px;"><b>权限：</b></td>
+                         <td><input type="checkbox" style="vertical-align: middle;margin-right: 5px;" id="txtPayType1" value ="购买产品" >购买产品
+                             <%if(company[0].role_seller == 1) {%>
+                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" style="vertical-align: middle;margin-right: 5px;" id="txtPayType2" value ="发布产品" >发布产品
+                             <%}%>
+                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" style="vertical-align: middle;margin-right: 5px;" id="txtPayType3" value ="财务结算" >财务结算
+                         </td>
+                     </tr>
+                 </table>
+        <br/>
+
+                 <img src="/images/yes.png" id="adduser" style="display:none;cursor:pointer;margin-top: 10px;"/>
+                    <img src="/images/changeok.png" id="updateuser" style="display:none;cursor:pointer;margin-top: 10px;" />
+                  </div>
+                  <%}else{%>
+<%
+for(var i in user1){
+    if(user1[i].id==user[0].id){
+%>
+<table style="width: 100%;background-color: #eeeeee;margin-top: 8px;" border="0">
+    <tr style="line-height: 5px;height: 5px"><td colspan="2"></td></tr>
+    <tr style="line-height: 25px;">
+        <td>&nbsp;&nbsp;&nbsp;<img src="files/<%=company[0].logo%>" style="width: 80px;height:80px;padding-top: 0px;padding-right: 10px;" /></td>
+        <td>
+            <%var q = "";
+                if(user1[i].role_company_admin==1){q="（管理员）";}%>
+            <b>姓名：</b><%=user1[i].name%><%=q%><span style="margin-left: 50px;"><b>隶属：</b><%=company[0].short_name+user1[i].departmentName%></span>
+            <%var q = "查询产品";
+                var q1 = "false";
+                var q2 = "false";
+                var q3 = "false";
+                if(user1[i].role_buyer == 1){q = q + "；购买产品";q1 = "true";}
+
+                if(user1[i].role_seller == 1){q = q + "；发布产品";q2 = "true";}
+
+                if(user1[i].role_accountant == 1){q = q + "；财务结算";q3 = "true";}
+            %>
+            <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;权限：</b><%=q%>
+            <br/>
+            <b>手机：</b><%=user1[i].mobile_phone%><span style="margin-left: 50px;"><b>固定电话：</b><%=user1[i].telephone%></span><span style="margin-left: 50px;"><b>邮箱：</b><%=user1[i].email%></span><br/>
+            <div style="width: 100%;text-align: right;">
+
+
+
+                &nbsp;&nbsp;
+            </div>
+        </td>
+    </tr>
+</table>
+
+<img src="/images/xu.png" style="margin-top: 5px;height: 1px;width: 100%;" /><br/>
+<%
+}
+}
+%>
+                  <%}%>
+             </td>
+         </tr>
+    </table>
+        <input style="display: none"  name="role_buyer" id="role_buyer"></input>
+        <input style="display: none"  name="role_seller" id="role_seller"></input>
+        <input style="display: none"  name="role_accountant" id="role_accountant"></input>
+        <input style="display: none"  name="company_id" id="company_id" value="<%=company[0].id%>"></input>
+        <input id="info" style="display: none" value="<%=error%>" />
+        <input id="stype" name="stype" style="display: none" />
+        <input id="docid" name="docid" style="display: none" />
+    </form>
+</div>

@@ -1,0 +1,35 @@
+{"total":<%=datasource.length%>,"rows":[
+<%
+//初始记录数=(页号-1)*每页记录大小+1
+var initCount = (page-1)*rows+1;
+//结束记录数
+//1.初始记录数+(每页记录大小-1)>总记录数 --------- 总记录数
+//2.初始记录数+(每页记录大小-1)<总记录数 --------- 初始记录数+(每页记录大小-1)
+var endCount = 0;
+if (initCount + (rows - 1) > datasource.length) {
+endCount = datasource.length;
+} else {
+endCount = initCount + (rows - 1);
+}
+var x = "";
+for(var i in datasource){
+if(i<endCount && i>initCount-2){
+if(i!=endCount-1){
+if(datasource[i].service_by_huiyou==1){
+	x = "荟邮代";
+}else{
+	x = "自营";
+}
+%>
+{"id":"<%=datasource[i].id%>","product_number":"<%=datasource[i].product_number%>", "status_id":"<%=datasource[i].statusname1%>", "service_by_huiyou":"<%=x%>", "published_at":"<%=datasource[i].published_at%>", "last_updated_at":"<%=datasource[i].last_updated_at%>", "a_user":"<%=datasource[i].approvename?datasource[i].approvename:''%>"},
+<%
+}
+else{
+%>
+{"id":"<%=datasource[i].id%>","product_number":"<%=datasource[i].product_number%>", "status_id":"<%=datasource[i].statusname1%>", "service_by_huiyou":"<%=x%>", "published_at":"<%=datasource[i].published_at%>", "last_updated_at":"<%=datasource[i].last_updated_at%>", "a_user":"<%=datasource[i].approvename?datasource[i].approvename:''%>"}
+<%
+}
+}
+}
+%>
+]}

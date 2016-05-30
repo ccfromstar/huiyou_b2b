@@ -1,0 +1,101 @@
+<div style="width:960px;background-color: #FFFFFF;margin:0 auto;">
+    <table style="width: 100%;margin-top: 20px;margin-bottom: 50px;" border="0">
+         <tr style="line-height: 25px;">
+             <td style="width: 200px;text-align: center;vertical-align: top">
+                 <%include optionmenu%>
+             </td>
+             <td style="vertical-align: top">
+                 <table style="width: 110px;margin-top: 0px;" border="0" cellspacing="0">
+                     <tr style="line-height: 30px">
+                         <td class="tdfooter1" style="background-color: #F7861E;color:#FFFFFF" id="n1" onclick="window.location='loading?page=optionaccount'">基础设置</td>
+                     </tr>
+                 </table>
+
+
+                 <div style="background-image: url('/images/ora.jpg');width: 100%;height: 3px;"></div>
+
+                
+                        <form method="post">
+                            <div style="margin-top: 20px;"><b>公司简称：</b><input style="width:250px" type="text" id="weixin_companyname"  /></div>
+                            <div style="margin-top: 20px;"><b>姓名：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b><input style="width:250px" type="text" id="weixin_name"  /></div>
+                            <div style="margin-top: 20px;"><b>联系电话：</b><input style="width:250px" type="text" id="weixin_tel"  /></div>
+                            <input type="button" value="保存修改" style="margin-top:20px" onclick="setOption();" />
+                            <input type="button" value="重置" style="margin-top:20px;margin-left:10px" onclick="resetOption();" />
+                            <input type="hidden" id="docid" name="docid" value="<%=company[0].id%>" />
+                            <input type="hidden" name="publishid" id="publishid"  value="<%=company[0].name+"(id:"+company[0].id+")的"+user[0].name+"(id:"+user[0].id+")"%>" />
+                        </form>
+
+                 <br/>
+             </td>
+         </tr>
+    </table>
+    <input id="info" style="display:none"  value="<%=e%>" />
+</div>
+<script> 
+function getOption(){
+var _path = "/services/getOption?id=<%=user[0].id%>&openid=<%=user[0].weixin_open_id%>";
+$.ajax({
+        url: _path,
+        type:'get',
+        dataType: 'json',
+        success: function(result) {
+            $("#weixin_companyname").val(result.weixin_companyname?result.weixin_companyname:result.companyname);
+            $("#weixin_name").val(result.weixin_name?result.weixin_name:result.name);
+            $("#weixin_tel").val(result.weixin_tel?result.weixin_tel:result.telephone);
+        },
+        error: function(err) {
+            console.log(err);
+            //TODO dialog
+        }
+});
+}
+
+function setOption(){
+    var p1 = $("#weixin_companyname").val();
+    var p2 = $("#weixin_name").val();
+    var p3 = $("#weixin_tel").val();
+    var _path = "/services/setOption?id=<%=user[0].id%>&weixin_companyname="+p1+"&weixin_name="+p2+"&weixin_tel="+p3;
+    $.ajax({
+        url: _path,
+        type:'get',
+        dataType: 'json',
+        success: function(result) {
+            if(result=="success"){
+                alert("修改成功！");
+                getOption();
+            }else{
+                alert(result);
+            }
+            
+        },
+        error: function(err) {
+            console.log(err);
+            //TODO dialog
+        }
+    }); 
+}   
+
+function resetOption(){
+    var _path = "/services/resetOption?id=<%=user[0].id%>&openid=<%=user[0].weixin_open_id%>";
+    $.ajax({
+        url: _path,
+        type:'get',
+        dataType: 'json',
+        success: function(result) {
+            if(result=="success"){
+                alert("重置成功！");
+                getOption();
+            }else{
+                alert(result);
+            }
+            
+        },
+        error: function(err) {
+            console.log(err);
+            //TODO dialog
+        }
+    }); 
+} 
+
+getOption();
+</script>

@@ -1,0 +1,429 @@
+<div id="product-list-view" style="width:960px;background-color: #FFFFFF;margin:0 auto;">
+<form method="post">
+    <table style="width: 150px;margin-top: 22px;display: none" border="0" cellspacing="0">
+        <tr>
+            <td class="tdfooter1" style="background-color: #F7861E;color:#FFFFFF;font-size: 11px;" id="n1">中国出发</td>
+            <td class="tdfooter1" style="font-size: 11px;" id="n2" onclick="window.location='/productoverseas'">海外出发</td>
+        </tr>
+    </table>
+    <table style="width: 100%;margin-top:22px;background-color: #F7861E" border="0" cellspacing="0">
+
+        <tr style="font-weight: bold;height: 45px;">
+            <td style="vertical-align: middle"><span style="margin-left: 5px;color: #FFFFFF;">
+                    <select name="datStart" style="width: 100px;">
+                        <option value="*">所有出发日期</option>
+                        <%
+                        var myDate = new Date();
+                        var tyear = myDate.getFullYear();
+                        var nummonth = myDate.getMonth();
+                        var tmonth = "";
+                        var nyear =  tyear + 1;
+                        var j = 0;
+                                for(var i=nummonth+1;i<14;i++){
+                                    j = j + 1;
+                                    if(j<15){
+                                    if(i==13){
+                                        tyear = tyear + 1;
+                                        i = 1;
+                                    }
+
+                            tmonth = i;
+                            if(tmonth!="12"&&tmonth!="11"&&tmonth!="10"){
+                                tmonth = "0" + tmonth;
+                            }
+                                if(datstart == tyear+"-"+tmonth)
+                        {
+                        %>
+                        <option selected value="<%=tyear+"-"+tmonth%>"><%=tyear+"年"+tmonth+"月"%></option>
+                        <%
+                        }
+                        else{
+                        %>
+                        <option value="<%=tyear+"-"+tmonth%>"><%=tyear+"年"+tmonth+"月"%></option>
+                        <%
+                        }
+                        }
+                        }
+                        %>
+                    </select>
+                </span></td>
+            <td style="vertical-align: middle"><span style="margin-left: 5px;color: #FFFFFF;">
+                    <select style="width:100px" id="cf" name="cf" onchange="rebuildPortFilter()">
+                        <option value="*">所有航区</option>
+                        <%
+                        var medlist = "";
+                        var medlist1 = "";
+                                for (var i in med) {
+                            if(medlist==""){
+                                medlist = med[i].id;
+                                medlist1 = med[i].txtCruiseArea;
+                            }else{
+                                medlist = medlist+";"+med[i].id;
+                                medlist1 = medlist1+";"+med[i].txtCruiseArea;
+                            }
+                            if(med[i].id == cf){
+                        %>
+                        <option selected value="<%=med[i].id%>"><%=med[i].txtCruiseArea%>
+                        </option>
+                        <%
+                            }else{
+                        %>
+                        <option value="<%=med[i].id%>"><%=med[i].txtCruiseArea%>
+                        </option>
+                        <%
+                        }
+                        }
+                        %>
+                    </select>
+                </span></td>
+            <td style="vertical-align: middle"><span style="margin-left: 5px;color: #FFFFFF;">
+                     <select name="mdd" id="departureCities" style="width: 160px;">
+                         <option value="*">所有出发城市（团队游）</option>
+                         <%
+                         var md = "";
+                         for (var i in ports) {
+                            if(ports[i].location!=md ){
+                                 if(ports[i].location==mdd){
+                         %>
+                         <option selected value="<%=ports[i].location%>"><%=ports[i].location%></option>
+                         <%
+                                 }else{
+                         %>
+                         <option value="<%=ports[i].location%>"><%=ports[i].location%></option>
+                         <%
+                                }
+                                md = ports[i].location;
+                            }
+                         }
+                         %>
+                     </select>
+                </span></td>
+            <td style="vertical-align: middle"><span style="margin-left: 5px;color: #FFFFFF;">
+                     <select name="departurePorts" id="departurePorts" style="width: 160px;">
+                         <option value="*">所有出发港口（单船票）</option>
+                     </select>
+                </span></td>
+            <td style="vertical-align: middle"><span style="margin-left: 5px;color: #FFFFFF;">
+                 <select style="width:100px" id="txtCuriseCompany" name="txtCuriseCompany">
+                     <option value="*">所有邮轮公司</option>
+                     <%
+                     for (var i in cruisecompany) {
+                             if(cruisecompany[i].txtCompanyNo==txtCuriseCompany){
+                     %>
+                     <option selected value="<%=cruisecompany[i].txtCompanyNo%>"><%=cruisecompany[i].txtCompanyName%></option>
+                     <%
+                     }else{
+                     %>
+                     <option value="<%=cruisecompany[i].txtCompanyNo%>"><%=cruisecompany[i].txtCompanyName%></option>
+                     <%
+                     }
+                     }
+                     %>
+                 </select>
+                </span></td>
+            <td style="vertical-align: middle"><span style="margin-left: 5px;color: #FFFFFF;">
+                     <select id="ship_id" name="ship_id" style="width: 100px;">
+                         <option value="-">所有邮轮</option>
+                         <%
+                         for (var i in cruiseship) {
+                                 if(cruiseship[i].id==ship_id){
+                         %>
+                         <option selected value="<%=cruiseship[i].id%>"><%=cruiseship[i].txtShipName%></option>
+                         <%
+                         }else{
+                         %>
+                         <option value="<%=cruiseship[i].id%>"><%=cruiseship[i].txtShipName%></option>
+                         <%
+                         }}
+                         %>
+                     </select>
+                </span></td>
+            <td style="vertical-align: middle"><img style="padding-top:14px;cursor: pointer" onclick="document.all.numStart.value = 0;document.forms[0].submit();"  src="images/sou.png"><div style="display:none;height:25px;cursor:pointer;margin-left: 40px;margin-top: 0px;width: 70px;background-color: #0068BD;color:#FFFFFF;font-weight: bold;text-align: center;line-height: 25px;">搜！</div></td>
+        </tr>
+    </table>
+    <div style="width: 100%;text-align: right;margin-top: 10px;">
+    <select name="pse2" id="pse2" onchange="changeSorting();">
+        <option value="*">选择排序</option>
+        <%if(pse2=="1"){%>
+        <option selected value="1">结算价格由低到高</option>
+        <%
+        }else{
+        %>
+        <option value="1">结算价格由低到高</option>
+        <%
+        }
+        %>
+        <%if(pse2=="2"){%>
+        <option selected value="2">出发日期由近到远</option>
+        <%
+        }else{
+        %>
+        <option value="2">出发日期由近到远</option>
+        <%
+        }
+        %>
+        <%if(pse2=="3"){%>
+        <option selected value="3">发布日期由近及远</option>
+        <%
+        }else{
+        %>
+        <option value="3">发布日期由近及远</option>
+        <%
+        }
+        %>
+    </select>
+    </div>
+        <%
+
+        var s1 = "";
+        for(var i in product){
+            if(product[i].status_id==3|product[i].status_id==4){
+            (i%2 !=0) ?s1="background-color:#F2F0F4;":s1="";
+        %>
+    <table id="cxtableid<%=i%>" class="pclass" onmouseover="$(this).css('background-color','#F2F0F4');" onmouseout="$(this).css('background-color','#FFFFFF');" style="margin-top:10px;width:960px;BORDER-COLLAPSE: collapse ;border-color: #ABBBBB;border:2px solid #ABBBBB;"  cellspacing="0" cellpadding="0" >
+        <tr>
+            <td rowspan="5" style="text-align: center;width: 100px;line-height: 20px;">
+
+                <img src="images/<%=product[i].rtfCompanyLogo%>" style="width: 80px;padding-top: 10px;" /><br/>
+                <br/><%=product[i].product_number%><br/><%=product[i].txtCruiseArea%><br/>
+                <%if(product[i].status_id==3){%>
+                <span style="color:#6296C1"><%=product[i].statusname%></span></td>
+                <%}else{%>
+                <span style="color:#ff0000"><%=product[i].statusname%></span></td>
+                <%}%>
+            <%var tp = "";
+                if(product[i].type_id==1){
+                    tp = "单船票"
+                }else{
+                    tp = "团队游"
+                }
+            %>
+            <td  style="text-align: center"><%=tp%></td>
+            <td colspan="6" style="font-size: 16px;font-weight: bold;color:#0468B9">&nbsp;&nbsp;&nbsp;&nbsp;<%=product[i].title%>&nbsp;&nbsp;&nbsp;
+                <%
+                    var dat1c = (new Date(product[i].created_at)).Format("yyyy-MM-dd");
+                    var myDate = new Date();
+                    var m = myDate.getMonth()+1;
+                    m = m +"";
+                    if(m.length==1){
+                        m = "0" + m;
+                    }
+                    var d = myDate.getDate();
+                    d= d +"";
+                    if(d.length==1){
+                        d = "0" + d;
+                    }
+                    var d2 = myDate.getFullYear()+"-"+m+"-"+d;
+                if(dat1c == d2){%>
+                <img src="/images/45.gif" />
+                <%}%>
+            </td>
+            <td colspan="3">&nbsp;&nbsp;&nbsp;&nbsp;供应商：<%=product[i].short_name%></td>
+            <%
+                var dp = 99999;
+                for(var j in pp){
+                    if(pp[j].product_id==product[i].id){
+                        if(pp[j].retail_price < dp && pp[j].retail_price != 0){
+                            dp = pp[j].retail_price;
+                        }
+                    }
+                }
+            %>
+            <td rowspan="5" style="width: 100px;text-align: center;line-height: 20px;">
+                <span style="font-size: 12px;color: #000000;">最低结算价</span><br/>
+                <span style="font-size: 16px;color: #FA8723;font-weight: bold">￥<%=dp%></span>
+            <br/><br/><br/>
+                <%if(product[i].status_id==3){%>
+                <% if( product[i].owner_id != user[0].id ) { %>
+                &nbsp;<img onclick="parent.openBooking('<%=product[i].product_number%>');" style="cursor:pointer;margin-left: 0px;" src="/images/booking2.png" />
+                <br/>
+                <%}%>
+                <%}%>
+                <img onclick="maskIframe('加载中...',false);window.location='productdetail?p=<%=product[i].product_number%>';" style="cursor:pointer;margin-left: 0px;" src="/images/detail.png" />
+            </td>
+        </tr>
+        <tr>
+            <%
+                var h1 = "";
+                var hx = "";
+                for(j in ts){
+                    if(ts[j].product_id ==product[i].id && ts[j].day_number == 1){
+                        h1 = ts[j].location;
+                    }
+                    if(ts[j].product_id ==product[i].id){
+                        if(ts[j].location!="航海日"){
+                            hx = hx==""?ts[j].location:hx + "-" + ts[j].location;
+                        }
+
+                    }
+                }
+            %>
+            <td colspan="8" style="padding-left:15px;padding-right:12px;"><%=(hx.length>100)?(hx.substring(0,99) + "..."):hx%></td>
+            <td colspan="2"  style="text-align: center">出发日期：<%=(new Date(product[i].start_date)).Format("yyyy-MM-dd")%></td>
+        </tr>
+        <tr style="text-align: center">
+            <td style="width: 76px;">内舱结算</td>
+            <td style="width: 76px;">海景结算</td>
+            <td style="width: 76px;">阳台结算</td>
+            <td style="width: 76px;">套房结算</td>
+            <td style="width: 76px;">港务费</td>
+            <td style="width: 76px;">岸上游</td>
+            <td style="width: 76px;">邮轮小费</td>
+            <td style="width: 76px;">领队费</td>
+            <td style="width: 76px;">签证费</td>
+            <td style="width: 76px;">保险费</td>
+        </tr>
+        <tr style="text-align: center">
+            <%
+                var dp1 = 99999;
+                var dp2 = 0;
+                var dp3 = 99999;
+                var dp4 = 0;
+                var dp5 = 99999;
+                var dp6 = 0;
+                var dp7 = 99999;
+                var dp8 = 0;
+                for(var j in pp){
+                    if(pp[j].product_id==product[i].id && pp[j].cabin_type_id==1){
+                        if(pp[j].retail_price < dp1 && pp[j].retail_price != 0){
+                            dp1 = pp[j].retail_price;
+                            dp2 = pp[j].amount+"间";
+                        }
+                    }
+                    if(pp[j].product_id==product[i].id && pp[j].cabin_type_id==2){
+                        if(pp[j].retail_price < dp3 && pp[j].retail_price != 0){
+                            dp3 = pp[j].retail_price;
+                            dp4 = pp[j].amount+"间";
+                        }
+                    }
+                    if(pp[j].product_id==product[i].id && pp[j].cabin_type_id==3){
+                        if(pp[j].retail_price < dp5 && pp[j].retail_price != 0){
+                            dp5 = pp[j].retail_price;
+                            dp6 = pp[j].amount+"间";
+                        }
+                    }
+                    if(pp[j].product_id==product[i].id && pp[j].cabin_type_id==4){
+                        if(pp[j].retail_price < dp7 && pp[j].retail_price != 0){
+                            dp7 = pp[j].retail_price;
+                            dp8 = pp[j].amount+"间";
+                        }
+                    }
+                }
+                if(dp1==99999){dp1="-";dp2="-";}else{dp1="￥"+dp1;};
+                if(dp3==99999){dp3="-";dp4="-";}else{dp3="￥"+dp3;};
+                if(dp5==99999){dp5="-";dp6="-";}else{dp5="￥"+dp5;};
+                if(dp7==99999){dp7="-";dp8="-";}else{dp7="￥"+dp7;};
+            %>
+            <td style="font-weight: bold"><%=dp1%></td>
+            <td style="font-weight: bold"><%=dp3%></td>
+            <td style="font-weight: bold"><%=dp5%></td>
+            <td style="font-weight: bold"><%=dp7%></td>
+            <%
+            for(j in inf){
+                    if(inf[j].product_id ==product[i].id){
+                var b1="不含";var b2="不含";var b3="不含";var b4="不含";var b5="不含";var b6="不含";
+                if(inf[j].incl_port_tax==1){b1="含";}
+                if(inf[j].incl_excursion==1){b2="含";}
+                if(inf[j].incl_tip==1){b3="含";}
+                if(inf[j].incl_tourist_guide==1){b4="含";}
+                if(inf[j].incl_visa_fee==1){b5="含";}
+                if(inf[j].incl_travel_insurance==1){b6="含";}
+                if(inf[j].port_tax_fee == 0){c1="";}else{c1="￥"+inf[j].port_tax_fee;}
+                if(inf[j].excursion_fee == 0){c2="";}else{c2="￥"+inf[j].excursion_fee;}
+                if(inf[j].tip == 0){c3="";}else{c3="￥"+inf[j].tip;}
+                if(inf[j].tourist_guide_fee == 0){c4="";}else{c4="￥"+inf[j].tourist_guide_fee;}
+                if(inf[j].visa_fee == 0){c5="";}else{c5="￥"+inf[j].visa_fee;}
+                if(inf[j].incl_travel_insurance_comment == 0){c6="";}else{c6="￥"+inf[j].incl_travel_insurance_comment;}
+            %>
+
+            <td><%=c1%><%=b1%></td>
+            <td><%=c2%><%=b2%></td>
+            <td><%=c3%><%=b3%></td>
+            <td><%=c4%><%=b4%></td>
+            <td><%=c5%><%=b5%></td>
+            <td><%=b6%></td>
+            <%
+            }
+            }
+            %>
+        </tr>
+        <%
+         var adv = product[i].advertising;
+            if(adv!=""){
+                if(adv.length>200){
+                    adv = adv.substring(0,200)+"...";
+                }
+            }
+        %>
+        <tr>
+            <td colspan="10" style="width: 760px;padding: 10px;line-height: 20px;height: 40px;"><%-adv%></td>
+        </tr>
+    </table>
+        <%
+        }
+        }%>
+    <br/>
+
+    <table style="width: 100%">
+        <tr>
+            <td style="text-align: center;font-size: 12px;">
+                <%
+                var bb = 1+(numStart)/6;
+                if(bb !=1){%>
+                <img src="images/previours_page.png" style="cursor: pointer;margin-bottom:-5px" onclick="onPreviousPageClicked(<%=1+(numStart-1)/6%>);window.parent.htotop();" title="上一页"/>
+                <%}%>
+                &nbsp;第&nbsp;<input style="width: 25px;text-align: center" type="text" id="numNo1" value="<%=1+(numStart)/6%>" onchange="onPageValueChanged(<%=Math.ceil(total/6)%>);window.parent.htotop();" />&nbsp;页
+                &nbsp;共<%=Math.ceil(total/6)%>页&nbsp;<%=total%>条记录
+                <%
+                var aa = Math.ceil(total/6);
+                var bb = 1+(numStart)/6;
+                if(aa!=bb){%>
+                <img src="images/next_page.png" style="margin-bottom:-5px;padding-left: 5px;cursor: pointer" onclick="onNextPageClicked(<%=1+(numStart)/6%>, <%=Math.ceil(total/6)%>);window.parent.htotop();" title="下一页"/>
+                <%}%>
+            </td>
+        </tr>
+
+    </table>
+    <br/>
+    <input type="hidden" name="numStart"  value="<%=numStart%>" ></input>
+    <%
+    function getNow(){
+        var date = new Date(); //日期对象
+        var now = "";
+        now = date.getFullYear()+"";
+        now = now + (date.getMonth()+1)+"";//取月的时候取的是当前月-1如果想取当前月+1就可以了
+        now = now + date.getDate()+"";
+        now = now + date.getHours()+"";
+        now = now + date.getMinutes()+"";
+        now = now + date.getSeconds()+"";
+        return now;
+    }
+    var shipNo = "";
+    var shipName = "";
+    var shipComNo = "";
+    var shipNum = "";
+    for (var i in cruiseship) {
+        if(shipNo == ""){
+            shipNo =  cruiseship[i].id;
+            shipName =  cruiseship[i].txtShipName;
+            shipComNo = cruiseship[i].txtCompanyNo;
+            shipNum =  cruiseship[i].txtShipNo;
+        }else{
+            shipNo =  shipNo+";"+cruiseship[i].id;
+            shipName = shipName+";"+cruiseship[i].txtShipName;
+            shipComNo = shipComNo+";"+cruiseship[i].txtCompanyNo;
+            shipNum =  shipNum+";"+cruiseship[i].txtShipNo;
+        }
+    }
+    %>
+    <input type="hidden" name="unid" value="<%=getNow()%>"></input>
+    <input type="hidden" id="shipNo" value="<%=shipNo%>" />
+    <input type="hidden" id="shipName" value="<%=shipName%>"  />
+    <input type="hidden" id="shipComNo" value="<%=shipComNo%>"  />
+    <input type="hidden" id="shipNum" value="<%=shipNum%>"  />
+    <input type="hidden" name="orderby1" id="orderby1" value="<%=pse2%>" />
+    <input type="hidden" id="refreshable-page" value="1"/>
+
+</form>
+    <script type="text/javascript" src="/javascripts/b_productfilter.js"></script>
+</div>

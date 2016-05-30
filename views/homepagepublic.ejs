@@ -1,0 +1,128 @@
+<!doctype html>
+<html>
+<head>
+    <title>荟邮轮</title>
+
+    <link href="/images/favicon.ico" mce_href="favicon.ico" rel="bookmark" type="image/x-icon" />   
+    <link href="/images/favicon.ico" mce_href="favicon.ico" rel="icon" type="image/x-icon" />  
+    <link href="/images/favicon.ico" mce_href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    
+    <script type="text/javascript" src="/javascripts/jquery-easyui_jb51/jquery-1.8.0.min.js"></script>
+    <script type="text/javascript" src="/javascripts/publicb_main.js"></script>
+    <script type="text/javascript" src="/javascripts/cookiesoperator.js"></script>
+    <script type="text/javascript" src="/javascripts/datapicker.js"></script>
+    <script type="text/javascript" src="/javascripts/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript" src="/javascripts/jquery-easyui_jb51/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="/javascripts/jquery-easyui_jb51/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    
+    <script type="text/javascript" src="/javascripts/utils.js"></script>
+    <script type="text/javascript" src="/javascripts/My97DatePicker/WdatePicker.js"></script>
+
+
+
+    <link rel="stylesheet" type="text/css" href="/javascripts/jquery-easyui_jb51/themes/cds/easyui.css">
+    <link rel="stylesheet" type="text/css" href="/javascripts/jquery-easyui_jb51/themes/icon.css">
+
+    <link href="/stylesheets/demozi.css" rel="stylesheet" type="text/css"/>
+    <link href="/stylesheets/chat.css" rel="stylesheet" type="text/css"/>
+
+    <script type="text/javascript" src="/javascripts/jquery/jquery_tsk/js/jquery.alerts.js"></script>
+    <link rel="stylesheet" href="/javascripts/jquery/jquery_tsk/js/jquery.alerts.css" type="text/css"/>
+
+</head>
+<body style="background-color: #ffffff" >
+    <br/>
+    <div style="width:960px;background-color: #FFFFFF;margin:0 auto;">
+        <%
+        var myDate = new Date();
+        var tyear = myDate.getFullYear();
+        var nummonth = myDate.getMonth()+1;
+        nummonth = nummonth + "";
+        if(nummonth.length==1){
+            nummonth = "0"+nummonth;
+        }
+        %>
+        <table style="width:100%" border="0">
+            <tr>
+                <td style="background-image:url('/images/rli00.png');width:670px;padding-left:32px;height:430px;">
+
+                    <div style="text-align:center;margin-top:25px;height:25px;line-height:25px;color:#0071B8;font-weight:bold;font-size:18px;">
+                        <select style="width:60px;" id="caly" onchange="changeCalender();">
+                            <%
+                            for(var i = 0;i<3;i++){
+                            if(i==tyear){
+                            %>
+                            <option selected value="<%=tyear+i%>"><%=tyear+i%></option>
+                            <%
+                            }else{
+                            %>
+                            <option value="<%=tyear+i%>"><%=tyear+i%></option>
+                            <%
+                            }
+                            }
+                            %>
+                        </select>&nbsp;年
+
+                        <select style="width:60px;" id="calm" onchange="changeCalender();">
+                            <%
+                            var j = "";
+                            for(var i = 1;i<13;i++){
+                                j = i + "";
+                                if(j.length==1){
+                                    j = "0"+j;
+                                }
+                            if(i==nummonth){
+                            %>
+                            <option selected value="<%=j%>"><%=j%></option>
+                            <%
+                            }else{
+                            %>
+                            <option value="<%=j%>"><%=j%></option>
+                            <%
+                            }
+                            }
+                            %>
+                        </select>&nbsp;月</div>
+                    <table style="width:100%" >
+                        <tr>
+                            <td>
+                                <table border="1" style="margin-top:15px;width:634px;BORDER-COLLAPSE: collapse ;border-color: #ABBBBB;border:2px solid #ABBBBB;"  cellspacing="0" cellpadding="0" class="pclasscal" id="calender">
+
+                                </table>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </table>
+
+                </td>
+                <td style="background-image:url('/images/noteboard.png');vertical-align:top;line-height:15px;">
+                    <div id="notice-board" style="margin-top:60px;padding-left:20px;"></div>
+                </td>
+            </tr>
+        </table>
+
+        <img style="margin-top:50px;" src="/images/0002.png">
+        <img style="margin-top:0px;" src="/images/0001.png">
+        <img style="margin-top:50px;" src="/images/0003.png">
+        <img style="margin-top:0px;" src="/images/logos1.png">
+
+        <div style="width:382px;display:none;position:absolute;" id="tooltip2">
+
+            <div style="background:url(/images/tab0101.png);width:382px;height:20px"></div>
+
+            <div style="background:url(/images/tab0102.png);width:382px;">
+                <div  style="width:360px; margin:0 auto; padding-left:0px;font-size:12px; color:#CCCCCC;line-height:20px;">
+                    <div id="tooltip" style="float:left;margin-top:-15px;margin-left:5px;"></div>
+                    <!-- 文本内容 -->
+                    <div class="clear" style="width:360px; height:0px"></div><!--清除浮动-->
+                </div>
+            </div>
+
+            <div style="background:url(/images/tab0103.png);width:382px;height:7px; margin-left:1px;"></div>
+        </div>
+
+    </div>
+    <script src="/javascripts/b_homepage.js"></script>
+</body>
+</html>

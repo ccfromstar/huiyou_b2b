@@ -1,0 +1,614 @@
+<div style="width:960px;background-color: #FFFFFF;margin:0 auto;">
+<script type="text/javascript">
+    var editor;
+    KindEditor.ready(function(k){
+        editor = k.create('#advertising');
+    });
+</script>
+<form method="post" enctype="multipart/form-data">
+<a name="top" id="top"></a>
+
+<div id="step1">
+    <table style="width: 100%;height: 110px;background-image: url('/images/step1.png');margin-top: 20px;" border="0">
+        <tr style="line-height: 10px;">
+            <td><img id="jian1" src="/images/orangeright.gif" style="width: 20px;height:20px;margin-top: 0px;margin-left: 130px" /></td>
+        </tr>
+        <tr style="line-height: 10px;">
+            <td></td>
+        </tr>
+    </table>
+
+    <br/>
+    <input type="file" name="customized_ship_description" style="display:none" />
+
+    <%if(company[0].name=="上海荟邮网络科技有限公司"){%>
+    当前身份是客服、客服主管、管理员,可发布产品来源是供应商的产品<br/>
+    供应商:
+    <select id="gys">
+        <%for(var k in supplyuser){%>
+            <option value="<%=supplyuser[k].name%>#<%=supplyuser[k].mobile_phone%>#<%=supplyuser[k].email%>#<%=supplyuser[k].company_id%>#<%=supplyuser[k].id%>"><%=supplyuser[k].cshort_name%>-<%=supplyuser[k].name%></option>
+        <%}%>
+    </select>
+    <input type="button" value="确定" onclick="sureGYS();" />
+    <span style="margin-left:100px">备注: <input type="text" name="remark" /></span>
+    <%}%>
+    <table border="0">
+        <tr style="line-height: 25px;">
+            <td style="width: 160px;font-size: 14px;"><span style="color:#F68421;font-size: 14px;">*</span><b>选择服务商</b></td>
+            <td ><div style="color:#000000;background-color: #F2F0F4;width: 820px;padding: 20px;">
+                    <input type="radio" style="vertical-align: middle;margin-right: 5px;" name="servicetype" value ="1" checked >荟邮轮（由平台提供第三方服务，应询、客服、销售全程无忧）
+                    <br/>
+                    <span style="margin-left: 0px;color:#000000;"><input type="radio" style="vertical-align: middle;margin-right: 5px;" name="servicetype" value ="0" >自营服务（由供应商自行提供相应服务，过程、结果尽在掌握）</span>
+                    <br/>
+    <span id="shuru1" style="display:none;margin-left: 20px;">联系人：<input type="text" name="contact_person" id="username"  style="width: 100px;"></input>
+    手机：<input type="text"  name="contact_mobile_phone" id="usertel" style="width: 100px;"></input>
+    邮箱：<input type="text"  name="contact_email" id="usermail" style="width: 150px;"></input></span>
+            </div></td>
+        </tr>
+        <tr style="line-height: 20px;">
+            <td style="width: 160px;"><span style="color:#F68421">*</span><b>选择邮轮</b></td>
+            <td ><div style="color:#000000;background-color: #F2F0F4;width: 820px;padding: 20px;">
+                    <select style="width:165px" id="txtCuriseCompany" name="txtCuriseCompany">
+                        <option value="*">邮轮公司</option>
+                        <%
+                        for (var i in cruisecompany) {
+                        %>
+                        <option value="<%=cruisecompany[i].txtCompanyNo%>"><%=cruisecompany[i].txtCompanyName%></option>
+                        <%
+                        }
+                        %>
+                    </select>
+        <span style="margin-left: 50px;color:#000000;">
+        <select style="width:165px" id="ship_id" name="ship_id">
+            <option value="*">邮轮名称</option>
+            <%
+            for (var i in cruiseship) {
+            %>
+            <option value="<%=cruiseship[i].id%>"><%=cruiseship[i].txtShipName%></option>
+            <%
+            }
+            %>
+        </select>
+        </span>
+            </div></td>
+        </tr>
+        <tr style="line-height: 25px;">
+            <td style="width: 160px;"><span style="color:#F68421;font-size: 14px;">*</span><b>产品类型</b></td>
+            <td ><div style="color:#000000;background-color: #F2F0F4;width: 820px;padding: 20px;">
+                    <input type="radio" style="vertical-align: middle;margin-right: 5px;" name="ptype" value ="2" checked >团队游（供应商提供签证、领队等组团服务）</span>
+                    <br/><span style="margin-left: 0px;color:#000000;">
+            <input type="radio" style="vertical-align: middle;margin-right: 5px;" name="ptype" value ="1" />单船票（供应商不负责船票以外的其他服务） </span>
+            </div></td>
+        </tr>
+        <tr style="line-height: 20px;">
+            <td style="width: 160px;"><span style="color:#F68421">*</span><b>关于航线</b></td>
+            <td ><div style="color:#000000;background-color: #F2F0F4;width: 820px;padding: 20px;">
+
+                    <select style="width:145px" id="txtPlace" name="txtPlace">
+                        <option value="*">航区</option>
+                        <%
+                        var medlist = "";
+                        var medlist1 = "";
+                                for (var i in med) {
+                            if(medlist==""){
+                                medlist = med[i].id;
+                                medlist1 = med[i].txtCruiseArea;
+                            }else{
+                                medlist = medlist+";"+med[i].id;
+                                medlist1 = medlist1+";"+med[i].txtCruiseArea;
+                            }
+                        %>
+                        <option value="<%=med[i].id%>"><%=med[i].txtCruiseArea%>
+                        </option>
+                        <%
+                        }
+                        %>
+                    </select>
+                    <span style="margin-left: 50px;color: #000000">出发日期 <input type="text" name="start_date" id="start_date" style="cursor:pointer" readonly  class="Wdate" onfocus="WdatePicker({minDate:'%y-%M-{%d+1}',doubleCalendar:true,dateFmt:'yyyy-MM-dd'})"></input></span>
+                    <span style="margin-left: 50px;"><input onchange="loadxc();" type="text" name="days" id="days" style="width: 25px;color: #000000" /> 天 <input id="wan" name="wan" style="width: 25px;color: #000000" type="text" /> 晚</span>
+                </div></td>
+        </tr>
+        <tr style="line-height: 20px;">
+            <td style="width: 160px;"><b>&nbsp;产品卖点</b></td>
+            <td ><div style="color:#000000;background-color: #F2F0F4;width: 820px;padding: 20px;">
+                    <textarea id="productfeature" name="productfeature" style="width: 100%;" rows="5"></textarea>
+                    ( 本区域文字为直客可见文字，可输入优惠活动，请勿录入同行返利信息，请谨慎发布！)
+                </div></td>
+        </tr>
+        <tr style="line-height: 20px;">
+            <td style="width: 160px;"><b>&nbsp;优惠促销</b>
+</td>
+            <td ><div style="color:#000000;background-color: #F2F0F4;width: 820px;padding: 20px;">
+                    <textarea onFocus="if(value==defaultValue){value='';this.style.color='#000'}" onBlur="if(!value){value=defaultValue;this.style.color='#999'}" id="advertising" name="advertising" style="width: 100%;color:#999999" rows="5"></textarea>
+                    (同行可见，可输入优惠活动和同行返利，例：把你的优惠促销、卖点写出来吧，酒香也怕巷子深，吸引分销商的眼球很重要！)
+                </div></td>
+        </tr>
+        <tr style="line-height: 20px;">
+            <td style="width: 160px;"><b>&nbsp;促销海报</b></td>
+            <td ><div style="color:#000000;background-color: #F2F0F4;width: 820px;padding: 20px;">
+                    文件名: <input type="text" name="filenameadv" /> <input onchange="getname1();" id='advertising_img_url' name='advertising_img_url' type="file"></input>
+                    <br/><span style="color:#F68421">最大上传大小为3MB，支持上传类型：jpg bmp </span>
+                </div></td>
+        </tr>
+    </table>
+
+    <div style="display:none">
+        <span style="color:#F68421">*</span>出发地区：&nbsp;&nbsp;&nbsp;<input type="radio" style="vertical-align: middle;margin-right: 5px;" name="gotype" value ="1" checked >中国出发
+        <span style="margin-left: 28px;"><input type="radio" style="vertical-align: middle;margin-right: 5px;" name="gotype" value ="0" >海外出发</span><br/>
+        <br/><span style="color:#F68421">*</span>产品名称：&nbsp;&nbsp;<input type="text"  name="title" id="title" style="width: 400px;border: none" readonly value="点击下一步时自动生成"></input>
+    </div>
+     <br>
+    <span style="color:#F68421">*</span><b>行程说明</b>
+    <table style="width: 100%;background-color: #EDEBEC" border="0">
+        <tr style="text-align: center;color: #000000;font-weight: bold">
+            <td style="width: 80px;">日期</td>
+            <td style="width: 100px;">目的地</td>
+            <td style="width: 100px;">抵达时间</td>
+            <td style="width: 100px;">出发时间</td>
+            <td style="width: 400px;" colspan="2">行程内容</td>
+            <td style="width: 100px;">用餐</td>
+            <td style="width: 80px;">住宿</td>
+        </tr>
+    </table>
+
+    <div id="xingcheng">
+        请先填写天数，会根据天数自动加载行程信息！
+    </div>
+    <div onclick="addXC()" style="display:none;cursor:pointer;background-color: #0169C0;width: 100px;height: 30px;color:#FFFFFF;text-align: center">添加行程</div>
+    <input type="hidden" id="xcnum" value="0" /><br/>
+    <table border="0">
+        <tr style="line-height: 25px;">
+            <td style="width: 160px;"><b>&nbsp;备注</b></td>
+            <td ><div style="color:#000000;background-color: #F2F0F4;width: 820px;padding: 20px;">
+                    <textarea onFocus="if(value==defaultValue){value='';this.style.color='#000'}" onBlur="if(!value){value=defaultValue;this.style.color='#999'}" id="schedule_comment" name="schedule_comment" style="margin-top: 10px;width: 100%;color:#999999" rows="2">例：此处用于添加与行程内容有关的备注说明！</textarea>
+            </div></td>
+        </tr>
+    </table>
+
+    <table border="0">
+        <tr style="line-height: 25px;">
+            <td style="width: 160px;"><b>&nbsp;岸上游行程</b></td>
+            <td ><div style="color:#000000;background-color: #F2F0F4;width: 820px;padding: 20px;">
+                    <textarea onFocus="if(value==defaultValue){value='';this.style.color='#000'}" onBlur="if(!value){value=defaultValue;this.style.color='#999'}" id="excursion_txt" name="excursion_txt" style="margin-top: 10px;width: 100%;color:#999999" rows="5">例：此处用于添加岸上游具体行程说明！</textarea>
+            </div></td>
+        </tr>
+    </table>
+
+
+    <br/><br/>
+    <div>
+        <img onclick="history.go(-1);" style="cursor:pointer;margin-left: 320px;" src="/images/retune.png" />
+        <img onclick="step1next()" style="cursor:pointer;margin-left: 45px;" src="/images/xiayibu.png" />
+        <img onclick="productsave()" style="cursor:pointer;margin-left: 45px;" src="/images/save.png" />
+    </div>
+</div>
+
+
+
+
+
+
+
+<div id="step2" style="display:none" >
+    <table style="width: 100%;height: 110px;background-image: url('/images/step2.png');margin-top: 20px;" border="0">
+        <tr style="line-height: 10px;">
+            <td><img id="jian1" src="/images/orangeright.gif" style="width: 20px;height:20px;margin-top: 0px;margin-left: 130px" /></td>
+        </tr>
+        <tr style="line-height: 10px;">
+            <td></td>
+        </tr>
+    </table>
+     <br/>
+    <table border="0">
+        <tr style="line-height: 25px;">
+            <td style="width: 160px;"><b>&nbsp;选择报价方式</b></td>
+            <td ><div style="color:#000000;background-color: #F2F0F4;width: 820px;padding: 20px;">
+                    <span style="margin-left: 0px;">
+            <input onclick="$('#pricelist').removeAttr('style');$('.zhup').css('display','none');$('.zip').removeAttr('style').css('text-align','center');$('#dlexl').css('display','none');" type="radio" checked style="vertical-align: middle;margin-right: 5px;" name="ptype1" value ="1" >体系价格（按船舱等级设置价格体系）</span><span style="color: red">推荐！</span>
+                    <span style="margin-left: 0px;display:none">
+            <input onclick="$('#pricelist').removeAttr('style');$('.zip').css('display','none');$('.zhup').removeAttr('style').css('text-align','center');$('#dlexl').css('display','none');" type="radio" style="vertical-align: middle;margin-right: 5px;" name="ptype1" value ="2" >类别价格（按船舱大类别报价） </span>
+                    <br/><span style="margin-left: 0px;">
+            <input onclick="$('#dlexl').removeAttr('style');$('#dlexl').css('border','3px solid #F7861E');" type="radio" style="vertical-align: middle;margin-right: 5px;" name="ptype1" value ="3" >导入价格 </span>
+                    <br/>
+                </div></td>
+        </tr>
+    </table>
+    <br/>
+    <div id="dlexl" style="border:3px solid #F7861E;display:none">
+        &nbsp;&nbsp;&nbsp;1.导入模板
+        <br/>&nbsp;&nbsp;&nbsp;<a href="/downloads/VY.xls"><img style="width: 30px;" src="/images/xls.jpg" />下载</a>
+        <br/>&nbsp;&nbsp;&nbsp;2.选择导入的xls表<br/>
+        &nbsp;&nbsp;&nbsp;文件名：<input type="text" readonly id="filenamexls" name="filenamexls" />&nbsp;&nbsp;&nbsp;<input onchange="getnamexls();" id='pxls_url' name='pxls_url' type="file"></input>
+        <br/>&nbsp;&nbsp;&nbsp;3.导入舱房信息<br/>
+        &nbsp;&nbsp;&nbsp;<img src="/images/import.png" style="cursor: pointer" onclick="getExcel()" />
+    </div>
+    <br/>
+    填表说明：请正确填写舱位报价，并保证可售房间数为真实有效信息！
+    <div id="pricelist">&nbsp;&nbsp;&nbsp;请先选择邮轮名称，会根据邮轮名称自动加载舱房信息！</div>
+
+
+    <br/>
+
+    <table border="0">
+        <tr style="line-height: 25px;">
+            <td style="width: 160px;"><b>&nbsp;舱房备注</b></td>
+            <td ><div style="color:#000000;background-color: #F2F0F4;width: 820px;padding: 20px;">
+                    <textarea onFocus="if(value==defaultValue){value='';this.style.color='#000'}" onBlur="if(!value){value=defaultValue;this.style.color='#999'}" id="schedule_comment" name="cabin_comment" style="margin-top: 10px;width: 100%;color:#999999" rows="5"></textarea>
+            </div></td>
+        </tr>
+    </table>
+
+    <table border="0">
+        <tr style="line-height: 25px;">
+            <td style="width: 160px;"><b>&nbsp;保险</b></td>
+            <td ><div style="color:#000000;background-color: #F2F0F4;width: 820px;padding: 20px;">
+                    险种：<input type="text" name="bxtype" />
+                    &nbsp;单价：<input onBlur="if(!value){value=defaultValue};" onFocus="if(value==defaultValue){value='';}" onkeyup="this.value=this.value.replace(/\D/g,'')" type="text" value="0" style="width:50px;" name="bxprice"></input>&nbsp;元/人
+                    &nbsp;说明：<input type="text" style="width:300px;" name="bxdescription" />
+            </div></td>
+        </tr>
+    </table>
+
+    <table border="0">
+        <tr style="line-height: 25px;">
+            <td style="width: 160px;"><b>&nbsp;费用说明</b></td>
+            <td ><div style="color:#000000;background-color: #F2F0F4;width: 820px;padding: 20px;">
+                    <table style="width: 800px;margin-top: 0px;" >
+                        <tr>
+                            <td class="class1" id="yy1" style="width:70px ">包含</td>
+                            <td class="class1" id="xx1" style="width: 70px">不包含</td>
+                            <td style="width: 180px">&nbsp;&nbsp;&nbsp;邮轮船票&nbsp;&nbsp;&nbsp;</td>
+                            <td style="width: 480px"><input type="text"  name="cc1" value="（对应邮轮舱房船费，邮轮免费餐厅用餐，邮轮免费娱乐活动、表演等）。" style="width: 100%;"></input></td>
+                        </tr>
+                        <tr>
+                            <td class="class1" id="yy2">包含</td>
+                            <td class="class1" id="xx2">不包含</td>
+                            <td>&nbsp;&nbsp;&nbsp;港务费&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input onBlur="if(!value){value=defaultValue};" onFocus="if(value==defaultValue){value='';}" onkeyup="this.value=this.value.replace(/\D/g,'')" type="text" name="cc2" style="width: 50px;" value="0"></input>  元/人 </td>
+                            <td><input type="text" name="cc3" style="width: 100%"></input></td>
+                        </tr>
+                        <tr>
+                            <td class="class1" id="yy14">包含</td>
+                            <td class="class1" id="xx14">不包含</td>
+                            <td>&nbsp;&nbsp;&nbsp;邮轮小费&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input onBlur="if(!value){value=defaultValue};" onFocus="if(value==defaultValue){value='';}" onkeyup="this.value=this.value.replace(/\D/g,'')" type="text" name="cc19" style="width: 50px;display:none" value="0"></input>   </td>
+                            <td><input type="text" name="cc20" style="width: 100%;"></input></td>
+                        </tr>
+                        <tr>
+                            <td class="class1" id="yy5">包含</td>
+                            <td class="class1" id="xx5">不包含</td>
+                            <td>&nbsp;&nbsp;&nbsp;岸上观光费&nbsp;&nbsp;&nbsp;<input onBlur="if(!value){value=defaultValue};" onFocus="if(value==defaultValue){value='';}" onkeyup="this.value=this.value.replace(/\D/g,'')" type="text" name="cc8" style="width: 50px;" value="0"></input>  元/人 </td>
+                            <td><input type="text" name="cc9" style="width: 100%;"></input></td>
+                        </tr>
+                        <tr>
+                            <td class="class1" id="yy3">包含</td>
+                            <td class="class1" id="xx3">不包含</td>
+                            <td>&nbsp;&nbsp;&nbsp;签证服务费&nbsp;&nbsp;&nbsp;<input onBlur="if(!value){value=defaultValue};" onFocus="if(value==defaultValue){value='';}" onkeyup="this.value=this.value.replace(/\D/g,'')" type="text" name="cc4" style="width: 50px;" value="0"></input>  元/人 </td>
+                            <td><input type="text" name="cc5" style="width: 100%"></input></td>
+                        </tr>
+                        <tr>
+                            <td class="class1" id="yy4">包含</td>
+                            <td class="class1" id="xx4">不包含</td>
+                            <td>&nbsp;&nbsp;&nbsp;领队派遣费&nbsp;&nbsp;&nbsp;<input onBlur="if(!value){value=defaultValue};" onFocus="if(value==defaultValue){value='';}" onkeyup="this.value=this.value.replace(/\D/g,'')" type="text" name="cc6" style="width: 50px;" value="0"></input>  元/人 </td>
+                            <td><input type="text" name="cc7" style="width: 100%;"></input></td>
+                        </tr>
+
+                        <tr style="display: none">
+                            <td class="class1" id="yy6">包含</td>
+                            <td class="class1" id="xx6">不包含</td>
+                            <td>&nbsp;&nbsp;&nbsp;邮轮免费餐厅用餐&nbsp;&nbsp;&nbsp;</td>
+                            <td><input type="text" name="cc10" style="width: 100%"></input></td>
+                        </tr>
+                        <tr style="display: none">
+                            <td class="class1" id="yy7">包含</td>
+                            <td class="class1" id="xx7">不包含</td>
+                            <td>&nbsp;&nbsp;&nbsp;邮轮免费娱乐活动&nbsp;&nbsp;&nbsp;</td>
+                            <td><input type="text" name="cc11" style="width: 100%"></input></td>
+                        </tr>
+                        <tr style="display: none">
+                            <td class="class1" id="yy8">包含</td>
+                            <td class="class1" id="xx8">不包含</td>
+                            <td>&nbsp;&nbsp;&nbsp;护照费&nbsp;&nbsp;&nbsp;</td>
+                            <td><input type="text" name="cc12" style="width: 100%"></input></td>
+                        </tr>
+                        <tr>
+                            <td class="class1" id="yy9">包含</td>
+                            <td class="class1" id="xx9">不包含</td>
+                            <td>&nbsp;&nbsp;&nbsp;出发地至港口交通费&nbsp;&nbsp;&nbsp;</td>
+                            <td><input type="text" name="cc13" style="width: 100%"></input></td>
+                        </tr>
+                        <tr>
+                            <td class="class1" id="yy10">包含</td>
+                            <td class="class1" id="xx10">不包含</td>
+                            <td>&nbsp;&nbsp;&nbsp;邮轮单人房差价费用&nbsp;&nbsp;&nbsp;</td>
+                            <td><input type="text" name="cc14" style="width: 100%"></input></td>
+                        </tr>
+                        <tr>
+                            <td class="class1" id="yy11">包含</td>
+                            <td class="class1" id="xx11">不包含</td>
+                            <td>&nbsp;&nbsp;&nbsp;邮轮上私人消费费用&nbsp;&nbsp;&nbsp;</td>
+                            <td><input type="text" name="cc15" style="width: 100%;"></input></td>
+                        </tr>
+                        <tr>
+                            <td class="class1" id="yy12">包含</td>
+                            <td class="class1" id="xx12">不包含</td>
+                            <td>&nbsp;&nbsp;&nbsp;旅游保险费用&nbsp;&nbsp;&nbsp;</td>
+                            <td><input type="text" name="cc16" style="width: 100%;"></input></td>
+                        </tr>
+                        <tr>
+                            <td class="class1" id="yy13">包含</td>
+                            <td class="class1" id="xx13">不包含</td>
+                            <td>&nbsp;&nbsp;&nbsp;其他未提及的费用&nbsp;&nbsp;&nbsp;</td>
+                            <td><input type="text" name="cc17" style="width: 100%;"></input></td>
+                        </tr>
+                        <tr style="display: none">
+                            <td colspan="2">其他费用说明</td>
+                            <td>&nbsp;&nbsp;&nbsp;</td>
+                            <td><input type="text" name="cc18" style="width: 100%"></input></td>
+                        </tr>
+                    </table>
+                </div></td>
+        </tr>
+    </table>
+
+    <br/><br/>
+    <table style="margin: auto">
+        <tr>
+            <td>
+
+                <img onclick="$('#step2').css('display','none');$('#step1').removeAttr('style');$('#step3').css('display','none'); var url1 = window.location.href;if(url1.indexOf('#')==-1){window.location = url1 + '#';}else{window.location = url1;}window.parent.htotop();"  style="cursor:pointer;margin-left: 100px;" src="/images/shangyibu.png" />
+            </td>
+            <td>
+                <img onclick="step2next()" style="cursor:pointer;margin-left: 20px;" src="/images/xiayibu.png" />
+            </td>
+            <td>
+                <img onclick="productsave()" style="cursor:pointer;margin-left: 20px;" src="/images/save.png" />
+            </td>
+        </tr>
+    </table>
+
+
+</div>
+
+
+
+
+
+<div id="step3" style="display: none" >
+    <table style="width: 100%;height: 110px;background-image: url('/images/step3.png');margin-top: 20px;" border="0">
+        <tr style="line-height: 10px;">
+            <td><img id="jian1" src="/images/orangeright.gif" style="width: 20px;height:20px;margin-top: 0px;margin-left: 130px" /></td>
+        </tr>
+        <tr style="line-height: 10px;">
+            <td></td>
+        </tr>
+    </table>
+    <div style="margin-top: 20px;width: 100%">
+        <table border="0">
+            <tr style="line-height: 20px;">
+                <td style="width: 160px;"><b><span style="color:#F68421">*</span>签证截止日</b></td>
+                <td ><div style="color:#000000;background-color: #F2F0F4;width: 820px;padding: 20px;">
+                        <input type="text" readonly  class="Wdate" onfocus="WdatePicker({minDate:'%y-%M-{%d+1}',doubleCalendar:true,dateFmt:'yyyy-MM-dd'})" name="visa_application_until"  id="visa_application_until" style="cursor:pointer"></input></div></td>
+            </tr>
+            <tr style="line-height: 20px;">
+                <td style="width: 160px;"><b>&nbsp;相关文件上传</b></td>
+                <td >
+                    <div style="color:#000000;background-color: #F2F0F4;width: 820px;padding: 20px;">
+                        <span style="color:#F68421">最大上传大小为3MB，支持上传类型：doc docx xls xlsx rar zip</span><br/>
+                        文件名: <input type="text" name="filename1" /> <input onchange="getname('1');" type="file" name="file1" id="file1"></input><br/>
+                        文件名: <input type="text" name="filename2" /> <input onchange="getname('2');" type="file" name="file2" id="file2"></input><br/>
+                        文件名: <input type="text" name="filename3" /> <input onchange="getname('3');" type="file" name="file3" id="file3"></input><br/>
+                </div></td>
+            </tr>
+            <tr style="line-height: 20px;">
+                <td style="width: 160px;"><b><span style="color:#F68421">*</span>取消政策</b></td>
+                <td ><div style="color:#000000;background-color: #F2F0F4;width: 820px;padding: 20px;">
+                        <textarea id="cancellation_policy" name="cancellation_policy" style="width: 90%;margin-top: 0px;" rows="5"></textarea>
+                        <image style="cursor: pointer" onclick="showchange1();" src='/images/yushe.png' />
+                    </div></td>
+            </tr>
+            <tr style="line-height: 20px;">
+                <td style="width: 160px;"><b>&nbsp;签证说明</b></td>
+                <td style="vertical-align: top"><div style="color:#000000;background-color: #F2F0F4;width: 820px;padding: 20px;">
+                        <textarea id="visa_comment" name="visa_comment" style="width: 90%;margin-top: 0px;" rows="5"></textarea>
+                        <image style="cursor: pointer" onclick="showchange2();" src='/images/yushe.png' />
+                </div></td>
+            </tr>
+            <tr style="line-height: 20px;">
+                <td style="width: 160px;"><b>&nbsp;付款说明</b></td>
+                <td ><div style="color:#000000;background-color: #F2F0F4;width: 820px;padding: 20px;">
+                        <textarea id="payment_comment" name="payment_comment" style="width: 90%;margin-top: 0px;" rows="5"></textarea>
+                        <image style="cursor: pointer" onclick="showchange3();" src='/images/yushe.png' />
+                </div></td>
+            </tr>
+
+            <tr style="line-height: 20px;">
+                <td style="width: 160px;"><b>&nbsp;预订须知</b></td>
+                <td ><div style="color:#000000;background-color: #F2F0F4;width: 820px;padding: 20px;">
+                        <textarea id="booking_note" name="booking_note" style="width: 90%;margin-top: 0px;" rows="5"></textarea>
+                        <image style="cursor: pointer" onclick="showchange4();" src='/images/yushe.png' />
+                    </div></td>
+            </tr>
+            <tr style="line-height: 20px;display: none">
+                <td style="width: 160px;"><b>&nbsp;其他说明</b></td>
+                <td ><div style="color:#000000;background-color: #F2F0F4;width: 820px;padding: 20px;">
+                        <textarea id="comment" name="comment" style="width: 90%;margin-top: 0px;" rows="5"></textarea>
+                        <image style="cursor: pointer" onclick="showchange5();" src='/images/yushe.png' />
+                    </div></td>
+            </tr>
+        </table>
+    </div>
+
+    <br/>
+
+    <table style="margin: auto">
+        <tr>
+            <td>
+
+                <img onclick="$('#step1').css('display','none');$('#step2').removeAttr('style');$('#step3').css('display','none'); var url1 = window.location.href;if(url1.indexOf('#')==-1){window.location = url1 + '#';}else{window.location = url1;}window.parent.htotop();" style="cursor:pointer;margin-left: 20px;" src="/images/shangyibu.png" />
+            </td>
+            <td>
+                <img onclick="productsave()" style="cursor:pointer;margin-left: 20px;" src="/images/save.png" />
+            </td>
+            <td>
+                <img id="yulan" style="cursor:pointer;margin-left: 20px;" src="/images/preview.png" />
+            </td>
+        </tr>
+    </table>
+
+</div>
+<br/><br/><br/>
+<input type="hidden" name="cruise_area_id" id="cruise_area_id"></input>
+<input type="hidden" name="product_number" id="product_number"></input>
+<input type="hidden" name="companyID" id="companyID" value="<%=user[0].company_id%>" style="width: 100px;"></input>
+<input type="hidden" name="userID" id="userID" value="<%=user[0].id%>" style="width: 100px;"></input>
+<input type="hidden" name="cuserID" id="cuserID" value="<%=user[0].id%>" style="width: 100px;"></input>
+<input type="hidden" id="username1" value="<%=user[0].name%>" style="width: 100px;"></input>
+<input type="hidden" id="usertel1" value="<%=user[0].mobile_phone%>" style="width: 100px;"></input>
+<input type="hidden" id="usermail1" value="<%=user[0].email%>" style="width: 150px;"></input>
+<%
+var shipNo = "";
+var shipName = "";
+var shipComNo = "";
+var shipNum = "";
+for (var i in cruiseship) {
+    if(shipNo == ""){
+        shipNo =  cruiseship[i].id;
+        shipName =  cruiseship[i].txtShipName;
+        shipComNo = cruiseship[i].txtCompanyNo;
+        shipNum =  cruiseship[i].txtShipNo;
+    }else{
+        shipNo =  shipNo+";"+cruiseship[i].id;
+        shipName = shipName+";"+cruiseship[i].txtShipName;
+        shipComNo = shipComNo+";"+cruiseship[i].txtCompanyNo;
+        shipNum =  shipNum+";"+cruiseship[i].txtShipNo;
+    }
+}
+var q1 ="";
+var q2 = "";
+var q3 = "";
+var q4 = "";
+var q5 = "";
+var q6 = "";
+for (var i in cac) {
+    if(q1 == ""){
+        q1 =  cac[i].txtShipNo;
+        q2 =  cac[i].txtCabinNo;
+        q3 =  cac[i].txtCabinName;
+        q4 =  cac[i].numCanCheckIn;
+        q5 =  cac[i].id;
+        q6 =  cac[i].txtCabinType;
+    }else{
+        q1 =  q1+"@"+cac[i].txtShipNo;
+        q2 = q2+"@"+cac[i].txtCabinNo;
+        q3 = q3+"@"+cac[i].txtCabinName;
+        q4 =  q4+"@"+cac[i].numCanCheckIn;
+        q5 =  q5+"@"+cac[i].id;
+        q6 = q6+"@"+ cac[i].txtCabinType;
+    }
+}
+var e1 = "";
+var e2 = "";
+for(var i in ps){
+    if(e1==""){
+        e1 = ps[i].port_city_name;
+        e2 = ps[i].description;
+    }else{
+        e1 = e1+"@"+ps[i].port_city_name;
+        e2 = e2+"@"+ps[i].description;
+    }
+}
+%>
+
+<div style="display:none">
+    <input type="text" name="e1" id="e1" value="<%=e1%>" />
+    <input type="text" name="e2" id="e2" value="<%=e2%>" />
+
+    <input type="text" name="bh1" id="bh1" />
+    <input type="text" name="bh2" id="bh2" />
+    <input type="text" name="bh3" id="bh3" />
+    <input type="text" name="bh4" id="bh4" />
+    <input type="text" name="bh5" id="bh5" />
+    <input type="text" name="bh6" id="bh6" />
+    <input type="text" name="bh7" id="bh7" />
+    <input type="text" name="bh8" id="bh8" />
+    <input type="text" name="bh9" id="bh9" />
+    <input type="text" name="bh10" id="bh10" />
+    <input type="text" name="bh11" id="bh11" />
+    <input type="text" name="bh12" id="bh12" />
+    <input type="text" name="bh13" id="bh13" />
+    <input type="text" name="bh14" id="bh14" />
+
+    <input type="text" id="ch1" value="<%=q1%>" />
+    <input type="text" id="ch2" value="<%=q2%>" />
+    <input type="text" id="ch3" value="<%=q3%>" />
+    <input type="text" id="ch4" value="<%=q4%>" />
+    <input type="text" id="ch5" value="<%=q5%>" />
+    <input type="text" id="ch6" value="<%=q6%>" />
+
+    <input type="text" id="shipNo" value="<%=shipNo%>" />
+    <input type="text" id="shipName" value="<%=shipName%>"  />
+    <input type="text" id="shipComNo" value="<%=shipComNo%>"  />
+    <input type="text" id="shipNum" value="<%=shipNum%>"  />
+
+
+
+    <input type="text" name="dh1" id="dh1" />
+    <input type="text" name="dh2" id="dh2" />
+    <input type="text" name="dh3" id="dh3" />
+    <input type="text" name="dh4" id="dh4" />
+    <input type="text" name="dh5" id="dh5" />
+    <input type="text" name="dh6" id="dh6" />
+    <input type="text" name="dh7" id="dh7" />
+    <input type="text" name="dh8" id="dh8" />
+    <input type="text" name="dh9" id="dh9" />
+    <input type="text" name="dh0" id="dh0" />
+
+    <input type="text" name="redirurl" id="redirurl" value="null" />
+
+    <input type="text" name="day_number0" id="day_number0" />
+    <input type="text" name="location0" id="location0" />
+    <input type="text" name="departure_time0" id="departure_time0" />
+    <input type="text" name="arrival_time0" id="arrival_time0" />
+    <input type="text" name="description0" id="description0" />
+    <input type="text" name="breakfast0" id="breakfast0" />
+    <input type="text" name="lunch0" id="lunch0" />
+    <input type="text" name="dinner0" id="dinner0" />
+    <input type="text" name="overnight_stay0" id="overnight_stay0" />
+    <%
+    function getNow(){
+        var date = new Date(); //日期对象
+        var now = "";
+        now = date.getFullYear()+"";
+        now = now + (date.getMonth()+1)+"";//取月的时候取的是当前月-1如果想取当前月+1就可以了
+        now = now + date.getDate()+"";
+        now = now + date.getHours()+"";
+        now = now + date.getMinutes()+"";
+        now = now + date.getSeconds()+"";
+        return now;
+    }
+    %>
+    <input type="hidden" name="unid" value="<%=getNow()%>"></input>
+    <%
+    var titlec = "";
+    var pn = "";
+    for(var i in prj){
+         pn = prj[i].product_number;
+         titlec = titlec==""?pn:titlec + "@" + pn;
+    }
+     %>
+    <input type="text" id="titlec" name="titlec" value="<%=titlec%>"></input>
+    <input id="chose2" type="hidden" value="1、上海领馆的送签范围(上海市、浙江省、江苏省、安徽省、江西省)。如其他省市有该五省的六个月以上的暂住证并工作在以上五省，也可在上海领区送签。 <br>2、护照原件：有效期在六个月以上，护照最后页本人亲笔签名,并且有两页及以上的空白页。<br>3、照片：2张本人2寸彩色照片。要求：白色背景半年内的近照。照片背面请不要写名字，以免污损正面。<br>4、身份证复印件：本人身份证正反面复印件。<br>5、户口簿复印件：需要户口簿全套复印件。户口本上的服务处所要和公司营业执照，抬头信纸上的公司名字一致。<br>6、工作证明：如是在职人员，请提供公司在职证明原件、公司营业执照副本复印件；如是在读学生，请提供学生证复印件；如是退休人员，请提供退休证复印件。<br>7、财产证明：(1)房产证复印件；(2)存款五万元起或理财产品证明（也可直系亲属名下资产，须有亲属关系证明）；(3)车辆行驶证复印件。<br>8、结婚证明：如是已婚或离婚人员，请提供结婚或离婚证复印件。<br>9、交齐以上材料，最后填写《日本国申请表》，此表上个人信息（如姓名、拼音、家庭住址、籍贯、工作单位及地址，以下部份可空着，由旅行社代写）。<br>10、在游客交齐所有材料后，由我社负责和游客联系，并告知最终押金数额 “一般为5万元-20万元人民币/人不等”。待签证顺利签出后，游客需在出发前缴纳全部押金并保管好收据以便回国退款。送签期间如领馆需要追加材料原件，请客人敬请配合领馆。<br>注意：本次邮轮产品为团队签证，不得中途离团，需整团进出方可下船。如您放弃岸上游行程，须签订离团协议，并支付离团费400元/人。如需要下船自由观光（除济州外）的游客，必须持有相关国家个人旅游签证，且必须在参加团队岸上观光的乘客下船后方可登岸。@1、护照原件。有效期6个月以上的护照原件（全国收签，不分领区）。护照最后页本人亲笔签名,并且有两页及以上的空白页。<br>2、出境信息登记表。<br>注：本次邮轮产品为团队签证，不得中途离团，需整团进出方可下船。如您放弃岸上游行程，须签订离团协议，并支付离团费400元/人。如需要下船自由观光（除济州外）的游客，必须持有相关国家个人旅游签证，且必须在参加团队岸上观光的乘客下船后方可登岸。" />
+    <input id="chose1" type="hidden" value="1、开航前90天前（含第90天）通知取消，收取全部费用的10%的损失费。<br>2、开航前89-45天（含第45天）通知取消，收取全部费用的30%的损失费。<br>3、开航前44-30天（含第30天）通知取消，收取全部费用的50%的损失费。<br>4、开航前30-14天（含第14天）通知取消，收取全部费用的70%的损失费。<br>5、开航前14天内通知取消，无论以任何理由或没有在规定关闸时间前准时出现，或在开行后无论以任何理由放弃旅行，均收取全部费用的100%的损失费。<br>6、若以上取消日涉及国定假期或双休日，则自动提前至最近工作日。@1、开航前90天前（含第90天）内通知取消，收2000元/人损失。<br>2、开航前89天至45天前（含第45天）内通知取消，收取团款的50%。<br>3、开航前44天至15天前（含第15天）内通知取消，收取团款的80%。<br>4、开航前14天（含第14天）内通知取消，或没有在开航时准时出现，或在开航后无论以任何理由放弃旅行，其必须支付100%团费。<br>5、若以上取消日涉及国定假期或双休日，则自动提前至最近工作日。" />
+    <input id="chose3" type="hidden" value="1、请于确认定位后三日内支付订金人民币2000元/人至我社账户。<br>2、开航前90天付清团款总额的70%；全部团款请于开航前30天付清。<br>3、若逾期未付，我社有权取消定位。@1、请于确认定位后三日内支付订单全款至我社账户。<br> 2、若逾期未付，我社有权取消定位。" />
+    <input id="chose4" type="hidden" value="1、邮轮公司规定，不接受怀孕超过24周的孕妇和6个月以下的婴儿报名。未超过24周的孕妇报名须提供医生开具的允许登船的证明，日期按照登船日计算。若您携带婴儿（6个月-2周岁）出行，在提交订单时请在备注中注明或直接告知预订员，我们会为您操作其相关预订。<br>2、邮轮公司规定,每间房至少有一位18周岁以上成年人入住,年龄按照登船日计算。<br>3、客人信息一旦确认，一律不予以更改。如遇特殊情况需要修改信息（包括客人中英文姓名、性别、出生年月日），收取200元更名费。名单提交后，房内至少有一名客人的名字不能更改，否则视为取消。<br>4、因不可抗拒的客观原因和非旅行社原因（如天灾、战争、罢工、政府行为等）或航空公司航班延误或取消、使领馆签证延误、报名人数不足等特殊情况，旅行社有权取消或变更行程，一切超出费用（如在外延期签证费、住、食及交通费、国家航空运价调整等）旅行社有权追加差价。<br>5、由于团队行程中所有住宿、用车、景点门票等均为旅行社打包整体销售，因此若您因自身原因未能游览参观的则视为自动放弃，旅行社将无法退费用。" />
+    <input id="chose5" type="hidden" value="" />
+</div>
+</form>
+<div id="chooseinfo" style="overflow:hidden;border:none;display:none;width:780px;height:382px;background-image: url('/images/tanchukuang.png');z-index:9999;position:absolute;top:0px;left:50px;padding: 10px;">
+
+    <div id="htmlxc" style="height:302px;margin:20px;overflow:auto;line-height:20px;">123</div>
+    <div id="htmlxc2" style="width:90%;text-align:right;margin: 20px;">
+    </div>
+</div>
+</div>
+
+<script type="text/javascript" src="/javascripts/b_newproduct.js"></script>

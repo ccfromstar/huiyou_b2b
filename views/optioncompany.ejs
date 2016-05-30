@@ -1,0 +1,92 @@
+<div style="width:960px;background-color: #FFFFFF;margin:0 auto;">
+    <form method="post" enctype="multipart/form-data">
+    <table style="width: 100%;margin-top: 20px;margin-bottom: 50px;" border="0">
+         <tr style="line-height: 25px;">
+             <td style="width: 200px;text-align: center;vertical-align: top">
+                 <%include optionmenu%>
+             </td>
+             <%
+             var u1 = "";
+                 if(user[0].role_company_admin==1){
+                     u1 = "子账户信息";
+                 }else{
+                     u1 = "个人信息";
+                 }
+              %>
+             <td style="vertical-align: top">
+                 <table style="width: 400px;margin-top: 0px;" border="0" cellspacing="0">
+                     <tr>
+                         <td class="tdfooter1" style="background-color: #F7861E;color:#FFFFFF" id="n1" onclick="window.location='loading?page=optioncompany'">公司信息</td>
+                         <td class="tdfooter1" id="n3" onclick="window.location='loading?page=optionadmin'">管理员信息</td>
+                         <td class="tdfooter1" id="n2" onclick="window.location='loading?page=option'"><%=u1%></td>
+                         <td class="tdfooter1" id="n4" onclick="window.location='loading?page=optionpwd'">修改密码</td>
+                     </tr>
+                 </table>
+                 <div style="background-image: url('/images/ora.jpg');width: 100%;height: 3px;"></div>
+                 <%if(user[0].role_company_admin!=1){%>
+                 <table width="612" border="0" style="margin-top: 10px;line-height: 25px;">
+                     <tr style="line-height: 25px;">
+                         <td style="width: 70px;"><b>公司名称：</b></td>
+                         <td><%=company[0].name%></td>
+                         <td style="width: 150px;vertical-align: top" rowspan="6"><b>公司logo：</b>
+                             <br/><img src="/files/<%=company[0].logo%>" style="margin-left: 0px;width: 100px;" />
+                         </td>
+                     </tr>
+                     <tr style="line-height: 25px;">
+                         <td style="width: 70px;"><b>公司简称：</b></td>
+                         <td><%=company[0].short_name%></td>
+                     </tr>
+                     <tr style="line-height: 25px;">
+                         <td style="vertical-align: top"><b>公司地址：</b></td>
+                         <td><%=company[0].address%></td>
+                     </tr>
+                     <tr style="line-height: 25px;">
+                         <td><b>公司电话：</b></td>
+                         <td><%=company[0].telephone_area_code%>-<%=company[0].telephone%></td>
+                     </tr>
+                     <tr style="line-height: 25px;">
+                         <td style="padding-left: 0px;"><b>公司传真：</b></td>
+                         <td><%=company[0].telephone_area_code%>-<%=company[0].fax%></td>
+                     </tr>
+                 </table>
+                 <%}else{%>
+                 <table width="612" border="0" style="margin-top: 10px;line-height: 25px;">
+                     <tr style="line-height: 25px;">
+                         <td style="width: 70px;"><b>公司名称：</b></td>
+                         <td><%=company[0].name%></td>
+                         <td style="width: 150px;vertical-align: top" rowspan="6"><b>公司logo：</b>
+                             <br/><input id='logo' name='logo' type="file">
+                             <br/><img src="/files/<%=company[0].logo%>" alt="公司logo图片" style="margin-left: 0px;width: 100px;" />
+                         </td>
+                     </tr>
+                     <tr style="line-height: 25px;">
+                         <td style="width: 70px;"><b>公司简称：</b></td>
+                         <td><input type="text" name="short_name" style="width:250px;" value="<%=company[0].short_name%>" /></td>
+                     </tr>
+                     <tr style="line-height: 25px;">
+                         <td style="vertical-align: top"><b>公司地址：</b></td>
+                         <td><input type="text" name="address" style="width:250px;" value="<%=company[0].address%>" /></td>
+                     </tr>
+                     <tr style="line-height: 25px;">
+                         <td><b>区号：</b></td>
+                         <td><input type="text" name="telephone_area_code" style="width:250px;" value="<%=company[0].telephone_area_code%>" /></td>
+                     </tr>
+                     <tr style="line-height: 25px;">
+                         <td><b>公司电话：</b></td>
+                         <td><input type="text" name="telephone" style="width:250px;" value="<%=company[0].telephone%>" /></td>
+                     </tr>
+                     <tr style="line-height: 25px;">
+                         <td style="padding-left: 0px;"><b>公司传真：</b></td>
+                         <td><input type="text" name="fax" style="width:250px;" value="<%=company[0].fax%>" /></td>
+                     </tr>
+                 </table>
+                 <input type="button" value="确认修改" style="margin-top:10px" onclick="document.forms[0].submit();" />
+                 <input type="hidden" id="docid" name="docid" value="<%=company[0].id%>" />
+                 <%}%>
+             </td>
+         </tr>
+    </table>
+    <input id="info" style="display: none" value="<%=e%>" />
+    <input type="hidden" name="publishid" id="publishid"  value="<%=company[0].name+"(id:"+company[0].id+")的"+user[0].name+"(id:"+user[0].id+")"%>" />
+    </form>
+</div>

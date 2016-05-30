@@ -1,0 +1,200 @@
+<div style="width:960px;background-color: #FFFFFF;margin:0 auto;">
+    <form method="post">
+    <table style="width: 100%;margin-top: 20px;margin-bottom: 50px;" border="0">
+         <tr>
+             <td style="width: 200px;text-align: center;vertical-align: top">
+                 <%include optionmenu%>
+             </td>
+             <td style="vertical-align: top">
+
+                 <%var x= 0;
+                    if(user[0].role_company_admin==1){
+                        x = 180;
+                    }else{
+                        x = 180;
+                 }%>
+
+                 <table style="width:<%=x%>px;margin-top: 0px;" border="0" cellspacing="0">
+                     <tr>
+
+                       <%if(user[0].role_company_admin==1){%>
+                         <td class="tdfooter1" style="color:#FFFFFF;background:#F78D2B;" onclick="window.location='loading?page=optionpublish1'">我要卖mài</td>
+                         <td class="tdfooter1" style="" onclick="window.location='loading?page=optionpublish2'">我要买mǎi</td>
+                        <%}%>
+
+                        <%if(user[0].role_company_admin!=1){%>  
+                         <td class="tdfooter1" style="color:#FFFFFF;background:#F78D2B;"
+                         onclick="window.location='loading?page=optionpublish1'">我要卖mài</td>
+                         <td class="tdfooter1" onclick="window.location='loading?page=optionpublish2'">我要买mǎi</td>
+                        <%}%>
+
+                     </tr>
+                 </table>
+                 <div style="background-image: url('/images/ora.jpg');width: 100%;height: 3px;"></div>
+
+  <!--搜索-->  <div style="width: 100%;text-align: right;vertical-align: top">
+                     <table border="0" style="width: 100%">
+                         <tr>
+                             <td><input type="text" id="fs" onFocus="if(value==defaultValue){value='';this.style.color='#000'}" onBlur="if(!value){value=defaultValue;this.style.color='#999'}" value="产品名称" /></td>
+                             <td style="width: 20px;"><img onclick="filterS()" src="/images/fangdajing.png" style="cursor: pointer;margin-top: 10px;" /></td>
+                         </tr>
+                     </table>
+  <!--搜索结束-->  </div>
+                   
+<!--子账户开始--><%if(user[0].role_company_admin!=1){%>
+                 <table class="pclass" style="border:2px solid #ABBBBB;margin-top: 10px;width: 100%;border-collapse: collapse;" border="0" cellspacing="0" cellpadding="0">
+                     <tr style="background-color: #EAE8E9">
+                         <th style="width:130px;text-align: center">
+                         <select style="width: 120px;" id="rq" onchange="filterP()">
+                                 <option value="0">发布日期</option>
+                                 <option value="3">最近3个月</option>
+                                 <option value="6">最近6个月</option>
+                                 <option value="7">最近一年</option>
+                                 <option value="8">最近两年</option>
+                        </select></th>
+                         <th style="text-align: center">产品名称</th>
+                         <th style="width:80px;text-align: center"><select id="fp" onchange="filterP()">
+                                 <option value="全部">产品状态</option>
+                                 <option value="在售">在售</option>
+                                 <option value="停售">停售</option>
+                                 <option value="后台删除">后台删除</option>
+                             </select></th>
+                         <th style="text-align: center;width: 140px;">操作</th>
+                     </tr>
+                     <%
+                     var k = 0;
+                     for(var i in supply){
+                      if(supply[i].owner_id == user[0].id){
+                         k = k + 1;
+                     %>
+
+                     <tr id="j<%=i%>">
+                         <td>
+                             <span style="margin-left: 5px;"><%=(new Date(supply[i].published_at)).Format("yyyy-MM-dd hh:mm:ss")%></span>
+                         </td>
+                         <% var pname = (new Date(supply[i].departure_date)).Format("yyyy-MM-dd")+supply[i].txtShipName+supply[i].days+"天"+(Number(supply[i].days-1))+"晚"+supply[i].cruise_route;
+                             if(pname.length>30){
+                                 //pname = pname.substring(0,30)+"...";
+                             }
+                         %>
+                         <td><span id="w<%=i%>" style="margin-left: 5px;"><%=pname%></span></td>
+                         <%
+                             var s = "";var q = "";
+                             if(supply[i].status_id==1){s="草稿"; }
+                             else if(supply[i].status_id==2){s="在售"; q="#6296C1";}
+                             else if(supply[i].status_id==3){s="停售"; q="#ff0000";}
+                             else if(supply[i].status_id==4){s="后台删除"; q="#ff0000";}
+                         %>
+                         <td style="text-align: center"><span id="h<%=i%>" style='color:<%=q%>'><%=s%></span></td>
+                         <td id="v<%=i%>" style="text-align: center;width: 140px;">
+                             <input onclick="window.location='/optionopen2?p=<%=supply[i].id%>';" type="button" value="查看" />
+                             <%if(supply[i].status_id ==2 ){%>
+                             <input onclick="window.location='/optionedit2?p=<%=supply[i].id%>';" type="button" value="编辑" />
+                             
+                             <input onclick="$('#docid').val('<%=supply[i].id%>');document.forms[0].submit();" type="button" value="停售" />
+                             <%}%>
+
+                              </td>
+                     </tr>
+                     <%
+                       }
+                     }
+                     %>
+                 </table>
+<!--子账户结束--><%}%> 
+
+                     
+<!--管理员账户开始--><%if(user[0].role_company_admin==1){%>
+                    <table class="pclass" style="border:2px solid #ABBBBB;margin-top: 10px;width: 100%;border-collapse: collapse;" border="0" cellspacing="0" cellpadding="0">
+                     <tr style="background-color: #EAE8E9">
+
+                     <th style="text-align: center;">
+                            <select style="width: 70px;" id="fp2" onchange="filterP()">
+                                 <option value="全部">发布人</option>
+                                 <%
+                                    var str0 = "";
+                                    for(var i in supply){
+                                        if(supply[i].status_id !=5){
+                                            if(supply[i].company_id == company[0].id){
+                                                if(str0.indexOf(supply[i].name)==-1){
+                                  %>
+                                        <option value="<%=supply[i].name%>"><%=supply[i].name%></option>
+                                  <%
+                                                str0 = str0 + "@" + supply[i].name;
+                                                }
+                                            }
+                                        }
+                                    }
+                                 %>
+                             </select>
+                         </th>
+
+                         <th style="width:130px;text-align: center">
+                         <select style="width: 120px;" id="rq" onchange="filterP()">
+                                 <option value="0">发布日期</option>
+                                 <option value="3">最近3个月</option>
+                                 <option value="6">最近6个月</option>
+                                 <option value="7">最近一年</option>
+                                 <option value="8">最近两年</option>
+                             </select></th>
+                         <th style="text-align: center">产品名称</th>
+                         <th style="width:80px;text-align: center"><select id="fp" onchange="filterP()">
+                                 <option value="全部">产品状态</option>
+                                 <option value="在售">在售</option>
+                                 <option value="停售">停售</option>
+                                 <option value="后台删除">后台删除</option>
+                             </select></th>
+                         <th style="text-align: center;width: 140px;">操作</th>
+                     </tr>
+                     <%
+                     var k = 0;
+                     for(var i in supply){
+                        if(supply[i].company_id == company[0].id){
+                         k = k + 1;
+                     %>
+
+                     <tr id="j<%=i%>">
+                         <td>
+                            <%=supply[i].name%>
+                         </td>
+                         <td>
+                             <span style="margin-left: 5px;"><%=(new Date(supply[i].published_at)).Format("yyyy-MM-dd hh:mm:ss")%></span>
+                         </td>
+                         <% var pname = (new Date(supply[i].departure_date)).Format("yyyy-MM-dd")+supply[i].txtShipName+supply[i].days+"天"+(Number(supply[i].days-1))+"晚"+supply[i].cruise_route;
+                             if(pname.length>30){
+                                 //pname = pname.substring(0,30)+"...";
+                             }
+                         %>
+                         <td><span id="w<%=i%>" style="margin-left: 5px;"><%=pname%></span></td>
+                         <%
+                             var s = "";var q = "";
+                             if(supply[i].status_id==1){s="草稿"; }
+                             else if(supply[i].status_id==2){s="在售"; q="#6296C1";}
+                             else if(supply[i].status_id==3){s="停售"; q="#ff0000";}
+                             else if(supply[i].status_id==4){s="后台删除"; q="#ff0000";}
+                         %>
+                         <td style="text-align: center"><span id="h<%=i%>" style='color:<%=q%>'><%=s%></span></td>
+                         <td id="v<%=i%>" style="text-align: center;width: 140px;">
+                             <input onclick="window.location='/optionopen2?p=<%=supply[i].id%>';" type="button" value="查看" />
+                             <%if(supply[i].status_id ==2 ){%>
+                             <input onclick="window.location='/optionedit2?p=<%=supply[i].id%>';" type="button" value="编辑" />
+                             
+                             <input onclick="$('#docid').val('<%=supply[i].id%>');document.forms[0].submit();" type="button" value="停售" />
+                             <%}%>
+
+                              </td>
+                       </tr>
+                       <%
+                            }
+                       }
+                       %>
+                    </table>
+<!--管理员账户结束--><%}%>  
+
+             </td>
+         </tr>
+    </table>
+    <input type="hidden" id="docid" name="docid" />
+        <input type="hidden" id="kk" value="<%=k%>" />
+        </form>
+</div>

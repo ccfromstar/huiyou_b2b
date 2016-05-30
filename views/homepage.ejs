@@ -1,0 +1,381 @@
+<div style="width:960px;background-color: #FFFFFF;margin:0 auto;">
+    <%
+        var myDate = new Date();
+        var tyear = myDate.getFullYear();
+        var nummonth = myDate.getMonth()+1;
+        nummonth = nummonth + "";
+        if(nummonth.length==1){
+           nummonth = "0"+nummonth; 
+        }
+    %>
+    <table style="width:100%" border="0">
+        <tr>
+            <td style="background-image:url('/images/rli00.png');width:670px;padding-left:32px;height:430px;">
+                <div style="margin-top:25px;width:100%;height:30px;line-height:30px;color:#0071B8;font-weight:bold;font-size:18px;">
+                    <div style="float:none;margin:0 auto;display:table;">
+                    <select style="width:80px;" id="caly" onchange="changeCalender();">
+                    <%
+                        for(var i = 0;i<3;i++){
+                        if(i==0){
+                    %>
+                        <option selected value="<%=tyear%>"><%=tyear%></option>
+                    <%
+                        }else{
+                     %>
+                        <option value="<%=tyear+i%>"><%=tyear+i%></option>
+                    <%
+                        }
+                        }
+                    %>
+                    </select>&nbsp;年
+
+                    <select style="width:80px;" id="calm" onchange="changeCalender();">
+                        <%
+                            var j = "";
+                            for(var i = 1;i<13;i++){
+                                j = i + "";
+                                if(j.length==1){
+                                    j = "0"+j;
+                                }
+                                if(i==nummonth){
+                                %>
+                                    <option selected value="<%=j%>"><%=j%></option>
+                                <%
+                                }else{
+                                %>
+                                    <option value="<%=j%>"><%=j%></option>
+                                <%
+                                }
+                            }
+                        %>
+                    </select>&nbsp;月
+                    </div>
+                </div>
+                <div>
+                    <table style="width:100%; height:330px" >
+                        <tr>
+                            <td>
+                                <table border="1" style="margin-top:15px;width:634px;BORDER-COLLAPSE: collapse ;border-color: #ABBBBB;border:2px solid #ABBBBB;"  cellspacing="0" cellpadding="0" class="pclasscal" id="calender">
+
+                                </table>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+            <td style="background-image:url('/images/noteboard.png');vertical-align:top;line-height:15px;">
+            <div id="notice-board" style="margin-top:60px;padding-left:20px;"></div>
+            </td>
+        </tr>
+    </table>
+
+       <div style="margin-top:20px;">
+           <div style="">
+               <div id="home_button1" style="float:left;background:#F4901E;padding:0px 30px 0px 30px;cursor:pointer;color:#FFFFFF">限时特价</div>
+               <div id="home_button2" style="float:left;background:#FFFFFF;padding:0px 30px 0px 30px;cursor:pointer;color:black;font-weight:bold">早定优惠</div>
+               <div id="home_button3" style="float:left;background:#FFFFFF;padding:0px 30px 0px 30px;cursor:pointer;color:black;font-weight:bold">荟邮优选</div>
+           </div>  <div style="clear:both"></div>
+
+           <div style="background:#F4901E;padding:10px"><!--橘黄色背景 开始-->
+               <div id="home1" style="background:#FFFFFF;border-radius:5px;width:940px;"><!--圆框内的内容 开始-->
+                  
+                <ul  style="list-style: none" >
+                  <%for(var i in p1){%>
+                   <%var x = "border-bottom:2px dotted #B3B3B3;";
+           
+            if(i==(p1.length-1)){
+                x = "";
+      
+            }
+            %>
+                   <li onclick="window.parent.htp('<%=p1[i].product_number%>');"> 
+                    <div style="width:900px;margin:0 20px 0 20px;cursor:pointer">
+                     <div style="<%=x%>">
+
+                        <div style="float:left;width:100px;margin-top:10px">
+
+                              <img src="images/<%=p1[i].rtfCompanyLogo%>" style="max-width:100px;max-height:50px">
+                        </div>
+
+                        <div style="float:right;width:790px;padding-left:10px">
+
+                                <div style="float:left;width:660px">
+                                   <img src="images/<%=(p1[i].type_id==2?'tp2.png':'tp1.png')%>" style="vertical-align:middle"><span style="vertical-align:middle;color:#F25A24;font-weight:bold;font-size:15px">【<%=p1[i].cfcity%>出发】</span><span style="vertical-align:middle;font-weight:bold;color:black;font-size:15px"><%=p1[i].title%></span>
+                                   <%if(p1[i].special == 1){%>
+                                      <img src="images/t_sales.png" style="vertical-align:middle;height:20px">
+                                   <%}%>
+                                   <%if(p1[i].cheap == 1){%>
+                                      <img src="images/special.png" style="vertical-align:middle;height:20px">
+                                   <%}%>
+                                   <%if(p1[i].early_booking == 1){%>
+                                      <img src="images/earlybooking.png" style="vertical-align:middle;height:20px">
+                                   <%}%>
+                                </div><div style="clear:both"></div>
+
+                              <div style="">
+                                 <div style="float:left;width:657px;padding-left:3px;line-height:18px;padding-bottom:10px">
+                                     <span style="">
+                                      <%
+                                      var hx = "";
+                                      for(j in ts){
+                                        if(ts[j].product_id ==p1[i].id){
+                                          if(ts[j].location!="航海日"){
+                                            if(hx==""){
+                                              hx = ts[j].location;
+                                            }else{
+                                              hx = hx + "-" + ts[j].location;
+                                            }
+                                          }
+                                        }
+                                      }%>
+                                      <%=hx%>
+                                     </span>
+                                 </div>
+                                 <div style="float:right;width:130px;text-align:right;line-height:18px">
+                                     <span style="font-size:14px;color:red;">
+                                     <%
+                                     var minp = "999999";
+                                     for(var k in pj){
+                                         if(pj[k].product_id==p1[i].id && pj[k].retail_price<minp){
+                                            minp = pj[k].retail_price;
+                                         }
+                                     }
+                                     %>
+                                      ￥<%=minp%>起
+                                     </span>
+                                 </div>
+                              </div>
+
+                        </div>
+                        
+                             <div style="clear:both"></div>
+
+                     </div>
+                    </div>
+                 
+
+                      <div style="clear:both"></div>
+                </li>
+                <%}%>
+               </ul>
+                  <div style="text-align:right;padding-right:17px;display:none">
+                      <span id="look_many" style="color:#0976BF;font-size:14px;font-weight:bold;cursor:pointer">查看更多限时特价>>></span>
+                  </div>
+               </div><!--圆框内的内容 结束-->
+
+
+
+               <div id="home2" style="background:#FFFFFF;border-radius:5px;width:940px;display:none"><!--圆框内的内容 开始-->
+                  
+               <ul  style="list-style: none" >
+
+                  <%for(var i in p2){%>
+                   <%var x = "border-bottom:2px dotted #B3B3B3;";
+           
+            if(i==(p2.length-1)){
+                x = "";
+      
+            }
+            %>
+                   <li onclick="window.parent.htp('<%=p2[i].product_number%>');"> 
+                    <div style="width:900px;margin:0 20px 0 20px;cursor:pointer">
+                     <div style="<%=x%>">
+
+                        <div style="float:left;width:100px;margin-top:10px">
+
+                              <img src="images/<%=p2[i].rtfCompanyLogo%>" style="max-width:100px;max-height:50px">
+
+                        </div>
+
+                        <div style="float:right;width:790px;padding-left:10px">
+
+                                <div style="float:left;width:660px">
+                                   <img src="images/<%=(p2[i].type_id==2?'tp2.png':'tp1.png')%>" style="vertical-align:middle"><span style="vertical-align:middle;color:#F25A24;font-weight:bold;font-size:15px">【<%=p2[i].cfcity%>出发】</span><span style="vertical-align:middle;font-weight:bold;color:black;font-size:15px"><%=p2[i].title%></span>
+                                   <%if(p2[i].special == 1){%>
+                                      <img src="images/t_sales.png" style="vertical-align:middle;height:20px">
+                                   <%}%>
+                                   <%if(p2[i].cheap == 1){%>
+                                      <img src="images/special.png" style="vertical-align:middle;height:20px">
+                                   <%}%>
+                                   <%if(p2[i].early_booking == 1){%>
+                                      <img src="images/earlybooking.png" style="vertical-align:middle;height:20px">
+                                   <%}%>
+                                </div><div style="clear:both"></div>
+
+                              <div style="">
+                                 <div style="float:left;width:657px;padding-left:3px;line-height:18px;padding-bottom:10px">
+                                     <span style="">
+                                      <%
+                                      var hx = "";
+                                      for(j in ts){
+                                        if(ts[j].product_id ==p2[i].id){
+                                          if(ts[j].location!="航海日"){
+                                            if(hx==""){
+                                              hx = ts[j].location;
+                                            }else{
+                                              hx = hx + "-" + ts[j].location;
+                                            }
+                                          }
+                                        }
+                                      }%>
+                                      <%=hx%>
+                                     </span>
+                                 </div>
+                                 <div style="float:right;width:130px;text-align:right;line-height:18px">
+                                     <span style="font-size:14px;color:red;">
+                                     <%
+                                     var minp = "999999";
+                                     for(var k in pj){
+                                         if(pj[k].product_id==p2[i].id && pj[k].retail_price<minp){
+                                            minp = pj[k].retail_price;
+                                         }
+                                     }
+                                     %>
+                                      ￥<%=minp%>起
+                                     </span>
+                                 </div>
+                              </div>
+
+                        </div>
+                        
+                             <div style="clear:both"></div>
+
+                     </div>
+                    </div>
+                 
+
+                      <div style="clear:both"></div>
+
+                </li>
+                <%}%>
+               </ul>
+
+                  <div style="text-align:right;padding-right:17px;display:none">
+                      <span id="look_many" style="color:#0976BF;font-size:14px;font-weight:bold;cursor:pointer">查看更多早定优惠>>></span>
+                  </div>
+               </div><!--圆框内的内容 结束-->
+
+
+
+               <div id="home3" style="background:#FFFFFF;border-radius:5px;width:940px;display:none"><!--圆框内的内容 开始-->
+                  
+               <ul  style="list-style: none" >
+                  <%for(var i in p3){%>
+                   <%var x = "border-bottom:2px dotted #B3B3B3;";
+           
+            if(i==(p3.length-1)){
+                x = "";
+      
+            }
+            %>
+                   <li onclick="window.parent.htp('<%=p3[i].product_number%>');"> 
+                    <div style="width:900px;margin:0 20px 0 20px;cursor:pointer">
+                     <div style="<%=x%>">
+
+                        <div style="float:left;width:100px;margin-top:10px">
+
+                              <img src="images/<%=p3[i].rtfCompanyLogo%>" style="max-width:100px;max-height:50px">
+                        </div>
+
+                        <div style="float:right;width:790px;padding-left:10px">
+
+                                <div style="float:left;width:660px">
+                                   <img src="images/<%=(p3[i].type_id==2?'tp2.png':'tp1.png')%>" style="vertical-align:middle"><span style="vertical-align:middle;color:#F25A24;font-weight:bold;font-size:15px">【<%=p3[i].cfcity%>出发】</span><span style="vertical-align:middle;font-weight:bold;color:black;font-size:15px"><%=p3[i].title%></span>
+                                   <%if(p3[i].special == 1){%>
+                                      <img src="images/t_sales.png" style="vertical-align:middle;height:20px">
+                                   <%}%>
+                                   <%if(p3[i].cheap == 1){%>
+                                      <img src="images/special.png" style="vertical-align:middle;height:20px">
+                                   <%}%>
+                                   <%if(p3[i].early_booking == 1){%>
+                                      <img src="images/earlybooking.png" style="vertical-align:middle;height:20px">
+                                   <%}%>
+                                </div><div style="clear:both"></div>
+
+                              <div style="">
+                                 <div style="float:left;width:657px;padding-left:3px;line-height:18px;padding-bottom:10px">
+                                     <span style="">
+                                      <%
+                                      var hx = "";
+                                      for(j in ts){
+                                        if(ts[j].product_id ==p3[i].id){
+                                          if(ts[j].location!="航海日"){
+                                            if(hx==""){
+                                              hx = ts[j].location;
+                                            }else{
+                                              hx = hx + "-" + ts[j].location;
+                                            }
+                                          }
+                                        }
+                                      }%>
+                                      <%=hx%>
+                                     </span>
+                                 </div>
+                                 <div style="float:right;width:130px;text-align:right;line-height:18px">
+                                     <span style="font-size:14px;color:red;">
+                                     <%
+                                     var minp = "999999";
+                                     for(var k in pj){
+                                         if(pj[k].product_id==p3[i].id && pj[k].retail_price<minp){
+                                            minp = pj[k].retail_price;
+                                         }
+                                     }
+                                     %>
+                                      ￥<%=minp%>起
+                                     </span>
+                                 </div>
+                              </div>
+
+                        </div>
+                        
+                             <div style="clear:both"></div>
+
+                     </div>
+                    </div>
+                 
+
+                      <div style="clear:both"></div>
+
+                </li>
+                <%}%>
+               </ul>
+
+                  <div style="text-align:right;padding-right:17px;display:none">
+                      <span id="look_many" style="color:#0976BF;font-size:14px;font-weight:bold;cursor:pointer">查看更多特色航次>>></span>
+                  </div>
+               </div><!--圆框内的内容 结束-->
+
+           </div><!--橘黄色背景 结束-->
+       </div>
+
+    <img src="images/hwcp.jpg" style="width:960px;margin-top:30px;">
+    <img style="margin-top:20px;" src="/images/0002.png">
+    <img style="margin-top:0px;" src="/images/0001.png">
+    <img style="margin-top:50px;" src="/images/0003.png">
+
+    <div>
+        <marquee direction="left" align="left" behavior="scroll" hspace="0" scrolldelay="1" scrollamount="3" loop="infinite">
+           <img style="margin-top:0px;" src="/images/co-logo1.png">
+           <img style="margin-top:0px;" src="/images/co-logo2.png">
+           <img style="margin-top:0px;" src="/images/co-logo3.png">
+       </marquee>
+    </div>
+
+      <div style="width:382px;display:none;position:absolute;" id="tooltip2">
+
+        <div style="background:url(/images/tab0101.png);width:382px;height:20px"></div>
+
+        <div style="background:url(/images/tab0102.png);width:382px;">
+           <div  style="width:360px; margin:0 auto; padding-left:0px;font-size:12px; color:#CCCCCC;line-height:20px;"> 
+            <div id="tooltip" style="float:left;margin-top:-15px;margin-left:5px;"></div>
+          <!-- 文本内容 -->
+           <div class="clear" style="width:360px; height:0px"></div><!--清除浮动-->
+          </div>
+        </div>
+
+        <div style="background:url(/images/tab0103.png);width:382px;height:7px; margin-left:1px;"></div>
+    </div>
+</div>
+<input type="hidden" id="user-id" value="<%=user.id%>"/>
+<script src="/javascripts/b_homepage.js"></script>

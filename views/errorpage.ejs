@@ -1,0 +1,6 @@
+<h1><%= message %></h1>
+<%if(false && error){%>
+<%if(error.status){%><p><%= error.status %></p><%}%>
+<%if(error.stack){%><p><%= error.stack %></p><%}%>
+<%}%>
+<div>请稍后<span style="cursor: pointer; color:blue" onclick="window.location.reload(true);">刷新页面</span>重试</div>

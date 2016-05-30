@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+    <title>荟邮轮</title>
+    <script type="text/javascript" src="/javascripts/jquery-easyui_jb51/jquery-1.8.0.min.js"></script>
+    <script type="text/javascript" src="/javascripts/jquery-easyui_jb51/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="/javascripts/b_main.js"></script>
+    <script type="text/javascript" src="/javascripts/cookiesoperator.js"></script>
+    <script type="text/javascript" src="/javascripts/datapicker.js"></script>
+    <script type="text/javascript" src="/javascripts/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="/javascripts/utils.js"></script>
+    <script type="text/javascript" src="/javascripts/My97DatePicker/WdatePicker.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/javascripts/jquery-easyui_jb51/themes/cds/easyui.css">
+    <link rel="stylesheet" type="text/css" href="/javascripts/jquery-easyui_jb51/themes/icon.css">
+
+    <link href="/stylesheets/demozi.css" rel="stylesheet" type="text/css"/>
+    <link href="/stylesheets/chat.css" rel="stylesheet" type="text/css"/>
+
+    <script type="text/javascript" src="/javascripts/jquery/jquery_tsk/js/jquery.alerts.js"></script>
+    <link rel="stylesheet" href="/javascripts/jquery/jquery_tsk/js/jquery.alerts.css" type="text/css"/>
+
+</head>
+<body style="background-color: #ffffff">
+<a name="topc" id="topc"></a><div>&nbsp;</div>
+
+<table style="width: 960px;margin: auto" cellspacing="0">
+    <tr>
+        <td style="background-image: url('/images/leftbian.png');width: 25px;"></td>
+        <td style="background-color: #FFFFFF;">
+<%- body %>
+        </td>
+        <td style="background-image: url('/images/rightbian.png');width: 25px;"></td>
+    </tr>
+</table>
+<div style="width: 960px;margin-left: 20px;color:#FFFFFF">
+    <span id="pagename" style="color:#FFFFFF"></span>
+</div>
+
+<input id="info" style="display: none" value="<%=error%>" />
+<br/>
+
+</body>
+</html>

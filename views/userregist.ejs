@@ -1,0 +1,183 @@
+<div style="width:960px;background-color: #FFFFFF;margin:auto;">
+    <form method="post" enctype="multipart/form-data">
+        <table style="width: 100%;background-image:url(images/titlebg.jpg)" border="0">
+            <tr>
+                <td><img src="/images/logo.png" style="margin-left: 20px;height:80px;margin-top:10px;" /></td>
+                <td style="text-align: right;vertical-align: top"><img style="padding-top:20px;margin-right: 10px;" src="/images/callto.jpg" style="margin-left: 20px;" /></td>
+            </tr>
+        </table>
+        <table width="100%" style="height:580px;margin:auto;" border="0">
+            <tr>
+                <td style="width:20px;"></td>
+                <td style="vertical-align: top">
+                <div style="font-weight: bold;margin-top: 52px;font-size: 18px;height: 20px;">注册加入我们</div>
+                    <img src="/images/ora.jpg" style="margin-top: 0px;height: 4px;width: 100%;" />
+                    <div style="font-weight: bold;margin-top: 5px;font-size: 14px;width: 100%;text-align: right;">标有<span style="color:#F68421">*</span>字段为必填项&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                    <div style="font-weight: bold;margin-top: 10px;font-size: 18px;color:#F68421;line-height: 30px;height:15px">公司信息</div>
+                    <img src="/images/ora.jpg" style="margin-top: 0px;height: 3px;width: 100%;" />
+                    <table width="612" border="0" style="margin-top: 10px;">
+                        <tr>
+                            <td style="width: 70px;"><span style="color:#F68421">*</span><b>公司名称：</b></td>
+                            <td><input type="text" onFocus="if(value==defaultValue){value='';this.style.color='#000'}" onBlur="if(!value){value=defaultValue;this.style.color='#999'}" name="txtCompanyName" id="txtCompanyName" value="例:上海XXX旅行社有限公司" style="width: 300px;color:#999999"></input></td>
+                            <td style="width: 150px;vertical-align: top" rowspan="6">
+                            </td>
+                        </tr>
+                         <tr>
+                            <td style="width: 150px;"><span style="color:#F68421">*</span><b>部门/营业部：</b></td>
+                            <td><input type="text" onFocus="if(value==defaultValue){value='';this.style.color='#000'}" onBlur="if(!value){value=defaultValue;this.style.color='#999'}" name="departmentName" id="departmentName" value="例:XX部" style="width: 300px;color:#999999"></input></td>
+                            <td style="width: 150px;vertical-align: top" rowspan="6">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 80px;"><span style="color:#F68421">*</span><b>公司简称：</b></td>
+                            <td><input type="text" onFocus="if(value==defaultValue){value='';this.style.color='#000'}" onBlur="if(!value){value=defaultValue;this.style.color='#999'}" name="shortname" value="例:XXX-XX部" id="shortname" style="width: 150px;color:#999999"></input><span style="color:#F68421">&nbsp;&nbsp;字数限制在12个中文字内</span></td>
+                        </tr>
+                        <tr style="line-height: 25px">
+                            <td style="width: 70px;vertical-align: top"><span style="color:#F68421">*</span><b>公司Logo：</b></td>
+                            <td><input id='logo' name='logo' type="file">
+                            <br/><span style="color:#F68421">最大上传大小为1MB，支持上传类型：jpg bmp png</span></td>
+                        </tr>
+
+                        <tr style="line-height: 30px">
+                            <td style="vertical-align: top"><span style="color:#F68421">*</span><b>公司地址：</b></td>
+                            <td><select name="province" id="province" style="width:130px">
+                                    <option value="-">省</option>
+                                    <%
+                                    for (var i in province) {
+                                    %>
+                                    <option value="<%=province[i].id%>"><%=province[i].name%></option>
+                                    <%
+                                    }
+                                    %>
+                            </select>
+
+                                <select name="city" id="city" style="width:166px">
+                                    <option value="-">市</option>
+
+                                </select>
+
+                                  <br/>
+                                <input onFocus="if(value==defaultValue){value='';this.style.color='#000'}" onBlur="if(!value){value=defaultValue;this.style.color='#999'}" value="请输入详细地址" type="text" name="address" id="address" style="width: 300px;color:#999999"></input>
+                                <br/>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td><span style="color:#F68421">*</span><b>公司电话：</b></td>
+                            <td><input type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" name="zone" id="zone" style="width: 35px;"></input> - <input onkeyup="this.value=this.value.replace(/\D/g,'')" type="text" name="txtTel" id="txtTel" style="width: 102px;"></input></td>
+                        </tr>
+                        <tr>
+                            <td style="padding-left: 5px;"><b>公司传真：</b></td>
+                            <td><input type="text" name="zone1" id="zone1" readonly style="width: 35px;"></input> - <input onkeyup="this.value=this.value.replace(/\D/g,'')" type="text" name="txtFax" id="txtFax" style="width: 102px;"></input></td>
+                        </tr>
+                    </table>
+                    <div style="font-weight: bold;margin-top: 40px;font-size: 18px;color:#F68421;line-height: 1px;">管理员信息</div>
+                    <img src="/images/ora.jpg" style="margin-top: 0px;height: 3px;width: 100%;" />
+                    <table width="600" border="0" style="margin-top: 10px;">
+                        <tr>
+                            <td style="width: 80px;"><span style="color:#F68421">*</span><b>管理员姓名：</b></td>
+                            <td><input type="text"  name="username" id="username" style="width: 150px;"></input></td>
+                        </tr>
+                        <tr>
+                            <td style="padding-left: 5px;"><b>职位：</b></td>
+                            <td><input type="text" name="position" id="position" style="width: 150px;"></input></td>
+                        </tr>
+                        <tr>
+                            <td><span style="color:#F68421">*</span><b>联系电话：</b></td>
+                            <td><input type="text" name="zone2" id="zone2" readonly style="width: 35px;"></input> - <input type="text" name="usertelephone" id="usertelephone" onkeyup="this.value=this.value.replace(/\D/g,'')" style="width: 102px;"></input></td>
+                        </tr>
+                        <tr>
+                            <td style="padding-left: 5px;"><b>传真：</b></td>
+                            <td><input type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" name="zone3" id="zone3" style="width: 35px;"></input> - <input type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" name="userFax" id="userFax" style="width: 102px;"></input></td>
+                        </tr>
+                        <tr>
+                            <td><span style="color:#F68421">*</span><b>手机：</b></td>
+                            <td><input type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" name="userTel" id="userTel" style="width: 150px;"></input></td>
+                        </tr>
+                        <tr>
+                            <td><span style="color:#F68421">*</span><b>邮箱：</b></td>
+                            <td><input type="text" name="useremail" id="useremail" style="width: 150px;"></input><span style="color:#F68421">&nbsp;&nbsp;用于注册成功后接收密码和忘记密码找回</span></td>
+                        </tr>
+                    </table>
+                    <div style="font-weight: bold;margin-top: 40px;font-size: 18px;color:#F68421;line-height: 1px;hight:0px">财务信息</div>
+                    <img src="/images/ora.jpg" style="margin-top: 0px;height: 3px;width: 100%;" />
+                    <div style="margin-top: 10px;"><span style="color:#F68421">*</span><b>可接受付款方式(可多选)：</b>&nbsp;&nbsp;
+                    <input type="checkbox" style="vertical-align: middle;margin-right: 5px;" id="txtPayType1" value ="银行转账" >银行转账&nbsp;&nbsp;
+                    <input type="checkbox" style="display:none;vertical-align: middle;margin-right: 5px;" id="txtPayType2" value ="网上银行" >
+                    <input type="checkbox" style="display:none;vertical-align: middle;margin-right: 5px;" id="txtPayType3" value ="支付宝" >
+                    <input type="checkbox" style="vertical-align: middle;margin-right: 5px;" id="txtPayType4" value ="支票" >支票&nbsp;&nbsp;
+                    <input type="checkbox" style="vertical-align: middle;margin-right: 5px;" id="txtPayType5" value ="现金" >现金&nbsp;&nbsp; </div>
+
+                    <span style="color:#F68421">为保证资金流向安全准确，请正确选择可接受的付款方式和对应账户信息。</span>
+                    <table width="600" border="0" style="margin-top: 10px;">
+                        <tr>
+                            <td style="width: 80px;"><span style="color:#F68421">*</span><b>公司账户名：</b></td>
+                            <td><input type="text" name="account_name" id="account_name" style="width: 250px;"></input></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 80px;"><span style="color:#F68421">*</span><b>公司账号：</b></td>
+                            <td><input type="text" name="accountNo" id="accountNo" style="width: 250px;"></input></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 80px;"><span style="color:#F68421">*</span><b>开户行：</b></td>
+                            <td><input type="text" name="bank" id="bank" style="width: 250px;"></input></td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <div style="width: 100%;text-align:left"><input type="checkbox" style="vertical-align: middle;margin-right: 5px;" id="txtUserAgreement" name="txtUserAgreement" >我已阅读并同意遵守<span onclick="window.open('/files/agreement.doc');" style="color:#2082C5;cursor: pointer">《协议条款》</span>。</div>
+                    <table>
+                        <tr>
+                            <td>
+                                  <img src="/images/retune.png" onclick="history.go(-1);" style="cursor:pointer;" />
+                            </td>
+                            <td>&nbsp;</td>
+                            <td>
+                                  <img src="/images/giveu.png" id="regsubmit" style="cursor:pointer;" />   
+                            </td>                            
+                        </tr>
+                    </table>
+                   
+                    
+                    <br/><br/>
+                </td>
+                <td style="width:20px;"></td>
+            </tr>
+        </table>
+
+        <input id="info" style="display: none" value="<%=error%>" />
+        <input style="display: none"  name="payment_transfer" id="payment_transfer"></input>
+        <input style="display: none"  name="payment_online_banking" id="payment_online_banking"></input>
+        <input style="display: none"  name="payment_alipay" id="payment_alipay"></input>
+        <input style="display: none"  name="payment_cheque" id="payment_cheque"></input>
+        <input style="display: none"  name="payment_cash" id="payment_cash"></input>
+        <%
+        function getNow(){
+            var date = new Date(); //日期对象
+            var now = "";
+            now = date.getFullYear()+"";
+            now = now + (date.getMonth()+1)+"";//取月的时候取的是当前月-1如果想取当前月+1就可以了
+            now = now + date.getDate()+"";
+            now = now + date.getHours()+"";
+            now = now + date.getMinutes()+"";
+            now = now + date.getSeconds()+"";
+            return now;
+        }
+         %>
+        <input type="hidden" name="unid" value="<%=getNow()%>"></input>
+    </form>
+</div>
+<%
+var a1="";
+var a2="";
+for (var i in city) {
+    a1= a1+";"+ city[i].name;
+    a2 = a2 +";"+city[i].pid;
+}
+%>
+<div style="display: none">
+   <input id="a1" value="<%=a1%>"></input>
+   <input id="a2" value="<%=a2%>"></input>
+
+    <input id="info" style="display: none" value="<%=error%>" />
+</div>
+

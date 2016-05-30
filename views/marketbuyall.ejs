@@ -1,0 +1,168 @@
+<div style="width:960px;background-color: #FFFFFF;margin:0 auto;">
+     <table style="width: 400px;margin-top: 0px;" border="0" cellspacing="0">
+                     <tr>
+                         <td class="tdfooter1"  id="n1" onclick="window.location='loading?page=optionorderall'">分销商订单</td>
+                         <td class="tdfooter1" id="n2" onclick="window.location='loading?page=optionordersellall'">供应商订单</td>
+                         <td class="tdfooter1" id="n2"  onclick="window.location='loading?page=marketall'">供应信息</td>
+                         <td class="tdfooter1" id="n2" style="background-color: #2EAE25;color:#FFFFFF" onclick="window.location='loading?page=marketbuyall'">需求信息</td>
+                     </tr>
+                 </table>
+                 <div style="background-image: url('/images/lvgang.jpg');width: 100%;height: 3px;"></div>
+<div id="buy2">
+    <table style="display:none;width: 100%">
+        <tr>
+            <td style="text-align: right">
+                <img id="jian1" src="/images/greenleft.gif" style="width: 35px;margin-top: 70px;" />
+            </td>
+            <td style="width: 170px;">
+                <img style="margin-top: 20px;" src="/images/fa333.png" />
+            </td>
+
+        </tr>
+    </table>
+    <form method="post">
+
+
+        <table style="width: 100%;margin-top:0px;" border="0" cellspacing="0">
+            <tr style="display:none;height: 6px;">
+                <td colspan="3" style="background-image: url('/images/green1.jpg')">
+            </tr>
+        </table>
+
+        <div style="width: 100%;height: 210px;background-color: #F2F0F5">
+            <div style="padding-left: 20px;padding-top: 0px;font-weight: bold">需求描述:<textarea onFocus="if(value==defaultValue){value='';this.style.color='#000'}" onkeyup="addRows(this)" onBlur="if(!value){value=defaultValue;this.style.color='#999'}" id="description" name="description" style="color:#999999;width: 98%;" rows="6">例:我需要蓝宝石公主号717济州釜山內舱3人房5间，有的请联系我，谢谢！</textarea></div>
+            <div style="width: 100%;padding-left: 20px;padding-top: 0px;font-weight: bold">
+                <table style="width: 95%">
+                    <tr>
+                        <td>
+
+                        </td>
+                        <td style="text-align: right;width: 285px;">
+                            <img onclick="window.location='loading?page=marketbuy';window.parent.htotop();" style="cursor:pointer;margin-left: 0px;" src="/images/retune.png" />
+
+                            <img onclick="buypublish()" style="cursor:pointer;margin-left: 20px;" src="/images/pulish.png" />
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+
+</div>
+
+    <div id="buy1">
+        <img src="/images/lastminutelv.png" />
+        <div style="margin-top: 2px;width: 100%;height: 40px;">
+            <table style="width: 100%;background-color: #2EAE25" border="0">
+                <tr>
+                    <td style="height: 45px;vertical-align: middle;width: 846px;">
+                        <input onkeydown="if(event.keyCode==13){document.all.numStart.value = 0;document.forms[0].submit();}" type="text" name="skey" style="width: 800px;margin-left: 20px;margin-top: 0px;" value="<%=skey%>" />
+                    </td>
+                    <td style="text-align: left">
+                        <img onclick="document.all.numStart.value = 0;document.forms[0].submit();" style="padding-top:14px;cursor: pointer" src="images/sou.png">
+                        <div style="display:none;line-height:22px;cursor:pointer;margin-left: 20px;margin-top: 5px;width: 50px;background-color: #0068BD;color:#FFFFFF;font-weight: bold;text-align: center" onclick="document.all.numStart.value = 0;document.forms[0].submit();">搜！</div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+    
+    <table style="width: 100%;margin-top:0px;" border="0" cellspacing="0">
+        <tr style="height: 6px;">
+            <td colspan="3" style="background-image: url('/images/green1.jpg')">
+        </tr>
+    </table>
+    <%
+    for(var i in demand){
+    %>
+    <table style="width: 100%;margin-top:20px;" border="0" cellspacing="0">
+        <tr style="height: 2px;">
+            <td colspan="3" style="background-image: url('/images/green1.jpg')">
+        </tr>
+    </table>
+    <table  style="border-top:none;width: 100%;border:2px solid #ABBBBB;"  cellpadding="0" cellspacing="0" >
+        <tr style="line-height: 18px;height: 18px;">
+            <td rowspan="3" style="width: 160px;text-align: center">
+                <img src="files/<%=demand[i].logo%>" style="width: 100px;padding-top: 20px;" /><br/>
+                <%=demand[i].short_name%><br/>
+                <b><%=demand[i].name%></b>
+                <br/>
+                <a style="cursor:pointer" onclick="$('#docid').val(<%=demand[i].id%>);document.forms[0].submit();">删除</a>
+            </td>
+            <td style="padding: 10px;height: 100px;vertical-align: top" colspan="3">
+                <br/>
+                <b>需求详情</b>&nbsp;&nbsp;&nbsp;
+                <%
+                    var dat1c = (new Date(demand[i].created_at)).Format("yyyy-MM-dd");
+                    var myDate = new Date();
+                    var m = myDate.getMonth()+1;
+                    m = m +"";
+                    if(m.length==1){
+                        m = "0" + m;
+                    }
+                    var d = myDate.getDate();
+                    d= d +"";
+                    if(d.length==1){
+                        d = "0" + d;
+                    }
+                    var d2 = myDate.getFullYear()+"-"+m+"-"+d;
+                        if(dat1c == d2){%>
+                <img src="/images/45.gif" />
+                <%}%>
+                <br/>
+                <span id="xiaoC<%=i%>"><%=replaceTextarea2(demand[i].description)%></span>
+            </td>
+        </tr>
+        <%
+        function replaceTextarea2(str){
+            
+            str = str.replace(/\n/g,"<br/>");
+            return str;
+        }
+        %>
+        <tr style="line-height: 10px;height: 10px">
+            <td colspan="2">
+                 <img src="/images/xu3.png">
+            </td>
+        </tr>
+        <tr style="line-height: 20px;">
+            <td>
+                <span style="margin-left: 5px;">发布时间:<%=(new Date(demand[i].published_at)).Format("yyyy-MM-dd hh:mm:ss")%>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;状态:
+                    <%if(demand[i].status_id == 2){%><span style="color:#65A2D4;font-weight: bold">询价中</span><%}%>
+                    <%if(demand[i].status_id == 3){%><span style="color:#65A2D4;font-weight: bold">询价结束</span><%}%>
+                     <%if(demand[i].status_id == 4){%><span style="color:#65A2D4;font-weight: bold">后台删除</span><%}%>
+                </span>
+            </td>
+            <% if ( demand[i].owner_id != user[0].id ) {%>
+            <td style="width: 120px;vertical-align: middle">
+                <img style="padding-top: 5px;cursor: pointer" onclick="return parent.goToMessage({recipient:'<%=demand[i].owner_id%>', ext_p_id:'<%=demand[i].id%>', ext_type:3, title:'<%=demand[i].name%>发布于<%=demand[i].published_at%>的需求信息:<br><%=demand[i].description.substring(0,50)%>'});" src="/images/contactbuy.png" />&nbsp;&nbsp;
+            </td>
+            <% } %>
+        </tr>
+    </table>
+    <%
+    }
+    %>
+    <br/>
+    <table style="width: 100%">
+        <tr>
+            <td style="text-align: center;font-size: 12px;"><img src="images/previours_page.png" style="cursor: pointer;margin-bottom:-5px" onclick="onPreviousPageClicked(<%=1+(numStart-1)/6%>);window.parent.htotop();" title="上一页"/>
+                &nbsp;第&nbsp;<input style="width: 25px;text-align: center" type="text" id="numNo1" value="<%=1+(numStart)/6%>" onchange="onPageValueChanged(<%=Math.ceil(total/6)%>);window.parent.htotop();" />&nbsp;页
+                &nbsp;共<%=Math.ceil(total/6)%>页&nbsp;<%=total%>条记录
+                <img src="images/next_page.png" style="margin-bottom:-5px;padding-left: 5px;cursor: pointer" onclick="onNextPageClicked(<%=1+(numStart-1)/6%>, <%=Math.ceil(total/6)%>);window.parent.htotop();" title="下一页"/>
+            </td>
+        </tr>
+
+    </table>
+    <br/>
+
+        <input type="hidden" name="owner_id" value="<%=user[0].id%>" />
+        <input type="hidden" name="numStart"  value="<%=numStart%>" ></input>
+        <input type="hidden" name="sType" id="sType"  ></input>
+        <input type="hidden" name="sType1" id="sType1"  ></input>
+        <input type="hidden" id="docid" name="docid" />
+    </form>
+     <br/>
+    </div>
+
+</div>
