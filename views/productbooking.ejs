@@ -2,8 +2,23 @@
     <form method="post" enctype="multipart/form-data" >
     <img style="margin-top: 20px;" src="/images/no2.png" />
 
+    <table style="width: 960px;margin-top: 20px;">
+            <tr>
+                <td style="text-align:left">
+                    <!--<span style="margin-left:0px;margin-top:0px;color:#187ED3;cursor:pointer;display:inline-block" onclick="window.parent.htotop();parent.goToMessage({recipient:'<%=product[0].owner_id%>', ext_p_number:'<%=product[0].product_number%>', ext_p_id:'<%=product[0].id%>', ext_type:1, title:'<%=product[0].title%>'});"><img  src="/images/contactsell.png" /></span>-->
+                </td>
+                <td  style="width:100px">
+                    <!--<img onclick="maskIframe('加载中...',false);history.go(-1);" style="cursor:pointer;margin-left: 80px;" src="/images/shangyibu.png" />-->
+                </td>
+                <td><div id="bookingsave" style="display:none;cursor:pointer;margin:auto;background-color: #0169C0;width: 100px;height: 30px;color:#FFFFFF;text-align: center" >保存</div></td>
+                <td style="width:100px">
+                    <img id="bookingbtn" style="cursor:pointer;margin-left: 20px;" src="/images/submit.png" onclick="submitBooking();"/>
+                </td>
+            </tr>
+        </table>
 
-        <table style="width: 100%;text-align: center;border-bottom: 0;border:2px solid #ABBBBB;"  cellpadding="0" cellspacing="0">
+
+        <table style="width: 100%;text-align: center;border-bottom: 0;border:2px solid #ABBBBB;display: none"  cellpadding="0" cellspacing="0">
             <tr style="background-image: url('images/huitou.png');">
                 <td style="font-weight: bold;font-size: 14px;text-align: left">&nbsp;&nbsp;订单联系人信息</td>
             </tr>
@@ -406,20 +421,7 @@
                     </div></td>
             </tr>
         </table>
-        <table style="width: 960px;margin-top: 20px;">
-            <tr>
-                <td style="text-align:left">
-                    <span style="margin-left:0px;margin-top:0px;color:#187ED3;cursor:pointer;display:inline-block" onclick="window.parent.htotop();parent.goToMessage({recipient:'<%=product[0].owner_id%>', ext_p_number:'<%=product[0].product_number%>', ext_p_id:'<%=product[0].id%>', ext_type:1, title:'<%=product[0].title%>'});"><img  src="/images/contactsell.png" /></span>
-                </td>
-                <td  style="width:100px">
-                    <img onclick="maskIframe('加载中...',false);history.go(-1);" style="cursor:pointer;margin-left: 80px;" src="/images/shangyibu.png" />
-                </td>
-                <td><div id="bookingsave" style="display:none;cursor:pointer;margin:auto;background-color: #0169C0;width: 100px;height: 30px;color:#FFFFFF;text-align: center" >保存</div></td>
-                <td style="width:100px">
-                    <img id="bookingbtn" style="cursor:pointer;margin-left: 20px;" src="/images/submit.png" onclick="submitBooking();"/>
-                </td>
-            </tr>
-        </table>
+        
         <%
         var a1="";
         var a2="";

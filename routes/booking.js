@@ -280,6 +280,7 @@ exports.productbookingreadxsdo = function (req, res) {
 }
 
 exports.productbookingdo = function (req, res) {
+    console.log("Run");
     var o = req.body;
     var idb = 0;
     var stateid1 = "1";
@@ -1005,8 +1006,11 @@ exports.optionordersell = function (req, res) {
 }
 
 exports.productbooking = function (req, res) {
-    permission.checkUser(req, res, function (result) {
-        var company = new Company({id: result[0].company_id});
+    //permission.checkUser(req, res, function (result) {
+        var result = [{
+            id: 87
+        }];
+        var company = new Company({id: 231});
         company.get(function (result1) {
             if (nodeUtil.isError(result1)) {
                 nodeUtil.log("productbooking: company.get failed!");
@@ -1091,7 +1095,7 @@ exports.productbooking = function (req, res) {
             });
 
         });
-    });
+    //});
 };
 
 exports.productbookingsavesuccess = function (req, res) {
@@ -1112,8 +1116,12 @@ exports.productbookingsuccess = function (req, res) {
     res.locals.bn = req.session.bn;
     res.locals.bnid = req.session.bnid;
 
-    permission.checkUser(req, res, function (result) {
-        var company = new Company({id: result[0].company_id});
+    //permission.checkUser(req, res, function (result) {
+        //var company = new Company({id: result[0].company_id});
+        var result = [{
+            id: 87
+        }];
+        var company = new Company({id: 231});
         company.get(function (result1) {
             if (nodeUtil.isError(result1)) {
                 errHandler.responseError(result1, req, res);
@@ -1122,5 +1130,5 @@ exports.productbookingsuccess = function (req, res) {
                 res.render('productbookingsuccess', {layout: "layout", user: result, company: result1});
             }
         });
-    });
+    //});
 };

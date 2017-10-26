@@ -3636,7 +3636,7 @@ function bookingNextStep() {
         }
     }
     if (lab == 0) {
-        jAlert("请选择需要预定的舱房类型及数量！");
+        alert("请选择需要预定的舱房类型及数量！");
         window.location = window.location.href + "#top";
         return false;
     }
@@ -3652,6 +3652,7 @@ function bookingNextStep() {
         }
     }
     $("#buynum").val(num1);
+    //window.parent.location=window.parent.location+'1';
     document.forms[0].submit();
     window.parent.htotop();
     maskIframe('加载中...', false);
@@ -3674,13 +3675,13 @@ function submitBooking(){
         if(Number($("#canc"+i).html())==3){
             if(s1+s2 != 3){
                 //如最大入住人数是3，则成人数量+儿童数量总和一定是3！
-                jAlert("您录入的入住人数量有误，请正确填写");return false;
+                alert("您录入的入住人数量有误，请正确填写");return false;
             }
         }
         if(Number($("#canc"+i).html())==4){
             if((s1+s2 != 3) && (s1+s2 != 4)){
                 //如最大入住人数是4，则成人数量+儿童数量总和可以是3或者4！
-                jAlert7("您录入的入住人数量有误，家庭房需入住3-4人，请正确填写");return false;
+                alert("您录入的入住人数量有误，家庭房需入住3-4人，请正确填写");return false;
             }
         }
     }
@@ -3705,8 +3706,8 @@ function submitBooking(){
     str1 = str1+"\r\n总价为:"+total2+"元";
     str1 = str1+"\r\n是否确认";
 
-    jConfirmIframe("是否确认提交！", "", function(confirmed){
-        if(!confirmed) return false;
+    //jConfirmIframe("是否确认提交！", "", function(confirmed){
+    //    if(!confirmed) return false;
         //检查游客信息必填
         var lab = 0;
 
@@ -3724,8 +3725,9 @@ function submitBooking(){
         }
 
         if(lab == 1){
-            jAlert("游客姓名不全，请尽快补齐！");return false;
+            alert("游客姓名不全，请尽快补齐！");return false;
         }
+        
         //赋值游客信息
         var a1 = ""; var a2 = "";var a3 = "";var a4 = "";var a5 = "";var a6 = "";var a7 = "";var a8 = "";var a9 = "";var a10 = "";var a11 = "";
 
@@ -3757,7 +3759,8 @@ function submitBooking(){
                             }else{
                                 a7 = "0000-00-00";
                             }
-                            a8 = $("#q"+i+j+"7").combobox('getValue');
+                            //a8 = $("#q"+i+j+"7").combobox('getValue');
+                            a8 = "0";
                             a9 = $("#q"+i+j+"9").val();
                             a10 = $("#q"+i+j+"10").val();
                             a11 = "q"+i+j+"11";
@@ -3781,7 +3784,8 @@ function submitBooking(){
                             }else{
                                 a7 = a7 + "@" +"0000-00-00";
                             }
-                            a8 = a8 + "@" +$("#q"+i+j+"7").combobox('getValue');
+                            //a8 = a8 + "@" +$("#q"+i+j+"7").combobox('getValue');
+                            a8 = a8 + "@0";
                             a9 = a9 + "@" + $("#q"+i+j+"9").val();
                             a10 = a10 + "@" + $("#q"+i+j+"10").val();
                             a11 = a11 + "@" + "q"+i+j+"11";
@@ -3790,6 +3794,8 @@ function submitBooking(){
                 }
             }
         }
+
+        
 
         $("#pas1").val(a1);
         $("#pas2").val(a2);
@@ -3804,6 +3810,7 @@ function submitBooking(){
         $("#pas11").val(a11);
 
         //return false;
+        
 
         var num1 = "";var num2 = "";var num3 = "";
         for(var i=1;i<50;i++){
@@ -3824,8 +3831,9 @@ function submitBooking(){
         $("#zd7").val(num3);
         //return false;
         $("#stype").val("submit");
+        
         document.forms[0].submit();
-        window.parent.htotop();
-    });
+        //window.parent.htotop();
+    //});
 }
 

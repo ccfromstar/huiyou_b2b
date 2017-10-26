@@ -644,8 +644,12 @@ exports.publishproductread = function (req, res) {
 }
 
 exports.productdetailbooking = function (req, res) {
-    permission.checkUser(req, res, function (result) {
-        var company = new Company({id: result[0].company_id});
+    //permission.checkUser(req, res, function (result) {
+        //console.log(result);
+        var result = [{
+            id: 87
+        }];
+        var company = new Company({id: 231});
         company.get(function (result1) {
             if (nodeUtil.isError(result1)) {
                 errHandler.responseError(result1, req, res);
@@ -694,7 +698,7 @@ exports.productdetailbooking = function (req, res) {
             });
 
         });
-    });
+    //});
 }
 
 exports.publishproductedit = function (req, res) {

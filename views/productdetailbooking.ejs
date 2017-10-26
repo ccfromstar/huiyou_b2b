@@ -5,11 +5,27 @@
         <table style="width:100%">
             <tr>
                 <td style="vertical-align:top"><span style="font-weight: bold;font-size: 18px;color: #000000;padding-top: 10px;"><%=product[0].title%></span>
-                    <span style="margin-left:20px;margin-top:17px;color:#187ED3;cursor:pointer;display:inline-block;padding-top:10px" onclick="window.parent.htotop();parent.goToMessage({recipient:'<%=108%>', ext_p_number:'<%=product[0].product_number%>', ext_p_id:'<%=product[0].id%>', ext_type:1, title:'<%=product[0].title%>'});"><img  src="/images/contactsell.png" /></span>              
+                    <span style="margin-left:20px;margin-top:17px;color:#187ED3;cursor:pointer;display:inline-block;padding-top:10px" onclick="window.parent.htotop();parent.goToMessage({recipient:'<%=108%>', ext_p_number:'<%=product[0].product_number%>', ext_p_id:'<%=product[0].id%>', ext_type:1, title:'<%=product[0].title%>'});"><!--<img  src="/images/contactsell.png" />--></span>              
                 </td>
             </tr>
         </table>
         <img style="margin-top: 20px;" src="/images/no1.png" />
+
+        <table style="margin: auto;width: 960px;margin-top: 20px;" border="0">
+            <tr style="line-height:30px;">
+                <td>&nbsp;</td>
+                <td style="text-align:left;">
+                    <!--<img  src="/images/contactsell.png" style="cursor:pointer;" onclick="window.parent.htotop();parent.goToMessage({recipient:'<%=108%>', ext_p_number:'<%=product[0].product_number%>', ext_p_id:'<%=product[0].id%>', ext_type:1, title:'<%=product[0].title%>'});"/>-->
+                </td>
+                <td style="width:100px;text-align:center;vertical-align: top;">
+                   <!--<img src="/images/cancel_booking.png" style="cursor:pointer" onclick="parent.cancelBooking();" />-->
+                </td>
+                <td style="width:100px">
+                    <img id="yding" style="cursor:pointer;" src="/images/xiayibu.png" onclick="bookingNextStep();" />
+                </td>
+                 
+            </tr>
+        </table>
 
         <table style="width: 100%;margin-top: 0px;border:2px solid #ABBBBB;"  cellspacing="0" cellpadding="0">
             <tr style="text-align: center;color: #000000;font-weight: bold;background-image: url('images/huitou.png')">
@@ -455,21 +471,7 @@
 
         </table>
 
-        <table style="margin: auto;width: 960px;margin-top: 20px;" border="0">
-            <tr style="line-height:30px;">
-                <td>&nbsp;</td>
-                <td style="text-align:left;">
-                    <img  src="/images/contactsell.png" style="cursor:pointer;" onclick="window.parent.htotop();parent.goToMessage({recipient:'<%=108%>', ext_p_number:'<%=product[0].product_number%>', ext_p_id:'<%=product[0].id%>', ext_type:1, title:'<%=product[0].title%>'});"/>
-                </td>
-                <td style="width:100px;text-align:center;vertical-align: top;">
-                   <img src="/images/cancel_booking.png" style="cursor:pointer" onclick="parent.cancelBooking();" />
-                </td>
-                <td style="width:100px">
-                    <img id="yding" style="cursor:pointer;" src="/images/xiayibu.png" onclick="bookingNextStep();" />
-                </td>
-                 
-            </tr>
-        </table>
+        
 
         <br/>
         <input type="hidden" name="product_number" id="product_number" value="<%=product[0].product_number%>"></input>
